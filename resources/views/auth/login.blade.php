@@ -1,5 +1,5 @@
 
-<x-layout title="Add New Taxon" bodyClass="">
+<x-layout  bodyClass="">
 
     <div>
         <div class="container position-sticky z-index-sticky top-0">
