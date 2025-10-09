@@ -1,4 +1,4 @@
-{{-- <div class="fixed-plugin">
+<div class="fixed-plugin">
     <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
         <i class="material-icons py-2">settings</i>
     </a>
@@ -50,13 +50,13 @@
             </div>
             <p class="text-sm d-xl-none d-block mt-2">You can change the sidenav type just on desktop view.</p>
             <!-- Navbar Fixed -->
-            <div class="mt-3 d-flex">
+            {{-- <div class="mt-3 d-flex">
                 <h6 class="mb-0">Navbar Fixed</h6>
                 <div class="form-check form-switch ps-0 ms-auto my-auto">
                     <input class="form-check-input mt-1 ms-auto" type="checkbox" id="navbarFixed"
                         onclick="navbarFixed(this)">
                 </div>
-            </div>
+            </div> --}}
             <hr class="horizontal dark my-3">
             <div class="mt-2 d-flex">
                 <h6 class="mb-0">Light / Dark</h6>
@@ -68,4 +68,4 @@
 
         </div>
     </div>
-</div> --}}
+</div>

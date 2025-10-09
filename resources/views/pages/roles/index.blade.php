@@ -1,9 +1,9 @@
 <x-layout bodyClass="g-sidenav-show  bg-gray-200">
 
-    <x-navbars.sidebar activePage="permissions"></x-navbars.sidebar>
+    <x-navbars.sidebar activePage="roles"></x-navbars.sidebar>
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <!-- Navbar -->
-        <x-navbars.navs.auth titlePage="Permission"></x-navbars.navs.auth>
+        <x-navbars.navs.auth titlePage="Roles"></x-navbars.navs.auth>
         <!-- End Navbar -->
         <div class="container-fluid py-4">
             <div class="row">
@@ -12,14 +12,14 @@
 
                         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 mt-2">
                             <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                <h6 class="text-white text-capitalize ps-3">Permissions</h6>
+                                <h6 class="text-white text-capitalize ps-3">Roles</h6>
                             </div>
                         </div>
 
                         <div class=" me-3 my-3 text-end">
-                            <a class="btn bg-gradient-dark mb-0" href="{{ route('permissions.create') }}"><i
+                            <a class="btn bg-gradient-dark mb-0" href="{{ route('roles.create') }}"><i
                                     class="material-icons text-sm">add</i>&nbsp;&nbsp;Add New
-                                Permission</a>
+                                Role</a>
                         </div>
                        <div class="card-body px-0 pb-2">
                             <div class="table-responsive p-0">

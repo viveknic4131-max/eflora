@@ -11,8 +11,8 @@ class RoleController extends Controller
 {
     public function index()
     {
-        $roles = Role::with('permissions')->get();
-        return view('admin.roles.index', compact('roles'));
+        $permissions = Role::with('permissions')->paginate(2);
+        return view('pages.roles.index', compact('permissions'));
     }
 
     public function create()
@@ -20,11 +20,12 @@ class RoleController extends Controller
         $permissions = Permission::all()->groupBy(function($perm){
             return explode('.', $perm->name)[0]; // group by module prefix
         });
-        return view('admin.roles.create', compact('permissions'));
+        return view('pages.roles.create', compact('permissions'));
     }
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate(['name' => 'required|unique:roles,name']);
         $role = Role::create(['name' => $request->name]);
         $role->givePermissionTo($request->permissions ?? []);

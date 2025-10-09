@@ -64,5 +64,13 @@
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="{{ asset('assets') }}/js/material-dashboard.min.js?v=3.0.0"></script>
+<script>
+    function changePerPage(select) {
+        const perPage = select.value;
+        const url = new URL(window.location.href);
+        url.searchParams.set('perPage', perPage);
+        window.location.href = url.toString();
+    }
+</script>
 </body>
 </html>

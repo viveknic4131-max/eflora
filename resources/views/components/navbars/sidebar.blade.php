@@ -63,9 +63,27 @@
                     <span class="nav-link-text ms-1">Users</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link text-white {{ $activePage == 'assign_permissions' ? ' active bg-gradient-primary' : '' }} "
+                    href="{{ route('roles.index') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                         <i class="material-icons opacity-10">dashboard</i>
+                    </div>
+                    <span class="nav-link-text ms-1">Assign Permissions</span>
+                </a>
+            </li>
+             <li class="nav-item">
+                <a class="nav-link text-white {{ $activePage == 'permissions' ? ' active bg-gradient-primary' : '' }} "
+                    href="{{ route('permissions.index') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                         <i class="material-icons opacity-10">dashboard</i>
+                    </div>
+                    <span class="nav-link-text ms-1">Permissions</span>
+                </a>
+            </li>
               <li class="nav-item">
-                <a class="nav-link text-white {{ $activePage == 'user-management' ? ' active bg-gradient-primary' : '' }} "
-                    href="{{ route('user-management') }}">
+                <a class="nav-link text-white {{ $activePage == 'roles' ? ' active bg-gradient-primary' : '' }} "
+                    href="{{ route('roles.index') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                          <i class="material-icons opacity-10">dashboard</i>
                     </div>

@@ -26,7 +26,8 @@
                                 @csrf
                                 <div class="row">
 
-                                    <div class="col-md-6">           <label class="form-label">Select Taxon Type *</label>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Select Taxon Type *</label>
                                         <div class="input-group input-group-outline my-3">
 
                                             <select name="taxon_type_id" class="form-control" required>
@@ -168,7 +169,7 @@
                                         $yesNoOptions = ['yes' => 'Yes', 'no' => 'No'];
                                     @endphp
 
-                                    <div class="col-md-3">  <label class="form-label">Is Excluded Taxon *</label>
+                                    <div class="col-md-3"> <label class="form-label">Is Excluded Taxon *</label>
                                         <div class="input-group input-group-outline my-3">
 
                                             <select name="is_excluded_taxon" class="form-control" required>
@@ -180,7 +181,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">     <label class="form-label">Is Cultivated Taxon *</label>
+                                    <div class="col-md-3"> <label class="form-label">Is Cultivated Taxon *</label>
                                         <div class="input-group input-group-outline my-3">
 
                                             <select name="is_cultivated_taxon" class="form-control" required>
@@ -192,7 +193,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">    <label class="form-label">Is Introduced Taxon *</label>
+                                    <div class="col-md-3"> <label class="form-label">Is Introduced Taxon *</label>
                                         <div class="input-group input-group-outline my-3">
 
                                             <select name="is_introduced_taxon" class="form-control" required>
@@ -204,7 +205,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">  <label class="form-label">Is Doubtful Taxon *</label>
+                                    <div class="col-md-3"> <label class="form-label">Is Doubtful Taxon *</label>
                                         <div class="input-group input-group-outline my-3">
 
                                             <select name="is_doubtful_taxon" class="form-control" required>
