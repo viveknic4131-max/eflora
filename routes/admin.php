@@ -45,6 +45,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         return view('pages.laravel-examples.user-management');
     })->name('user-management');
 
+    
 
 
     Route::resource('taxon', TaxonController::class);

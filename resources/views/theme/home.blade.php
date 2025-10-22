@@ -119,13 +119,13 @@
   <div class="logo-slider-1">
     {{-- <h2>Simple partners logo carousel slider</h2> --}}
     <div class="owl-carousel version-1">
-       <div> <img src="{{ asset('storage/plants/rosaindica.jpg') }}"> </div>
-      <div> <img src="{{asset('storage/plants/basil.jpg') }}"> </div>
+       <div> <img src="{{ asset('images/sunflower.jpg') }}"> </div>
+      <div> <img src="{{asset('images/sunflower.jpg') }}"> </div>
       <div> <img src="{{ asset('images/sunflower.jpg') }}"> </div>
-      <div> <img src="{{ asset('storage/plants/rosaindica.jpg') }}"> </div>
-      <div> <img src="{{ asset('storage/plants/Madhuca.jpg') }}"> </div>
       <div> <img src="{{ asset('images/sunflower.jpg') }}"> </div>
-      <div> <img src="{{ asset('storage/plants/Madhuca.jpg') }}"> </div>
+      <div> <img src="{{ asset('images/sunflower.jpg') }}"> </div>
+      <div> <img src="{{ asset('images/sunflower.jpg') }}"> </div>
+      <div> <img src="{{ asset('images/sunflower.jpgg') }}"> </div>
     </div>
   </div>
   <!-- End Simple logo carousel slider -->

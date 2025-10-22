@@ -63,7 +63,7 @@
                     <span class="nav-link-text ms-1">Users</span>
                 </a>
             </li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link text-white {{ $activePage == 'assign_permissions' ? ' active bg-gradient-primary' : '' }} "
                     href="{{ route('roles.index') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -71,7 +71,7 @@
                     </div>
                     <span class="nav-link-text ms-1">Assign Permissions</span>
                 </a>
-            </li>
+            </li> --}}
              <li class="nav-item">
                 <a class="nav-link text-white {{ $activePage == 'permissions' ? ' active bg-gradient-primary' : '' }} "
                     href="{{ route('permissions.index') }}">

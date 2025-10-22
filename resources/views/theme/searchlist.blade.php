@@ -163,6 +163,9 @@
 
 
 
+
+
+
     <!-- Dummy Plant Cards -->
     <section class="py-3">
         <div class="container-fluid">
@@ -176,6 +179,8 @@
                                 @if ($plant['images'] != null)
                                     <a href="#"> <img src="{{$plant['images']}}"
                                             class="card-img-top img-fluid" style="height: 220px; object-fit: cover;"
+
+
                                             alt="Plant "> </a>
                                 @else
                                     <a href="#"> <img src="{{ asset('storage/images/species.jpg') }}"
@@ -187,6 +192,12 @@
                                 <a href="#" style="text-decoration: none;  color: #299a45;">
                                     <div class="custom-card d-flex flex-column ">
                                         <b> 🌿 {{ $plant['rank'] }}</b>
+
+
+
+
+
+
 
                                         <h5 class="card-title font-italic">{{ $plant['name'] . ' (' }}
                                             {{ $plant['author'] . ')' }}</h5>
