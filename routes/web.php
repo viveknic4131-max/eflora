@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/', function () {
-    return view('theme.home');
-});
+// Route::get('/', function () {
+//     return view('theme.home');
+// });
+
+Route::get('/', [HomeController::class ,'index'])->name('/');
 
 Route::get('/about', function () {
     return view('theme.about');

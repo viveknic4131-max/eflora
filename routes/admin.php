@@ -27,6 +27,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('permissions', PermissionController::class);
     Route::resource('users', UserController::class);
 
+    Route::resource('family', App\Http\Controllers\admin\FamilyController::class);
+    Route::resource('volume', App\Http\Controllers\admin\VolumeController::class);
+
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/home', function () {
@@ -45,7 +49,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         return view('pages.laravel-examples.user-management');
     })->name('user-management');
 
-    
+
 
 
     Route::resource('taxon', TaxonController::class);

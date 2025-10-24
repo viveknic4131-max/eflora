@@ -1,12 +1,22 @@
 @extends('theme.layouts.app')
 
 @section('title', 'Home | E-Flora')
+<style>
+.scrollable-list {
+    max-height: 300px; /* Adjust the height as needed */
+    overflow-y: auto; /* Scroll vertically if content exceeds height */
+    padding-right: 10px; /* Optional: space for scrollbar */
+}
+.scrollable-list ul li a {
+    display: block;
+}
+</style>
 
 @section('content')
 
     <!-- Hero Banner -->
     <section class="hero-banner d-flex align-items-center text-center text-light"
-        style="background: url('{{ asset('images/herobanner.jpg') }}') center/cover no-repeat;">
+        style="background: url('{{ asset('images/ss.jpg') }}') center/cover no-repeat;">
 
         <div class="container">
             <h1 class="display-4 fw-bold">Explore the World of Plants</h1>
@@ -24,6 +34,94 @@
             </form>
         </div>
     </section>
+
+
+{{-- <section class="py-5 bg-light">
+    <div class="container text-center">
+        <div class="row">
+            <!-- BSI Volume Column -->
+            <div class="col-md-6 col-sm-6">
+                <h2 class="fw-bold mb-4 text-success" style="font-weight: 700">BSI Volume</h2>
+                <div class="scrollable-list">
+                    <ul class="list-unstyled">
+                        @foreach ($bsiVolume as $volume)
+                            <li class="mb-2">
+                                <a href="#" class="text-decoration-none text-success">
+                                    {{ $volume['volume'] }} - {{ $volume['title'] }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Flora Of India Column -->
+            <div class="col-md-6 col-sm-6">
+                <h2 class="fw-bold mb-4 text-success" style="font-weight: 700">Flora Of India</h2>
+                <div class="scrollable-list">
+                    <ul class="list-unstyled">
+                        @foreach ($floraofIndia as $flora)
+                            <li class="mb-2">
+                                <a href="#" class="text-decoration-none text-success">
+                                    {{ $flora['volume'] }} - {{ $flora['name'] }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> --}}
+
+<section class="py-5 ">
+  <div class="container text-center">
+    <div class="row g-4">
+      <!-- BSI Volume Column -->
+      <div class="col-md-6 col-sm-6">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <h2 class="fw-bold mb-4 text-success" style="font-weight: 700">BSI Volume</h2>
+            <div class="scrollable-list" style="max-height: 250px; overflow-y: auto;">
+              <ul class="list-unstyled mb-0">
+                @foreach ($bsiVolume as $volume)
+                  <li class="mb-2">
+                    <a href="#" class="text-decoration-none text-success">
+                      {{ $volume['volume'] }} - {{ $volume['name'] }}
+                    </a>
+                  </li>
+                @endforeach
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flora Of India Column -->
+      <div class="col-md-6 col-sm-6">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <h2 class="fw-bold mb-4 text-success" style="font-weight: 700">Flora Of India</h2>
+            <div class="scrollable-list" style="max-height: 250px; overflow-y: auto;">
+              <ul class="list-unstyled mb-0">
+                @foreach ($floraofIndia as $flora)
+                  <li class="mb-2">
+                    <a href="#" class="text-decoration-none text-success">
+                      {{ $flora['volume'] }} - {{ $flora['name'] }}
+                    </a>
+                  </li>
+                @endforeach
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
 
     <!-- About Section -->
     <section class="py-5 bg-light">
@@ -64,7 +162,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card shadow h-100">
-                        <img src="{{ asset('storage/plants/basil.jpg')}}" class="card-img-top" alt="Plant 2">
+                        <img src="{{ asset('storage/plants/basil.jpg') }}" class="card-img-top" alt="Plant 2">
                         <div class="card-body text-center">
                             <h5 class="card-title">Sunflower</h5>
                             <p class="card-text text-muted">Known for following the sun, sunflowers bring joy and
@@ -87,7 +185,7 @@
             </div>
         </div>
     </section>
-     <!-- Call to Action -->
+    <!-- Call to Action -->
     <section class="py-5 text-white text-center" style="background: #198754;">
         <div class="container">
             <h2 class="fw-bold mb-3">Join Our Community</h2>
@@ -100,35 +198,21 @@
     <section class="py-5 bg-light">
         <div class="container text-center">
             <h2 class="fw-bold mb-5 text-success" style="font-weight: 700">Plant Gallery</h2>
-            {{-- <div class="row g-3">
-                <div class="col-6 col-md-3">
-                    <img src="{{ asset('images/gallery1.jpg') }}" class="img-fluid rounded shadow-sm" alt="Gallery">
-                </div>
-                <div class="col-6 col-md-3">
-                    <img src="{{ asset('images/gallery2.jpg') }}" class="img-fluid rounded shadow-sm" alt="Gallery">
-                </div>
-                <div class="col-6 col-md-3">
-                    <img src="{{ asset('images/gallery3.jpg') }}" class="img-fluid rounded shadow-sm" alt="Gallery">
-                </div>
-                <div class="col-6 col-md-3">
-                    <img src="{{ asset('images/gallery4.jpg') }}" class="img-fluid rounded shadow-sm" alt="Gallery">
-                </div>
-            </div> --}}
 
-            <!-- Simple logo carousel slider -->
-  <div class="logo-slider-1">
-    {{-- <h2>Simple partners logo carousel slider</h2> --}}
-    <div class="owl-carousel version-1">
-       <div> <img src="{{ asset('images/sunflower.jpg') }}"> </div>
-      <div> <img src="{{asset('images/sunflower.jpg') }}"> </div>
-      <div> <img src="{{ asset('images/sunflower.jpg') }}"> </div>
-      <div> <img src="{{ asset('images/sunflower.jpg') }}"> </div>
-      <div> <img src="{{ asset('images/sunflower.jpg') }}"> </div>
-      <div> <img src="{{ asset('images/sunflower.jpg') }}"> </div>
-      <div> <img src="{{ asset('images/sunflower.jpgg') }}"> </div>
-    </div>
-  </div>
-  <!-- End Simple logo carousel slider -->
+            <div class="logo-slider-1">
+                {{-- <h2>Simple partners logo carousel slider</h2> --}}
+                <div class="owl-carousel version-1">
+                    <div> <img src="{{ asset('images/sunflower.jpg') }}"> </div>
+                    <div> <img src="{{ asset('images/sunflower.jpg') }}"> </div>
+                    <div> <img src="{{ asset('images/sunflower.jpg') }}"> </div>
+                    <div> <img src="{{ asset('images/sunflower.jpg') }}"> </div>
+                    <div> <img src="{{ asset('images/sunflower.jpg') }}"> </div>
+                    <div> <img src="{{ asset('images/sunflower.jpg') }}"> </div>
+                    <div> <img src="{{ asset('images/sunflower.jpg') }}"> </div>
+
+                </div>
+            </div>
+            <!-- End Simple logo carousel slider -->
 
 
         </div>
