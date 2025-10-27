@@ -100,3 +100,54 @@
 
     <x-plugins></x-plugins>
 </x-layout>
+<script>
+$(document).ready(function() {
+    // Family dropdown
+    $('#family_id').select2({
+        placeholder: 'Search Family...',
+        ajax: {
+            url: '{{ route('ajax.families') }}',
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
+                return { q: params.term };
+            },
+            processResults: function(data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.name
+                    }))
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 1
+    });
+
+    // Volumes dropdown (multi-select)
+    $('#volumes').select2({
+        placeholder: 'Search and select Volumes...',
+        multiple: true,
+        ajax: {
+            url: '{{ route('ajax.volumes') }}',
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
+                return { q: params.term };
+            },
+            processResults: function(data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.name
+                    }))
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 1
+    });
+});
+</script>
+

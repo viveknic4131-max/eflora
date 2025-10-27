@@ -70,7 +70,7 @@
                                                 Family Name</th>
                                             <th
                                                 class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
-                                                Descriptions</th>
+                                                Volume Name</th>
 
                                             <th
                                                 class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
@@ -93,18 +93,20 @@
 
 
                                                 <td class="text-uppercase text-secondary text-xxs font-weight-bolder">
-                                                    <h6 class="mb-0 text-sm text-center">{{ $permission->name }}</h6>
+                                                    <h6 class="mb-0 text-sm text-center">{{ $permission['family_name'] }}</h6>
 
                                                 </td>
                                                 <td class="text-uppercase text-secondary text-xxs font-weight-bolder">
-                                                    <h6 class="mb-0 text-sm text-center">{{ $permission->description }}
+                                                    <h6 class="mb-0 text-sm text-center">{{ $permission['volume_name'] }}
                                                     </h6>
 
 
                                                 </td>
                                                 <td class="text-uppercase text-secondary text-xxs font-weight-bolder">
                                                     <h6 class="mb-0 text-sm text-center">
-                                                        {{ $permission->created_at->format('d-M-Y') }}</h6>
+                                                     {{ $permission['created_at']}}
+
+                                                    </h6>
 
                                                 </td>
 

@@ -12,7 +12,7 @@ class PermissionController extends Controller
 {
      public function index(Request $request)
     {
-          $perPage = $request->get('perPage', 2);
+          $perPage = $request->get('perPage', 50);
         $permissions = Permission::orderBy('id','desc')->paginate($perPage);
         return view('pages.permissions.index', compact('permissions'));
     }

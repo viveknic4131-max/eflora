@@ -36,8 +36,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('create-volume-family', [VolumeController::class, 'createVolumeFamily'])->name('create-volume-family');
     Route::post('store-volume-family', [VolumeController::class, 'storeVolumeFamily'])->name('store-volume-family');
 
-    Route::get('/ajax/families', [FamilyController::class, 'search'])->name('ajax.families');
-    Route::get('/ajax/volumes', [VolumeController::class, 'search'])->name('ajax.volumes');
+    Route::get('/ajax/families', [FamilyController::class, 'searchFamilies'])->name('ajax.families');
+    Route::get('/ajax/volumes', [VolumeController::class, 'searchVolumes'])->name('ajax.volumes');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 

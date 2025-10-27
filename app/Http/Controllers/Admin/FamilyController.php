@@ -15,7 +15,7 @@ class FamilyController extends Controller
     public function index(Request $request)
 
     {
-        $perPage = $request->get('perPage', 2);
+        $perPage = $request->get('perPage', 50);
         $families = Family::orderBy('id', 'desc')->paginate($perPage);
         return view('pages.family.index', compact('families'));
     }

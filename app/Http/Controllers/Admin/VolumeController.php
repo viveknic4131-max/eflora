@@ -17,7 +17,7 @@ class VolumeController extends Controller
     public function index(Request $request)
 
     {
-        $perPage = $request->get('perPage', 2);
+        $perPage = $request->get('perPage', 50);
         $families = Volume::orderBy('id', 'desc')->paginate($perPage);
         return view('pages.volume.index', compact('families'));
     }
@@ -90,26 +90,52 @@ class VolumeController extends Controller
     public function assignVolumeFamily()
     {
 
-        $families=FamilyVolumes::paginate(10);
+        $families = FamilyVolumes::with(['family', 'volume'])->paginate(10);
+$families->getCollection()->transform(function ($item) {
+    return [
+        'family_name' => $item->family->name ?? 'N/A',
+        'volume_name' => $item->volume->name ?? 'N/A',
+        'created_at'  => $item->created_at->format('d-M-Y'),
+    ];
+});
+        // dd($filtered);
         return view('pages.volume_family_assign.index', compact('families'));
     }
 
     public function createVolumeFamily()
     {
-        $volumes=Volume::all();
-        $families=Family::all();
+        $volumes = Volume::all();
+        $families = Family::all();
         return view('pages.volume_family_assign.create', compact('volumes', 'families'));
     }
     public function searchVolumes(Request $request)
-{
-    $search = $request->get('q', '');
-    $volumes = Volume::query()
-        ->where('name', 'like', "%{$search}%")
-        ->select('id', 'name')
-        ->limit(20)
-        ->get();
+    {
+        $search = $request->get('q', '');
+        $volumes = Volume::query()
+            ->where('name', 'like', "%{$search}%")
+            ->select('id', 'name')
+            ->limit(20)
+            ->get();
 
-    return response()->json($volumes);
-}
+        return response()->json($volumes);
+    }
 
+    public function storeVolumeFamily(Request $request)
+    {
+
+        $validated = $request->validate([
+            'family_id' => 'required|exists:families,id',
+            'volumes' => 'required|array',
+            'volumes.*' => 'exists:volumes,id',
+        ]);
+
+        foreach ($validated['volumes'] as $volumeId) {
+            FamilyVolumes::firstOrCreate([
+                'family_id' => $validated['family_id'],
+                'volume_id' => $volumeId,
+            ]);
+        }
+
+        return redirect()->route('family.index')->with('success', 'Volumes assigned successfully!');
+    }
 }
