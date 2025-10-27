@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\TaxonController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\FamilyController;
+use App\Http\Controllers\Admin\VolumeController;
 
 
 
@@ -23,13 +25,19 @@ Route::middleware('guest')->group(function () {
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     // Roles & Permissions
-     Route::resource('roles', RoleController::class);
+    Route::resource('roles', RoleController::class);
     Route::resource('permissions', PermissionController::class);
     Route::resource('users', UserController::class);
 
-    Route::resource('family', App\Http\Controllers\admin\FamilyController::class);
-    Route::resource('volume', App\Http\Controllers\admin\VolumeController::class);
+    Route::resource('family', FamilyController::class);
+    Route::resource('volume', VolumeController::class);
 
+    Route::get('assign-volume-family', [VolumeController::class, 'assignVolumeFamily'])->name('assign-volume-family');
+    Route::get('create-volume-family', [VolumeController::class, 'createVolumeFamily'])->name('create-volume-family');
+    Route::post('store-volume-family', [VolumeController::class, 'storeVolumeFamily'])->name('store-volume-family');
+
+    Route::get('/ajax/families', [FamilyController::class, 'search'])->name('ajax.families');
+    Route::get('/ajax/volumes', [VolumeController::class, 'search'])->name('ajax.volumes');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 

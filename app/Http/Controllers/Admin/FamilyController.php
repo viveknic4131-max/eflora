@@ -79,4 +79,17 @@ class FamilyController extends Controller
     {
         //
     }
+
+    public function searchFamilies(Request $request)
+{
+    $search = $request->get('q', '');
+    $families = Family::query()
+        ->where('name', 'like', "%{$search}%")
+        ->select('id', 'name')
+        ->limit(20)
+        ->get();
+
+    return response()->json($families);
+}
+
 }
