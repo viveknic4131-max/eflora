@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('theme.home');
 // });
 
-Route::get('/', [HomeController::class ,'index'])->name('/');
+Route::get('/', [HomeController::class, 'index'])->name('/');
 
 Route::get('/about', function () {
     return view('theme.about');
@@ -20,7 +20,8 @@ Route::get('/about', function () {
 Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/search-suggest', [HomeController::class, 'suggest'])->name('search.suggest');
 
-
-
+Route::get('/get-family', [HomeController::class, 'getFamily'])->name('get.family');
+Route::get('/get-genus', [HomeController::class, 'getGenus'])->name('get.genus');
+Route::get('/get-species', [HomeController::class, 'getSpecies'])->name('get.species');
 
 include 'admin.php';

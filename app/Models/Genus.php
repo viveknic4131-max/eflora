@@ -7,4 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Genus extends Model
 {
    use HasFactory;
+
+    public function family()
+    {
+         return $this->belongsTo(Family::class);
+    }
 }
