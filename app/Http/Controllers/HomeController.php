@@ -79,32 +79,76 @@ class HomeController extends Controller
     }
 
 
-   public function getFamily(Request $request)
-{
-    $family = Family::findOrFail($request->family);
+//    public function getFamily(Request $request)
+// {
+//     // dd($request->all());
+//     $family = Family::where('family_code',$request->family)->firstOrFail();
 
+
+//     $genusQuery = Genus::where('family_id', $family->id);
+//     $speciesQuery = Species::whereHas('genus', function ($q) use ($family) {
+//         $q->where('family_id', $family->id);
+//     });
+
+//     if ($request->has('genus_search')) {
+//         $genusQuery->where('name', 'like', '%' . $request->genus_search . '%');
+//     }
+
+//     if ($request->has('species_search')) {
+//         $speciesQuery->where('name', 'like', '%' . $request->species_search . '%');
+//     }
+
+//     $genusList = $genusQuery->get();
+//     $speciesList = $speciesQuery->get();
+//     // dd($genusList);
+//     //
+
+//     return view('theme.family-view', compact('family', 'genusList', 'speciesList'));
+// }
+
+public function getFamily(Request $request)
+{
+    $request->validate([
+        'family' => 'required|string'
+    ]);
+
+     $familyCode = trim($request->family);
+
+    // Find the family by family_code
+   $family = Family::where('family_code', $familyCode)->firstOrFail();
 
     $genusQuery = Genus::where('family_id', $family->id);
     $speciesQuery = Species::whereHas('genus', function ($q) use ($family) {
         $q->where('family_id', $family->id);
     });
 
-    if ($request->has('genus_search')) {
+    if ($request->filled('genus_search')) {
         $genusQuery->where('name', 'like', '%' . $request->genus_search . '%');
+        $speciesQuery->whereHas('genus', function ($q) use ($family, $request) {
+            $q->where('family_id', $family->id)
+              ->where('name', 'like', '%' . $request->genus_search . '%');
+        });
     }
 
-    if ($request->has('species_search')) {
+    if ($request->filled('species_search')) {
         $speciesQuery->where('name', 'like', '%' . $request->species_search . '%');
     }
 
-    $genusList = $genusQuery->get();
-    $speciesList = $speciesQuery->get();
+    $genusList = $genusQuery->paginate(10);
+    $speciesList = $speciesQuery->paginate(10);
 
     return view('theme.family-view', compact('family', 'genusList', 'speciesList'));
 }
 
 
+
     public function getGenus(Request $request) {}
 
-    public function getSpecies(Request $request) {}
+  public function getSpecies(Request $request)
+{
+    $species = Species::with(['genus', 'family', 'images'])->where('species_code', $request->species)->firstOrFail();
+
+    return view('theme.species-details', compact('species'));
+}
+
 }

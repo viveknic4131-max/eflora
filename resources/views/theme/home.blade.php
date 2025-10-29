@@ -22,7 +22,7 @@
             <h1 class="display-4 fw-bold">Explore the World of Plants</h1>
             <p class="lead mb-5">Search thousands of species and discover the beauty of nature 🌿</p>
 
-            <form action="{{ url('/search') }}" method="GET" class="row justify-content-center">
+            <form action="{{ route('search') }}" method="POST" class="row justify-content-center">
                 @csrf
                 <div class="col-12 col-md-6">
                     <div class="input-group">

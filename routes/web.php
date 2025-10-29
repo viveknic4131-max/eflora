@@ -17,7 +17,7 @@ Route::get('/about', function () {
 
 
 
-Route::get('/search', [HomeController::class, 'search'])->name('search');
+Route::post('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/search-suggest', [HomeController::class, 'suggest'])->name('search.suggest');
 
 Route::get('/get-family', [HomeController::class, 'getFamily'])->name('get.family');

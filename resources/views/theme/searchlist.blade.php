@@ -60,8 +60,9 @@
     <!-- 🔎 Filter/Search Section -->
     <section class="py-4 bg-light border-bottom">
         <div class="container-fluid">
-            <form action="{{ route('search') }}" method="GET"
+            <form action="{{ route('search') }}" method="POST"
                 class="row g-2 g-md-3 align-items-end justify-content-center">
+                @csrf
                 <div class="col-12 col-sm-6 col-md-3">
                     <div class="position-relative">
                         <input type="text" id="searchInput" name="q" class="form-control"
