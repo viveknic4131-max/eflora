@@ -140,7 +140,8 @@
                                                 @endif
                                                 @if ($plant['type'] == 'Species')
                                                     <p class="card-text mb-1">
-                                                       <a href="#"> <small class="text-muted"> {{ $plant['details'] }}</small> </a>
+                                                        <a href="">
+                                                       <a href="{{ route('get.species', ['species' => $plant['id']]) }}"> <small class="text-muted"> {{ $plant['details'] }}</small> </a>
                                                     </p>
                                                 @endif
 
