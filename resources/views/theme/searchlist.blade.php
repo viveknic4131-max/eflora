@@ -163,50 +163,68 @@
 
 @endsection
 
-@push('scripts')
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const input = document.getElementById("searchInput");
-            const suggestionsBox = document.getElementById("suggestions");
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const input = document.getElementById("searchInput");
+        const suggestionsBox = document.getElementById("suggestions");
 
-            input.addEventListener("input", function() {
-                const query = this.value.trim();
-                if (query.length < 2) {
-                    suggestionsBox.classList.add("d-none");
-                    return;
-                }
+        input.addEventListener("input", function() {
+            const query = this.value.trim();
+            if (query.length < 2) {
+                suggestionsBox.classList.add("d-none");
+                return;
+            }
 
-                fetch(`{{ route('search.suggest') }}?q=${query}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        suggestionsBox.innerHTML = '';
-                        Object.keys(data).forEach(type => {
-                            const groupTitle = document.createElement("li");
-                            groupTitle.className =
-                                "list-group-item active text-uppercase fw-bold";
-                            groupTitle.textContent = type;
-                            suggestionsBox.appendChild(groupTitle);
+            fetch(`{{ route('search.suggest') }}?q=${encodeURIComponent(query)}`)
+                .then(res => res.json())
+                .then(data => {
+                    suggestionsBox.innerHTML = '';
 
+                    let hasResults = false;
+
+                    Object.keys(data).forEach(type => {
+                        if (data[type].length > 0) {
+                            hasResults = true;
+
+                            // Group header
+                            const header = document.createElement("li");
+                            header.className =
+                                "list-group-item active fw-bold text-uppercase";
+                            header.textContent = type;
+                            suggestionsBox.appendChild(header);
+
+                            // Items
                             data[type].forEach(item => {
                                 const li = document.createElement("li");
-                                li.className = "list-group-item list-group-item-action";
+                                li.className =
+                                    "list-group-item list-group-item-action";
                                 li.textContent = item.name;
+                                li.style.cursor = "pointer";
                                 li.onclick = () => {
-                                    input.value = item.name;
-                                    suggestionsBox.classList.add("d-none");
+                                    input.value = item
+                                        .name; // ✅ Fill input with clicked suggestion
+                                    suggestionsBox.classList.add(
+                                        "d-none"); // Hide box
                                 };
                                 suggestionsBox.appendChild(li);
                             });
-                        });
-                        suggestionsBox.classList.remove("d-none");
+                        }
                     });
-            });
 
-            document.addEventListener("click", e => {
-                if (!suggestionsBox.contains(e.target) && e.target !== input) {
-                    suggestionsBox.classList.add("d-none");
-                }
-            });
+                    if (hasResults) {
+                        suggestionsBox.classList.remove("d-none");
+                    } else {
+                        suggestionsBox.classList.add("d-none");
+                    }
+                })
+                .catch(() => suggestionsBox.classList.add("d-none"));
         });
-    </script>
-@endpush
+
+        // Hide suggestion box when clicked outside
+        document.addEventListener("click", (e) => {
+            if (!suggestionsBox.contains(e.target) && e.target !== input) {
+                suggestionsBox.classList.add("d-none");
+            }
+        });
+    });
+</script>

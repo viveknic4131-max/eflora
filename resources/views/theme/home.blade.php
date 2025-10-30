@@ -2,14 +2,33 @@
 
 @section('title', 'Home | E-Flora')
 <style>
-.scrollable-list {
-    max-height: 300px; /* Adjust the height as needed */
-    overflow-y: auto; /* Scroll vertically if content exceeds height */
-    padding-right: 10px; /* Optional: space for scrollbar */
-}
-.scrollable-list ul li a {
-    display: block;
-}
+    .scrollable-list {
+        max-height: 300px;
+        /* Adjust the height as needed */
+        overflow-y: auto;
+        /* Scroll vertically if content exceeds height */
+        padding-right: 10px;
+        /* Optional: space for scrollbar */
+    }
+
+    .scrollable-list ul li a {
+        display: block;
+    }
+
+    .list-group-item.active {
+        background-color: #198754 !important;
+        border-color: #198754 !important;
+        font-weight: bold;
+    }
+
+    #suggestions .list-group-item {
+        cursor: pointer;
+    }
+
+    #suggestions .list-group-item:hover {
+        background-color: #198754;
+        color: white;
+    }
 </style>
 
 @section('content')
@@ -22,103 +41,140 @@
             <h1 class="display-4 fw-bold">Explore the World of Plants</h1>
             <p class="lead mb-5">Search thousands of species and discover the beauty of nature 🌿</p>
 
-            <form action="{{ route('search') }}" method="POST" class="row justify-content-center">
+            {{-- <form action="{{ route('search') }}" method="POST" class="row justify-content-center">
                 @csrf
                 <div class="col-12 col-md-6">
                     <div class="input-group">
-                        <input type="text" name="q" class="form-control"
-                            placeholder="Search for plants, species...">
-                        <button type="submit" class="btn btn-success px-4">Search</button>
+                        <input type="text" id="searchInput" name="q" class="form-control"
+                            placeholder="Search for plants, species..." autocomplete="off" value="{{ request('q') }}">
+                        <ul id="suggestions" class="list-group position-absolute w-100 d-none"
+                            style="z-index: 1000; max-height: 300px; overflow-y: auto;"></ul>
                     </div>
+                    <button type="submit" class="btn btn-success px-4">Search</button>
+                </div>
+
+            </form> --}}
+            <form action="{{ route('search') }}" method="POST" class="row justify-content-center position-relative">
+                @csrf
+                <div class="col-12 col-md-6 ">
+                    <div class="input-group">
+                        <input type="text" id="searchInput" name="q"
+                            class="form-control form-control-lg rounded-pill shadow-sm text-center"
+                            placeholder="Search for plants, species..." autocomplete="off" value="{{ request('q') }}"
+                            style="z-index: 2;">
+
+                        <!-- Suggestion Box -->
+                        <ul id="suggestions" class="list-group position-absolute start-0 w-100 d-none mt-2 shadow rounded-3"
+                            style="z-index: 1000; max-height: 300px; overflow-y: auto; top: 100%;">
+                        </ul>
+                    </div>
+
+                        <button type="submit" class="btn btn-success px-4 rounded-pill">Search</button>
+
                 </div>
             </form>
+
         </div>
     </section>
 
 
-{{-- <section class="py-5 bg-light">
+
+{{--
+    <section class="py-5 ">
+        <div class="container text-center">
+            <div class="row g-4">
+                <!-- BSI Volume Column -->
+                <div class="col-md-6 col-sm-6">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body">
+                            <h2 class="fw-bold mb-4 text-success" style="font-weight: 700">BSI Volume</h2>
+                            <div class="scrollable-list" style="max-height: 250px; overflow-y: auto;">
+                                <ul class="list-unstyled mb-0">
+                                    @foreach ($bsiVolume as $volume)
+                                        <li class="mb-2">
+                                            <a href="#" class="text-decoration-none text-success">
+                                                {{ $volume['volume'] }} - {{ $volume['name'] }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flora Of India Column -->
+                <div class="col-md-6 col-sm-6">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body">
+                            <h2 class="fw-bold mb-4 text-success" style="font-weight: 700">Flora Of India</h2>
+                            <div class="scrollable-list" style="max-height: 250px; overflow-y: auto;">
+                                <ul class="list-unstyled mb-0">
+                                    @foreach ($floraofIndia as $flora)
+                                        <li class="mb-2">
+                                            <a href="#" class="text-decoration-none text-success">
+                                                {{ $flora['volume'] }} - {{ $flora['name'] }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> --}}
+
+    <section class="py-5">
     <div class="container text-center">
-        <div class="row">
-            <!-- BSI Volume Column -->
+        <div class="row g-4">
+            <!-- 🌿 BSI Volume Column -->
             <div class="col-md-6 col-sm-6">
-                <h2 class="fw-bold mb-4 text-success" style="font-weight: 700">BSI Volume</h2>
-                <div class="scrollable-list">
-                    <ul class="list-unstyled">
-                        @foreach ($bsiVolume as $volume)
-                            <li class="mb-2">
-                                <a href="#" class="text-decoration-none text-success">
-                                    {{ $volume['volume'] }} - {{ $volume['title'] }}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <h2 class="fw-bold mb-4 text-success">BSI Volume</h2>
+                        <div class="scrollable-list" style="max-height: 250px; overflow-y: auto;">
+                            <ul class="list-unstyled mb-0">
+                                @foreach ($bsiVolume as $volume)
+
+                                    <li class="mb-2">
+                                        <a href="{{ route('get.family', ['volume' => $volume['volume_code']]) }}"
+                                           class="text-decoration-none text-success">
+                                            {{ $volume['volume'] }} - {{ $volume['name'] }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Flora Of India Column -->
+            <!-- 🌸 Flora of India Column -->
             <div class="col-md-6 col-sm-6">
-                <h2 class="fw-bold mb-4 text-success" style="font-weight: 700">Flora Of India</h2>
-                <div class="scrollable-list">
-                    <ul class="list-unstyled">
-                        @foreach ($floraofIndia as $flora)
-                            <li class="mb-2">
-                                <a href="#" class="text-decoration-none text-success">
-                                    {{ $flora['volume'] }} - {{ $flora['name'] }}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <h2 class="fw-bold mb-4 text-success">Flora Of India</h2>
+                        <div class="scrollable-list" style="max-height: 250px; overflow-y: auto;">
+                            <ul class="list-unstyled mb-0">
+                                @foreach ($floraofIndia as $flora)
+                                    <li class="mb-2">
+                                        <a href="{{ route('get.family', ['volume' => $flora['volume_code']]) }}"
+                                           class="text-decoration-none text-success">
+                                            {{ $flora['volume'] }} - {{ $flora['name'] }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</section> --}}
-
-<section class="py-5 ">
-  <div class="container text-center">
-    <div class="row g-4">
-      <!-- BSI Volume Column -->
-      <div class="col-md-6 col-sm-6">
-        <div class="card shadow-sm border-0 h-100">
-          <div class="card-body">
-            <h2 class="fw-bold mb-4 text-success" style="font-weight: 700">BSI Volume</h2>
-            <div class="scrollable-list" style="max-height: 250px; overflow-y: auto;">
-              <ul class="list-unstyled mb-0">
-                @foreach ($bsiVolume as $volume)
-                  <li class="mb-2">
-                    <a href="#" class="text-decoration-none text-success">
-                      {{ $volume['volume'] }} - {{ $volume['name'] }}
-                    </a>
-                  </li>
-                @endforeach
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Flora Of India Column -->
-      <div class="col-md-6 col-sm-6">
-        <div class="card shadow-sm border-0 h-100">
-          <div class="card-body">
-            <h2 class="fw-bold mb-4 text-success" style="font-weight: 700">Flora Of India</h2>
-            <div class="scrollable-list" style="max-height: 250px; overflow-y: auto;">
-              <ul class="list-unstyled mb-0">
-                @foreach ($floraofIndia as $flora)
-                  <li class="mb-2">
-                    <a href="#" class="text-decoration-none text-success">
-                      {{ $flora['volume'] }} - {{ $flora['name'] }}
-                    </a>
-                  </li>
-                @endforeach
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </section>
+
 
 
 
@@ -221,3 +277,127 @@
 
 
 @endsection
+
+{{-- <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.querySelector('input[name="q"]');
+    const suggestionBox = document.createElement('div');
+
+    suggestionBox.classList.add('list-group', 'position-absolute', 'w-50', 'mx-auto');
+    suggestionBox.style.zIndex = '1000';
+    suggestionBox.style.maxHeight = '300px';
+    suggestionBox.style.overflowY = 'auto';
+    searchInput.parentNode.appendChild(suggestionBox);
+
+    let typingTimer;
+    const delay = 300;
+
+    searchInput.addEventListener('keyup', function() {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(fetchSuggestions, delay);
+    });
+
+    function fetchSuggestions() {
+        const query = searchInput.value.trim();
+        suggestionBox.innerHTML = '';
+
+        if (query.length < 2) return; // skip short queries
+
+        fetch(`/search-suggest?q=${encodeURIComponent(query)}`)
+            .then(res => res.json())
+            .then(data => {
+                Object.keys(data).forEach(type => {
+                    if (data[type].length > 0) {
+                        const header = document.createElement('div');
+                        header.classList.add('list-group-item', 'active');
+                        header.textContent = type;
+                        suggestionBox.appendChild(header);
+
+                        data[type].forEach(item => {
+                            const link = document.createElement('a');
+                            link.classList.add('list-group-item', 'list-group-item-action');
+                            link.textContent = item.name;
+                            link.href = `${item.name}`;
+                            suggestionBox.appendChild(link);
+                        });
+                    }
+                });
+            })
+            .catch(err => console.error(err));
+    }
+
+    // Hide suggestions when clicked outside
+    document.addEventListener('click', (e) => {
+        if (!suggestionBox.contains(e.target) && e.target !== searchInput) {
+            suggestionBox.innerHTML = '';
+        }
+    });
+});
+</script> --}}
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const input = document.getElementById("searchInput");
+        const suggestionsBox = document.getElementById("suggestions");
+
+        input.addEventListener("input", function() {
+            const query = this.value.trim();
+            if (query.length < 2) {
+                suggestionsBox.classList.add("d-none");
+                return;
+            }
+
+            fetch(`{{ route('search.suggest') }}?q=${encodeURIComponent(query)}`)
+                .then(res => res.json())
+                .then(data => {
+                    suggestionsBox.innerHTML = '';
+
+                    let hasResults = false;
+
+                    Object.keys(data).forEach(type => {
+                        if (data[type].length > 0) {
+                            hasResults = true;
+
+                            // Group header
+                            const header = document.createElement("li");
+                            header.className =
+                                "list-group-item active fw-bold text-uppercase";
+                            header.textContent = type;
+                            suggestionsBox.appendChild(header);
+
+                            // Items
+                            data[type].forEach(item => {
+                                const li = document.createElement("li");
+                                li.className =
+                                    "list-group-item list-group-item-action";
+                                li.textContent = item.name;
+                                li.style.cursor = "pointer";
+                                li.onclick = () => {
+                                    input.value = item
+                                        .name; // ✅ Fill input with clicked suggestion
+                                    suggestionsBox.classList.add(
+                                        "d-none"); // Hide box
+                                };
+                                suggestionsBox.appendChild(li);
+                            });
+                        }
+                    });
+
+                    if (hasResults) {
+                        suggestionsBox.classList.remove("d-none");
+                    } else {
+                        suggestionsBox.classList.add("d-none");
+                    }
+                })
+                .catch(() => suggestionsBox.classList.add("d-none"));
+        });
+
+        // Hide suggestion box when clicked outside
+        document.addEventListener("click", (e) => {
+            if (!suggestionsBox.contains(e.target) && e.target !== input) {
+                suggestionsBox.classList.add("d-none");
+            }
+        });
+    });
+</script>

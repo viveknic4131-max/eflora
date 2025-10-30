@@ -20,6 +20,9 @@ Route::get('/about', function () {
 Route::post('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/search-suggest', [HomeController::class, 'suggest'])->name('search.suggest');
 
+Route::get('/flora', [HomeController::class, 'getFamilyOrVolume'])->name('get.family');
+
+
 Route::get('/get-family', [HomeController::class, 'getFamily'])->name('get.family');
 Route::get('/get-genus', [HomeController::class, 'getGenus'])->name('get.genus');
 Route::get('/get-species', [HomeController::class, 'getSpecies'])->name('get.species');
