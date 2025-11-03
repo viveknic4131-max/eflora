@@ -1,84 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>@yield('title', 'E-Flora')</title>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="{{ asset('css/animate.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/owl.carousel.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/owl.theme.default.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/magnific-popup.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/flaticon.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>@yield('title')</title>
 
+  <!-- Bootstrap & Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Florize Custom CSS -->
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
 
+  <!-- ===== Florize Navbar ===== -->
+  <nav class="navbar navbar-expand-lg navbar-florize fixed-top py-3">
+    <div class="container">
+      <a class="navbar-brand" href="{{ url('/') }}">
+        eFlora<span style="color:#198754;">.</span>
+      </a>
 
-  @include('theme.layouts.header')
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
+      <div class="collapse navbar-collapse justify-content-center" id="mainNav">
+        <ul class="navbar-nav mb-2 mb-lg-0">
+          <li class="nav-item"><a href="{{ url('/') }}" class="nav-link active">Home</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Create Checklist</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">About Us</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Cite</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+        </ul>
+      </div>
 
-  <main>
+      <div class="social-icons d-none d-lg-block">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-x-twitter"></i></a>
+        <a href="#"><i class="fab fa-pinterest-p"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Yield page content -->
+  <main style="margin-top:100px;">
     @yield('content')
   </main>
 
-  @include('theme.layouts.footer')
+  <footer>
+    <p class="mb-0">© {{ date('Y') }} E-Flora. All rights reserved.</p>
+  </footer>
 
-  <script src="{{ asset('js/jquery.min.js') }}"></script>
-  <script src="{{ asset('js/popper.min.js') }}"></script>
-  <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-  <script src="{{ asset('js/owl.carousel.min.js') }}"></script>
-  <script src="{{ asset('js/jquery.magnific-popup.min.js') }}"></script>
-  <script src="{{ asset('js/jquery.animateNumber.min.js') }}"></script>
-  <script src="{{ asset('js/scrollax.min.js') }}"></script>
-  <script src="{{ asset('js/main.js') }}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-  <script>// Slider version 1
-$('.owl-carousel.version-1').owlCarousel({
-    loop:true,
-    margin:15,
-    responsiveClass:true,
-    responsive:{
-        0:{
-            items:2,
-            nav:true
-        },
-        600:{
-            items:3,
-            nav:false
-        },
-        1000:{
-            items:4,
-            nav:true
-        }
-    }
-});
-
-// Slider version 2
-$('.owl-carousel.version-2').owlCarousel({
-    loop:true,
-    margin:15,
-    center: true,
-    responsiveClass:true,
-    responsive:{
-        0:{
-            items:1,
-            nav:true
-        },
-        600:{
-            items:2,
-            nav:false
-        },
-        1000:{
-            items:3,
-            nav:true
-        }
-    }
-})</script>
-
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  @stack('scripts')
 </body>
 </html>

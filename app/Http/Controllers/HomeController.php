@@ -13,8 +13,8 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $bsiVolume = Volume::where('type', false)->get();
-        $floraofIndia = Volume::where('type', true)->get();
+        $bsiVolume = Volume::where('type', false)->paginate(25);
+        $floraofIndia = Volume::where('type', true)->paginate(25);
 
         return view('theme.home', compact('bsiVolume', 'floraofIndia'));
     }
