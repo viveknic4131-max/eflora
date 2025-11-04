@@ -26,4 +26,7 @@ Route::get('/get-family', [HomeController::class, 'getFamily'])->name('get.famil
 Route::get('/get-genus', [HomeController::class, 'getGenus'])->name('get.genus');
 Route::get('/get-species', [HomeController::class, 'getSpecies'])->name('get.species');
 
+Route::get('/bsi-volume', [HomeController::class, 'getBsiVolume'])->name('bsi.volume');
+Route::get('/flora-of-india', [HomeController::class, 'getFloraOfIndia'])->name('flora.india');
+
 include 'admin.php';

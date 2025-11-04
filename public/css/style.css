@@ -1,7 +1,17 @@
+.flora-primary {
+  /* background-color: #3e660e; */
+  color: #3e660e !important;
+  /* border-color: #3e660e; */
+}
+
 body {
   font-family: "Poppins", sans-serif;
   color: #333;
   overflow-x: hidden;
+}
+.body h1, .body h2, .body h3, .body h4, .body h5, .body h6 {
+  color: #3e660e !important;
+  font-weight: 600;
 }
 
 .flora-active {
@@ -270,7 +280,12 @@ footer {
 
 
 .modern-section {
-  background: linear-gradient(135deg, #fff 0%, #fdf1f4 100%);
+    /* background: url('/images/background.png') center/cover no-repeat;
+     */
+      background:
+    /* linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), black overlay with 40% opacity */
+    url('/images/background.jpg') center/cover no-repeat ;
+  /* background: linear-gradient(135deg, #fff 0%, #fdf1f4 100%); */
   border-top: 4px solid #3e660e;
   border-radius: 0 0 40px 40px;
 }
@@ -284,8 +299,8 @@ footer {
 }
 
 .modern-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px #3e660e;
+  /* transform: translateY(-5px); */
+  /* box-shadow: 0 8px 20px #3e660e; */
 }
 
 .section-title {
@@ -333,4 +348,82 @@ footer {
 .scroll-box::-webkit-scrollbar-thumb {
   background-color: #3e660e;
   border-radius: 10px;
+}
+
+/*
+.modern-section {
+    background: linear-gradient(180deg, #fffaf5 0%, #f9f9f9 100%);
+} */
+
+.glass-card {
+    /* border-radius: 18px;
+    border: 1px solid #d9e2cc;
+    box-shadow: 0 5px 15px rgba(77, 101, 38, 0.2);
+    background: #fff; */
+
+        border-radius: 18px;
+    border: 1px solid #d9e2cc;
+    box-shadow: 0 1px 7px rgba(70, 101, 38, 0.1);
+    background: #fff;
+}
+
+.volume-link {
+    color: #2e3a1f;
+    text-decoration: none;
+    font-weight: 500;
+}
+.volume-link:hover {
+    color: #6b8e23;
+}
+
+.text-accent {
+    color: #6b8e23;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination {
+    margin: 0;
+}
+.pagination .page-item.active .page-link {
+    background-color: #6b8e23;
+    border-color: #6b8e23;
+    color: white;
+}
+.pagination .page-link {
+    color: #6b8e23;
+    border-radius: 6px;
+    margin: 0 2px;
+}
+.pagination .page-link:hover {
+    background-color: #eaf3dd;
+}
+.loading-spinner {
+    text-align: center;
+    color: #6b8e23;
+    font-weight: 500;
+}
+
+
+
+.loader {
+  border: 5px solid #eee;
+  border-top: 5px solid #3e660e; /* theme color */
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+
+.flora-label{
+    font-size: 115%;
 }

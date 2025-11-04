@@ -13,10 +13,30 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $bsiVolume = Volume::where('type', false)->paginate(25);
-        $floraofIndia = Volume::where('type', true)->paginate(25);
+        $bsiVolume = Volume::where('type', false)->paginate(5);
+        $floraofIndia = Volume::where('type', true)->paginate(5);
 
         return view('theme.home', compact('bsiVolume', 'floraofIndia'));
+        // return view('theme.home');
+    }
+
+  public function getBsiVolume(Request $request)
+    {
+        $bsiVolume = Volume::where('type', false)->paginate(5);
+
+        if ($request->ajax()) {
+            return view('theme.components.bsi_volume', compact('bsiVolume'))->render();
+        }
+    }
+
+    // Flora of India AJAX
+    public function getFloraOfIndia(Request $request)
+    {
+        $floraofIndia = Volume::where('type', true)->paginate(5);
+
+        if ($request->ajax()) {
+            return view('theme.components.flora_of_india', compact('floraofIndia'))->render();
+        }
     }
 
 
@@ -56,6 +76,7 @@ class HomeController extends Controller
     }
     public function suggest(Request $request)
     {
+       $type = $request->get('plant_type');
         $keyword = $request->get('q');
 
         $families = Family::where('name', 'LIKE', "%{$keyword}%")

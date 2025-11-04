@@ -13,6 +13,9 @@
   <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
+<div class="loader-overlay" style="display:none;">
+  <div class="loader"></div>
+</div>
 
   <!-- ===== Florize Navbar ===== -->
   <nav class="navbar navbar-expand-lg navbar-florize fixed-top py-3">
@@ -45,7 +48,7 @@
   </nav>
 
   <!-- Yield page content -->
-  <main style="margin-top:100px;">
+  <main>
     @yield('content')
   </main>
 

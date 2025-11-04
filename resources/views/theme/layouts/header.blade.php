@@ -86,16 +86,7 @@
     border-radius: 4px;
   }
 
-  /* --- NAVBAR --- */
-  .sticky-top {
-    top: 34px; /* same as topbar height */
-    transition: top 0.4s ease;
-  }
-
-  /* When topbar hides */
-  .sticky-nav {
-    top: 0 !important;
-  }
+  
 
 
 
