@@ -11,7 +11,7 @@ class Family extends Model
     use HasFactory;
     protected $fillable = ['family_code', 'name', 'description'];
 
-    
+
     protected static function boot()
     {
         parent::boot();
@@ -19,5 +19,20 @@ class Family extends Model
         static::creating(function ($model) {
             $model->family_code = (string) Str::uuid();
         });
+    }
+
+    public function genera()
+    {
+        return $this->hasMany(Genus::class);
+    }
+    
+    public function species()
+    {
+        return $this->hasManyThrough(Species::class, Genus::class);
+    }
+
+    public function volumes()
+    {
+        return $this->hasMany(FamilyVolumes::class);
     }
 }

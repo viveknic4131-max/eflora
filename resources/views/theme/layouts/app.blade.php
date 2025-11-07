@@ -9,8 +9,23 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
+
   <!-- Florize Custom CSS -->
   <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="{{ asset('images/bsi_logo.png') }}" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{{ asset('css/animate.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/owl.carousel.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/owl.theme.default.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/magnific-popup.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/flaticon.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+
 </head>
 <body>
 <div class="loader-overlay" style="display:none;">
@@ -52,9 +67,10 @@
     @yield('content')
   </main>
 
-  <footer>
+    @include('theme.layouts.footer')
+  {{-- <footer>
     <p class="mb-0">© {{ date('Y') }} E-Flora. All rights reserved.</p>
-  </footer>
+  </footer> --}}
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   @stack('scripts')

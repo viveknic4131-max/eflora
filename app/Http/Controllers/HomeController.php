@@ -20,7 +20,7 @@ class HomeController extends Controller
         // return view('theme.home');
     }
 
-  public function getBsiVolume(Request $request)
+    public function getBsiVolume(Request $request)
     {
         $bsiVolume = Volume::where('type', false)->paginate(5);
 
@@ -40,43 +40,176 @@ class HomeController extends Controller
     }
 
 
+    // public function search(Request $request)
+    // {
+    //     // dd(url('/'));
+    //     // dd($request->all());
+    //   dd(  explode(',',$request->q,-1));
+
+    //      $validated = $request->validate([
+    //         'plant_type' => 'required|in:flora_india,checklist',
+    //         'q' => 'required|string|max:255',
+    //     ]);
+    //     $keyword = $request->q;
+    //     $searchType = $request->plant_type;
+
+    //     // if($request->plant_type ==='flora_india'){
+    //     //     dd('flora of india');
+    //     // }
+    //     // if($request->plant_type ==='checklist'){
+    //     //     dd('checklist');
+    //     // }
+    //     $keyword = $request->q;
+    //     $searchType = $request->plant_type;
+
+    //     $families = Family::where('name', 'LIKE', "%{$keyword}%")->get();
+    //     $genus = Genus::with('family')->where('name', 'LIKE', "%{$keyword}%")->get();
+    //     $species = Species::with('images', 'family', 'genus')->where('name', 'LIKE', "%{$keyword}%")->get();
+    //     $data = collect()
+    //         ->merge($families->map(fn($f) => [
+    //             'type' => 'Family',
+    //             'name' => $f->name,
+    //             'details' => $f->description,
+    //             'id' => $f->family_code
+    //         ]))
+    //         ->merge($genus->map(fn($g) => [
+    //             'type' => 'Genus',
+    //             'name' => $g->name,
+    //             'details' => $g->description . ' ' . $g->family->name,
+    //             'id' => $g->genus_code
+    //         ]))
+    //         ->merge($species->map(fn($s) => [
+    //             'type' => 'Species',
+    //             'name' => $s->name,
+    //             'details' => $s->family->name . ' ' . $s->genus->name . ' ' . $s->author . ' ' . $s->volume . ' ' . $s->page . ' ' . $s->year_described . ' ' . $s->publication,
+    //             'id' => $s->species_code,
+    //             'images' => $s->images->pluck('pic')->first()
+    //         ]));
+
+    //     // dd($data->toArray());
+    //     return view('theme.searchlist', compact('data', 'keyword','searchType'));
+
+    //     // return view('theme.searchlist', compact('data'));
+    // }
+
     public function search(Request $request)
-    {
-        // dd(url('/'));
-        $keyword = $request->get('q');
+{
+    // 🔹 Validate request
+    $validated = $request->validate([
+        'plant_type' => 'required|in:flora_india,checklist',
+        'q' => 'required|string|max:255',
+    ]);
 
-        $families = Family::where('name', 'LIKE', "%{$keyword}%")->get();
-        $genus = Genus::with('family')->where('name', 'LIKE', "%{$keyword}%")->get();
-        $species = Species::with('images', 'family', 'genus')->where('name', 'LIKE', "%{$keyword}%")->get();
-        $data = collect()
-            ->merge($families->map(fn($f) => [
-                'type' => 'Family',
-                'name' => $f->name,
-                'details' => $f->description,
-                'id' => $f->family_code
-            ]))
-            ->merge($genus->map(fn($g) => [
-                'type' => 'Genus',
-                'name' => $g->name,
-                'details' => $g->description . ' ' . $g->family->name,
-                'id' => $g->genus_code
-            ]))
-            ->merge($species->map(fn($s) => [
-                'type' => 'Species',
-                'name' => $s->name,
-                'details' => $s->family->name . ' ' . $s->genus->name . ' ' . $s->author . ' ' . $s->volume . ' ' . $s->page . ' ' . $s->year_described . ' ' . $s->publication,
-                'id' => $s->species_code,
-                'images' => $s->images->pluck('pic')->first()
-            ]));
+    $keyword = trim($request->q);
+    $searchType = $request->plant_type;
 
-        // dd($data->toArray());
-        return view('theme.searchlist', compact('data', 'keyword'));
+    // 🔹 Volume type: 1 = flora_india, 0 = checklist
+    $volumeType = $searchType === 'flora_india' ? 1 : 0;
 
-        // return view('theme.searchlist', compact('data'));
-    }
+    // 🔹 Get all volume IDs of that type
+    $volumeIds = \App\Models\Volume::where('type', $volumeType)->pluck('id');
+
+    // 🔹 Get all family IDs related to those volumes
+    $familyIds = \App\Models\FamilyVolumes::whereIn('volume_id', $volumeIds)
+        ->pluck('family_id')
+        ->unique();
+
+    // 🔹 Get families, genus, and species within those families
+    $families = \App\Models\Family::whereIn('id', $familyIds)
+        ->where('name', 'LIKE', "%{$keyword}%")
+        ->get();
+
+    $genus = \App\Models\Genus::with('family')
+        ->whereIn('family_id', $familyIds)
+        ->where('name', 'LIKE', "%{$keyword}%")
+        ->get();
+
+    $species = \App\Models\Species::with(['images', 'family', 'genus'])
+        ->whereIn('family_id', $familyIds)
+        ->where('name', 'LIKE', "%{$keyword}%")
+        ->get();
+
+    // 🔹 Combine all results into one collection
+    $combined = collect()
+        ->merge($families->map(fn($f) => [
+            'type' => 'Family',
+            'name' => $f->name,
+            'details' => $f->description,
+            'id' => $f->family_code,
+            'images' => null
+        ]))
+        ->merge($genus->map(fn($g) => [
+            'type' => 'Genus',
+            'name' => $g->name,
+            'details' => ($g->description ?? '') . ' (' . ($g->family->name ?? '') . ')',
+            'id' => $g->genus_code,
+            'images' => null
+        ]))
+        ->merge($species->map(fn($s) => [
+            'type' => 'Species',
+            'name' => $s->name,
+            'details' => implode(' ', array_filter([
+                $s->family->name ?? '',
+                $s->genus->name ?? '',
+                $s->author,
+                $s->volume,
+                $s->page,
+                $s->year_described,
+                $s->publication
+            ])),
+            'id' => $s->species_code,
+            'images' => $s->images->pluck('pic')->first()
+        ]));
+
+    // 🔹 Manual Pagination (since we merged collections)
+    $perPage = 10;
+    $page = request()->get('page', 1);
+    $pagedData = $combined->forPage($page, $perPage);
+
+    // Create LengthAwarePaginator instance
+
+
+    $data = new \Illuminate\Pagination\LengthAwarePaginator(
+        $pagedData,
+        $combined->count(),
+        $perPage,
+        $page,
+        ['path' => request()->url(), 'query' => request()->query()]
+    );
+//  dd($keyword );
+    // 🔹 Return view
+    return view('theme.searchlist', compact('data', 'keyword', 'searchType'));
+}
+
+
+    // public function search(Request $request)
+    // {
+
+    //     $validated = $request->validate([
+    //         'plant_type' => 'required|in:flora_india,checklist',
+    //         'q' => 'required|string|max:255',
+    //     ]);
+    //     $keyword = $request->q;
+    //     $searchType = $request->plant_type;
+
+    //     $families = Family::where('name', 'LIKE', "%{$keyword}%")
+    //         ->paginate(12, ['*'], 'families_page');
+
+    //     $genus = Genus::with('family')
+    //         ->where('name', 'LIKE', "%{$keyword}%")
+    //         ->paginate(12, ['*'], 'genus_page');
+
+    //     $species = Species::with('images', 'family', 'genus')
+    //         ->where('name', 'LIKE', "%{$keyword}%")
+    //         ->paginate(12, ['*'], 'species_page');
+
+    //     return view('theme.searchlist', compact('families', 'genus', 'species', 'keyword', 'searchType'));
+    // }
+
+
     public function suggest(Request $request)
     {
-       $type = $request->get('plant_type');
+        $type = $request->get('plant_type');
         $keyword = $request->get('q');
 
         $families = Family::where('name', 'LIKE', "%{$keyword}%")

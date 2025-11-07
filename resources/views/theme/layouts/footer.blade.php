@@ -1,48 +1,86 @@
-<footer class="bg-dark text-light pt-5 pb-3 mt-5">
-  <div class="container">
-    <div class="row">
+<footer class="flora-footer">
+    <div class="footer-top">
+        <div class="container py-5">
+            <div class="row align-items-center text-center text-md-start">
+                <!-- Social & Logo -->
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h6 class="fw-bold mb-3 flora-primary">Follow Our Social Network</h6>
+                    <div class="d-flex justify-content-center justify-content-md-start gap-3">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-x-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-pinterest"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
 
-      <!-- Company Info -->
-      <div class="col-md-4 mb-4">
-        <h5 class="text-uppercase fw-bold text-success mb-3">
-          <i class="fa fa-leaf me-2"></i>E-Flora
-        </h5>
-        <p>
-          Your trusted cleaning & lifestyle partner.
-          We make spaces shine with eco-friendly solutions 🌿
-        </p>
-        <!-- Social Icons -->
-        <div>
-          <a href="#" class="text-light me-3"><i class="fa fa-facebook"></i></a>
-          <a href="#" class="text-light me-3"><i class="fa fa-twitter"></i></a>
-          <a href="#" class="text-light me-3"><i class="fa fa-instagram"></i></a>
-          <a href="#" class="text-light"><i class="fa fa-linkedin"></i></a>
+                <!-- Logo -->
+
+
+                <!-- Newsletter -->
+                <div class="col-md-4 mb-4 mb-md-0 text-center">
+                    <h2 class="footer-logo mb-0">
+                        <img src="{{ asset('images/bsi_logo.png') }}" alt="BSI Logo" style="height:60px;">
+                    </h2>
+                </div>
+                <div class="col-md-4 mb-4 mb-md-0 text-center">
+                    <h2 class="footer-logo mb-0">
+                        e<span class="flora-primary">Flora</span>.
+                    </h2>
+                </div>
+
+            </div>
         </div>
-      </div>
+    </div>
 
-      <!-- Quick Links -->
-      <div class="col-md-4 mb-4">
-        <h5 class="text-uppercase fw-bold text-success mb-3">Quick Links</h5>
-        <ul class="list-unstyled">
-          <li><a href="{{ url('/') }}" class="text-light text-decoration-none d-block mb-2">Home</a></li>
-          <li><a href="{{ url('/about') }}" class="text-light text-decoration-none d-block mb-2">About</a></li>
-          <li><a href="{{ url('/services') }}" class="text-light text-decoration-none d-block mb-2">Services</a></li>
-          <li><a href="{{ url('/contact') }}" class="text-light text-decoration-none d-block">Contact</a></li>
-        </ul>
-      </div>
+    <!-- Bottom Section -->
+    <div class="footer-bottom py-5">
+        <div class="container">
+            <div class="row ">
+                <!-- Contact -->
+                <div class="col-md-4">
+                    <h6 class="fw-bold mb-3">Get in Touch</h6>
+                    <p><i class="fas fa-phone me-2 text-success"></i> <strong>Customer Support:</strong> +91 98765 43210
+                    </p>
+                    <p><i class="fas fa-envelope me-2 text-success"></i> support@eflora.in</p>
+                </div>
 
-      <!-- Contact Info -->
-      <div class="col-md-4 mb-4">
-        <h5 class="text-uppercase fw-bold text-success mb-3">Contact Us</h5>
-        <p><i class="fa fa-map-marker me-2"></i>123 Green Street, City, Country</p>
-        <p><i class="fa fa-phone me-2"></i>+1 234 567 890</p>
-        <p><i class="fa fa-envelope me-2"></i>info@eflora.com</p>
-      </div>
+                <!-- Company -->
+                <div class="col-md-4">
+                    <h6 class="fw-bold mb-3">Company</h6>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Leadership</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Publications</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div class="col-md-4">
+                    <h6 class="fw-bold mb-3">Services</h6>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="#">Plant Identification</a></li>
+                        <li><a href="#">Herbarium Access</a></li>
+                        <li><a href="#">Data Contribution</a></li>
+                        <li><a href="#">Research Collaboration</a></li>
+                    </ul>
+                </div>
+
+                <!-- Gallery -->
+                {{-- <div class="col-md-3">
+                    <h6 class="fw-bold mb-3">Our Gallery</h6>
+                    <div class="d-flex gap-2">
+                        <img src="/images/plant1.jpg" class="footer-gallery-img" alt="">
+                        <img src="/images/plant2.jpg" class="footer-gallery-img" alt="">
+                    </div>
+                </div> --}}
+            </div>
+        </div>
     </div>
 
     <!-- Copyright -->
-    <div class="text-center border-top pt-3 mt-3">
-      <small>© {{ date('Y') }} <span class="text-success">E-Flora</span>. All Rights Reserved.</small>
+    <div class="footer-copyright py-3 text-center">
+        <small>Copyright © {{ date('Y') }} <strong>eFlora</strong>. All rights reserved. | <a href="#">Privacy
+                Policy</a> | <a href="#">Terms</a></small>
     </div>
-  </div>
 </footer>
