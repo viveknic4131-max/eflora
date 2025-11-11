@@ -1,6 +1,7 @@
 <?php
 
 namespace Database\Factories;
+
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -16,9 +17,9 @@ class FamilyFactory extends Factory
      */
     public function definition(): array
     {
-         return [
+        return [
             'family_code' => (string) Str::uuid(),
-           'name' => ucfirst($this->faker->word()) . 'aceae',
+            'name' => ucfirst($this->faker->word()) . 'aceae',
 
             'description' => $this->faker->sentence(),
         ];

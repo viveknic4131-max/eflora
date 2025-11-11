@@ -57,7 +57,7 @@
 
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" id="plantChecklist" name="plant_type"
-                                value="checklist">
+                                value="checklist" checked>
                             <label class="form-check-label flora-label" for="plantChecklist">Plant Checklist of
                                 India</label>
                         </div>

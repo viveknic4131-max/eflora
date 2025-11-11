@@ -93,93 +93,94 @@ class HomeController extends Controller
     // }
 
     public function search(Request $request)
-{
-    // 🔹 Validate request
-    $validated = $request->validate([
-        'plant_type' => 'required|in:flora_india,checklist',
-        'q' => 'required|string|max:255',
-    ]);
+    {
 
-    $keyword = trim($request->q);
-    $searchType = $request->plant_type;
+        // 🔹 Validate request
+        $validated = $request->validate([
+            'plant_type' => 'required|in:flora_india,checklist',
+            'q' => 'required|string|max:255',
+        ]);
 
-    // 🔹 Volume type: 1 = flora_india, 0 = checklist
-    $volumeType = $searchType === 'flora_india' ? 1 : 0;
+        $keyword = trim($request->q);
+        $searchType = $request->plant_type;
 
-    // 🔹 Get all volume IDs of that type
-    $volumeIds = \App\Models\Volume::where('type', $volumeType)->pluck('id');
+        // 🔹 Volume type: 1 = flora_india, 0 = checklist
+        $volumeType = $searchType === 'flora_india' ? 1 : 0;
 
-    // 🔹 Get all family IDs related to those volumes
-    $familyIds = \App\Models\FamilyVolumes::whereIn('volume_id', $volumeIds)
-        ->pluck('family_id')
-        ->unique();
-
-    // 🔹 Get families, genus, and species within those families
-    $families = \App\Models\Family::whereIn('id', $familyIds)
-        ->where('name', 'LIKE', "%{$keyword}%")
-        ->get();
-
-    $genus = \App\Models\Genus::with('family')
-        ->whereIn('family_id', $familyIds)
-        ->where('name', 'LIKE', "%{$keyword}%")
-        ->get();
-
-    $species = \App\Models\Species::with(['images', 'family', 'genus'])
-        ->whereIn('family_id', $familyIds)
-        ->where('name', 'LIKE', "%{$keyword}%")
-        ->get();
-
-    // 🔹 Combine all results into one collection
-    $combined = collect()
-        ->merge($families->map(fn($f) => [
-            'type' => 'Family',
-            'name' => $f->name,
-            'details' => $f->description,
-            'id' => $f->family_code,
-            'images' => null
-        ]))
-        ->merge($genus->map(fn($g) => [
-            'type' => 'Genus',
-            'name' => $g->name,
-            'details' => ($g->description ?? '') . ' (' . ($g->family->name ?? '') . ')',
-            'id' => $g->genus_code,
-            'images' => null
-        ]))
-        ->merge($species->map(fn($s) => [
-            'type' => 'Species',
-            'name' => $s->name,
-            'details' => implode(' ', array_filter([
-                $s->family->name ?? '',
-                $s->genus->name ?? '',
-                $s->author,
-                $s->volume,
-                $s->page,
-                $s->year_described,
-                $s->publication
-            ])),
-            'id' => $s->species_code,
-            'images' => $s->images->pluck('pic')->first()
-        ]));
-
-    // 🔹 Manual Pagination (since we merged collections)
-    $perPage = 10;
-    $page = request()->get('page', 1);
-    $pagedData = $combined->forPage($page, $perPage);
-
-    // Create LengthAwarePaginator instance
+        // 🔹 Get all volume IDs of that type
+        $volumeIds = Volume::where('type', $volumeType)->pluck('id');
+        // dd(in_array(1,$volumeIds->toArray()));
+        // 🔹 Get all family IDs related to those volumes
+        $familyIds = FamilyVolumes::whereIn('volume_id', $volumeIds)
+            ->pluck('family_id')
+            ->unique();
 
 
-    $data = new \Illuminate\Pagination\LengthAwarePaginator(
-        $pagedData,
-        $combined->count(),
-        $perPage,
-        $page,
-        ['path' => request()->url(), 'query' => request()->query()]
-    );
-//  dd($keyword );
-    // 🔹 Return view
-    return view('theme.searchlist', compact('data', 'keyword', 'searchType'));
-}
+        $families = Family::whereIn('id', $familyIds)
+            ->where('name', 'LIKE', "%{$keyword}%")
+            ->get();
+        // dd($families);
+        $genus = Genus::with('family')
+            ->whereIn('family_id', $familyIds)
+            ->where('name', 'LIKE', "%{$keyword}%")
+            ->get();
+
+        $species = Species::with(['images', 'family', 'genus'])
+            ->whereIn('family_id', $familyIds)
+            ->where('name', 'LIKE', "%{$keyword}%")
+            ->get();
+
+        // 🔹 Combine all results into one collection
+        $combined = collect()
+            ->merge($families->map(fn($f) => [
+                'type' => 'Family',
+                'name' => $f->name,
+                'details' => $f->description,
+                'id' => $f->family_code,
+                'images' => null
+            ]))
+            ->merge($genus->map(fn($g) => [
+                'type' => 'Genus',
+                'name' => $g->name,
+                'details' => ($g->description ?? '') . ' (' . ($g->family->name ?? '') . ')',
+                'id' => $g->genus_code,
+                'images' => null
+            ]))
+            ->merge($species->map(fn($s) => [
+                'type' => 'Species',
+                'name' => $s->name,
+                'details' => implode(' ', array_filter([
+                    $s->family->name ?? '',
+                    $s->genus->name ?? '',
+                    $s->author,
+                    $s->volume,
+                    $s->page,
+                    $s->year_described,
+                    $s->publication
+                ])),
+                'id' => $s->species_code,
+                'images' => $s->images->pluck('pic')->first()
+            ]));
+
+        // 🔹 Manual Pagination (since we merged collections)
+        $perPage = 10;
+        $page = request()->get('page', 1);
+        $pagedData = $combined->forPage($page, $perPage);
+
+        // Create LengthAwarePaginator instance
+
+
+        $data = new \Illuminate\Pagination\LengthAwarePaginator(
+            $pagedData,
+            $combined->count(),
+            $perPage,
+            $page,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+        //  dd($keyword );
+        // 🔹 Return view
+        return view('theme.searchlist', compact('data', 'keyword', 'searchType'));
+    }
 
 
     // public function search(Request $request)
@@ -295,47 +296,102 @@ class HomeController extends Controller
         return view('theme.family-view', compact('family', 'genusList', 'speciesList'));
     }
 
+    // public function getFamilyOrVolume(Request $request)
+    // {
+    //     // ✅ Case 1: User clicked a Volume
+    //     if ($request->filled('volume')) {
+    //         $volumeCode = trim($request->volume);
+    //         $volume = Volume::where('volume_code', $volumeCode)->firstOrFail();
+    //         $familyIds = FamilyVolumes::where('volume_id', $volume->id)->pluck('family_id')->toArray();
+    //         // Fetch families in this volume
+    //         // $families = Family::where('volume_id', $volume->id)->get();
+    //         $families = Family::whereIn('id', $familyIds)->get();
+
+    //         // If only one family in this volume → redirect directly to it
+    //         if ($families->count() === 1) {
+    //             return redirect()->route('get.family', ['family' => $families->first()->family_code]);
+    //         }
+
+    //         // Otherwise, show families list in "volume mode"
+    //         return view('theme.family-view', [
+    //             'mode' => 'volume',
+    //             'volume' => $volume,
+    //             'families' => $families
+    //         ]);
+    //     }
+
+    //     // ✅ Case 2: User clicked a Family
+    //     $request->validate([
+    //         'family' => 'required|string'
+    //     ]);
+
+    //     $familyCode = trim($request->family);
+    //     $family = Family::where('family_code', $familyCode)->firstOrFail();
+
+    //     $genusQuery = Genus::where('family_id', $family->id);
+    //     $speciesQuery = Species::whereHas('genus', fn($q) => $q->where('family_id', $family->id));
+
+    //     // Filters
+    //     if ($request->filled('genus_search')) {
+    //         $genusQuery->where('name', 'like', '%' . $request->genus_search . '%');
+    //         $speciesQuery->whereHas('genus', fn($q) => $q
+    //             ->where('family_id', $family->id)
+    //             ->where('name', 'like', '%' . $request->genus_search . '%'));
+    //     }
+
+    //     if ($request->filled('species_search')) {
+    //         $speciesQuery->where('name', 'like', '%' . $request->species_search . '%');
+    //     }
+
+    //     $genusList = $genusQuery->paginate(10);
+    //     $speciesList = $speciesQuery->paginate(10);
+
+    //     return view('theme.family-view', [
+    //         'mode' => 'family',
+    //         'family' => $family,
+    //         'genusList' => $genusList,
+    //         'speciesList' => $speciesList
+    //     ]);
+    // }
+
     public function getFamilyOrVolume(Request $request)
     {
-        // ✅ Case 1: User clicked a Volume
+        // ✅ If viewing a Volume
         if ($request->filled('volume')) {
             $volumeCode = trim($request->volume);
             $volume = Volume::where('volume_code', $volumeCode)->firstOrFail();
-            $familyIds = FamilyVolumes::where('volume_id', $volume->id)->pluck('family_id')->toArray();
-            // Fetch families in this volume
-            // $families = Family::where('volume_id', $volume->id)->get();
+
+            $familyIds = FamilyVolumes::where('volume_id', $volume->id)->pluck('family_id');
             $families = Family::whereIn('id', $familyIds)->get();
 
-            // If only one family in this volume → redirect directly to it
-            if ($families->count() === 1) {
-                return redirect()->route('get.family', ['family' => $families->first()->family_code]);
-            }
-
-            // Otherwise, show families list in "volume mode"
             return view('theme.family-view', [
                 'mode' => 'volume',
                 'volume' => $volume,
-                'families' => $families
+                'families' => $families,
             ]);
         }
 
-        // ✅ Case 2: User clicked a Family
-        $request->validate([
-            'family' => 'required|string'
-        ]);
-
-        $familyCode = trim($request->family);
-        $family = Family::where('family_code', $familyCode)->firstOrFail();
+        // ✅ If viewing a Family
+        $family = Family::where('family_code', $request->family)->firstOrFail();
 
         $genusQuery = Genus::where('family_id', $family->id);
         $speciesQuery = Species::whereHas('genus', fn($q) => $q->where('family_id', $family->id));
 
-        // Filters
+        $selectedGenus = null;
+
+        // ✅ If user clicked a specific genus
+        if ($request->filled('genus')) {
+            $selectedGenus = Genus::where('genus_code', $request->genus)
+                ->where('family_id', $family->id)
+                ->firstOrFail();
+
+            // only load species from this genus
+            $speciesQuery->where('genus_id', $selectedGenus->id);
+        }
+
+        // ✅ Handle search filters
         if ($request->filled('genus_search')) {
             $genusQuery->where('name', 'like', '%' . $request->genus_search . '%');
-            $speciesQuery->whereHas('genus', fn($q) => $q
-                ->where('family_id', $family->id)
-                ->where('name', 'like', '%' . $request->genus_search . '%'));
         }
 
         if ($request->filled('species_search')) {
@@ -349,13 +405,38 @@ class HomeController extends Controller
             'mode' => 'family',
             'family' => $family,
             'genusList' => $genusList,
-            'speciesList' => $speciesList
+            'speciesList' => $speciesList,
+            'selectedGenus' => $selectedGenus,
         ]);
     }
 
 
 
-    public function getGenus(Request $request) {}
+
+
+    public function getGenus(Request $request)
+    {
+
+        $request->validate([
+            'genus' => 'required|string',
+        ]);
+
+        $genusCode = trim($request->genus);
+        $genus = Genus::where('genus_code', $genusCode)->firstOrFail();
+
+        // Since one genus belongs to a single family
+        $family = Family::findOrFail($genus->family_id);
+
+        // Fetch species that belong to this genus
+        $speciesList = Species::where('genus_id', $genus->id)->paginate(10);
+
+        return view('theme.family-view', [
+            'mode' => 'genus',
+            'family' => $family,
+            'genus' => $genus,
+            'speciesList' => $speciesList,
+        ]);
+    }
 
     public function getSpecies(Request $request)
     {

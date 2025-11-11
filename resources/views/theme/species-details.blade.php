@@ -46,6 +46,10 @@
     </div>
 </section> --}}
 
+@php
+
+@endphp
+
  <section class="d-flex align-items-center text-white position-relative"
         style="background: url('{{ asset('images/breadcrumb.jpg') }}') center center / cover no-repeat; min-height: 350px;">
         <div class="position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0, 0, 0, 0.4);"></div>
@@ -64,11 +68,11 @@
             <div class="col-md-5">
                 <div class="card overflow-hidden">
 
-                    @if(!empty($species->images) && file_exists(public_path('storage/plants/' . $species->images->pluck('pic')[0])))
+                    @if(count($species->images)>0 && !empty($species->images) && file_exists(public_path('storage/plants/' . $species->images->pluck('pic')[0])))
                         <img src="{{ asset('storage/plants/' . $species->images->pluck('pic')[0]) }}"
                              class="img-fluid rounded" alt="{{ $species->name }}">
                     @else
-                        <img src="{{ asset('images/default-plant.jpg') }}"
+                        <img src="{{ asset('images/as.jpg') }}"
                              class="img-fluid rounded" alt="No image available">
                     @endif
                 </div>

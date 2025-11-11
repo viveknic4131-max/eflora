@@ -69,13 +69,33 @@
                 <div class="row g-4">
                     @foreach ($data as $plant)
                         @php
-                            $link =
-                                strtolower($plant['type']) === 'family'
-                                    ? route('get.family', ['family' => $plant['id']])
-                                    : (strtolower($plant['type']) === 'species'
-                                        ? route('get.species', ['species' => $plant['id']])
-                                        : '#');
+                            // $link =
+                            //     strtolower($plant['type']) === 'family'
+                            //         ? route('get.family', ['family' => $plant['id']])
+                            //         : (strtolower($plant['type']) === 'species'
+                            //             ? route('get.species', ['species' => $plant['id']])
+                            //             : '#');
+
+                            switch (strtolower($plant['type'])) {
+                                case 'family':
+                                    $link = route('get.family', ['family' => $plant['id']]);
+                                    break;
+
+                                case 'genus':
+                                    $link = route('get.genus', ['genus' => $plant['id']]);
+                                    break;
+
+                                case 'species':
+                                    $link = route('get.species', ['species' => $plant['id']]);
+                                    break;
+
+                                default:
+                                    $link = '#';
+                                    break;
+                            }
                         @endphp
+
+                    
 
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex">
                             <a href="{{ $link }}"
