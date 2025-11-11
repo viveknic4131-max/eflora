@@ -31,32 +31,32 @@
                 </div>
 
                 <!-- Search Box -->
-       <div class="d-flex">
-                 <div class="d-flex align-items-center justify-content-center flex-wrap gap-3 position-relative" style="
-    flex-grow: 1">
-                    <div id="tagContainer"
-                        class="form-control form-control-lg rounded-pill shadow-sm d-flex flex-wrap align-items-center gap-2 px-3 flex-grow-1"
-                        style="cursor: text; min-width: 240px;">
-                        <input type="text" id="searchInput" class="border-0 flex-grow-1 bg-transparent"
-                            placeholder="Search for plants, species..." autocomplete="off">
+                <div class="d-flex">
+                    <div class="d-flex align-items-center justify-content-center flex-wrap gap-3 position-relative"
+                        style="flex-grow: 1">
+                        <div id="tagContainer"
+                            class="form-control form-control-lg rounded-pill shadow-sm d-flex flex-wrap align-items-center gap-2 px-3 flex-grow-1"
+                            style="cursor: text; min-width: 240px;">
+                            <input type="text" id="searchInput" class="border-0 flex-grow-1 bg-transparent"
+                                placeholder="Search for plants, species..." autocomplete="off">
+                        </div>
+                        <ul id="suggestions"
+                            class="list-group position-absolute start-0 end-0 mx-auto d-none mt-2 shadow-sm rounded-4 bg-white"
+                            style="z-index: 1050; max-height: 300px; overflow-y: auto; width: 75%; top: 100%;">
+                        </ul>
+
+
+
+
+
+                        <input type="hidden" name="q" id="hiddenInput" value="{{ request('q') }}">
                     </div>
-                    <ul id="suggestions"
-                        class="list-group position-absolute start-0 end-0 mx-auto d-none mt-2 shadow-sm rounded-4 bg-white"
-                        style="z-index: 1050; max-height: 300px; overflow-y: auto; width: 75%; top: 100%;">
-                    </ul>
-
-
-
-
-
-                    <input type="hidden" name="q" id="hiddenInput" value="{{ request('q') }}">
+                    <button type="submit"
+                        class="btn btn-success btn-lg rounded-circle d-flex align-items-center justify-content-center shadow-sm"
+                        style="width: 52px; height: 52px;">
+                        <i class="bi bi-search fs-4 text-white"></i>
+                    </button>
                 </div>
-                <button type="submit"
-                    class="btn btn-success btn-lg rounded-circle d-flex align-items-center justify-content-center shadow-sm"
-                    style="width: 52px; height: 52px;">
-                    <i class="bi bi-search fs-4 text-white"></i>
-                </button>
-       </div>
             </form>
 
         </div>

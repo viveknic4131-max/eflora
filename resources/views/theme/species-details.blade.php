@@ -38,13 +38,22 @@
 }
 </style>
 
-<!-- 🌿 Hero Section -->
+{{-- <!-- 🌿 Hero Section -->
 <section class="species-hero">
     <div class="container">
         <h1 class="fw-bold display-5">{{ $species->name }}</h1>
-        <p class="lead fst-italic">{{ $species->common_name ?? 'No common name available.' }}</p>
+
     </div>
-</section>
+</section> --}}
+
+ <section class="d-flex align-items-center text-white position-relative"
+        style="background: url('{{ asset('images/breadcrumb.jpg') }}') center center / cover no-repeat; min-height: 350px;">
+        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0, 0, 0, 0.4);"></div>
+        <div class="container position-relative text-center py-5">
+            <h1 class="display-5 fw-bold text-white">{{ $species->name }}</h1>
+            <p class="lead fst-italic">{{ $species->common_name ?? 'No common name available.' }}</p>
+        </div>
+    </section>
 
 <!-- 🌱 Species Details -->
 <section class="py-5 bg-light">

@@ -777,3 +777,18 @@ footer {
     border-bottom: 1px solid #e2e2e2;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
+
+
+
+.scrollable-column {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+.scrollable-column::-webkit-scrollbar {
+    width: 6px;
+}
+.scrollable-column::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
