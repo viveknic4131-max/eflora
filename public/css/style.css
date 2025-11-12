@@ -1,10 +1,262 @@
-.flora-primary {
-    /* background-color: #3e660e; */
-    color: #3e660e !important;
-    /* border-color: #3e660e; */
+/* ===== Global Typography ===== */
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    background-color: #fff;
+    line-height: 1.6;
+    overflow-x: hidden;
 }
 
-body {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 600;
+    color: #1a3c2a;
+}
+
+.text-accent {
+    color: #3e660e;
+}
+
+.flora-primary {
+    color: #3e660e !important;
+}
+
+/* ===== Hero Section ===== */
+.hero-section {
+    /* height: 100vh; */
+    /* margin-top: 86.8px; */
+   background: url('/images/ornamental.jpg') center/cover no-repeat;
+    color: #fff;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+
+     /* background: url('/images/ornamental.jpg') center/cover no-repeat; */
+    min-height: 100vh;
+    /* color: #fff; */
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    position: relative;
+}
+
+.hero-content {
+    max-width: 800px;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 40px 30px;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: #e6e6e6;
+}
+
+.hero-search-form input {
+    border-radius: 50px !important;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.hero-search-form input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.flora-label {
+    color: #fff;
+    font-weight: 500;
+}
+
+/* Suggestions dropdown */
+#suggestions li:hover {
+    background-color: #e9f7ef;
+    cursor: pointer;
+}
+
+/* ===== Modern Section ===== */
+.modern-section {
+    background-color: #f8f9fa;
+}
+
+.modern-card {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.modern-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.glass-card {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* ===== About Section ===== */
+.bg-light {
+    background-color: #f9f9f9 !important;
+}
+
+img.rounded.shadow {
+    border-radius: 20px !important;
+}
+
+/* ===== Featured Plants ===== */
+.card {
+    border: none;
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-weight: 600;
+    color: #198754;
+}
+
+.btn-outline-success {
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover {
+    background-color: #198754;
+    color: #fff;
+}
+
+/* ===== Loader ===== */
+.loader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #198754;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ===== Responsive Fixes ===== */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 1.8rem;
+    }
+
+    .hero-content {
+        padding: 30px 20px;
+    }
+
+    .modern-card {
+        margin-bottom: 20px;
+    }
+
+    .hero-section {
+        height: auto;
+        padding: 100px 0;
+    }
+}
+
+
+
+  /* --- TOPBAR --- */
+  #topbar {
+    /* position: fixed; */
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    width: 100%;
+    font-size: 15px;
+    font-family: "Poppins", Arial, sans-serif;
+    transition: all 0.4s ease;
+      background-color: gray !important;
+  }
+
+  /* Hidden on scroll */
+  .topbar-hidden {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  /* Visible normally */
+  .topbar-visible {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  #topbar a {
+    color: #000;
+    transition: color 0.2s ease;
+
+  }
+
+  #topbar a:hover {
+    color: #198754;
+    text-decoration: underline;
+  }
+
+  #topbar select {
+    font-size: 13px;
+    height: 24px;
+    padding: 0 6px;
+    border-radius: 4px;
+  }
+
+
+
+
+
+  @media (max-width: 768px) {
+    #topbar {
+      font-size: 12px;
+      text-align: center;
+    }
+    #topbar .d-flex {
+      justify-content: center !important;
+      flex-wrap: wrap;
+      /* gap: 4px; */
+    }
+    .sticky-top {
+      /* top: 48px; */
+    }
+    body {
+      /* padding-top: 100px; */
+    }
+  }
+
+
+/* update css */
+
+
+/* .flora-primary {
+    background-color: #3e660e;
+    color: #3e660e !important;
+    border-color: #3e660e;
+} */
+
+/* body {
     font-family: "Poppins", sans-serif;
     color: #333;
     overflow-x: hidden;
@@ -18,7 +270,7 @@ body {
 .body h6 {
     color: #3e660e !important;
     font-weight: 600;
-}
+} */
 
 .flora-active {
     background-color: #3e660e !important;
@@ -86,7 +338,7 @@ body {
     background: rgba(0, 0, 0, 0.4);
 }
 
-.hero-content {
+/* .hero-content {
     position: relative;
     z-index: 2;
     max-width: 800px;
@@ -107,7 +359,7 @@ body {
     font-size: 18px;
     margin: 15px 0 30px;
     color: #eee;
-}
+} */
 
 /* --- Buttons --- */
 .btn-florize {
@@ -243,13 +495,13 @@ footer {
 
 
 
-.hero-section {
+/* .hero-section {
     background: url('/images/ornamental.jpg') center/cover no-repeat;
     min-height: 80vh;
     color: #fff;
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
     position: relative;
-}
+} */
 
 .hero-section::before {
     content: "";
@@ -391,9 +643,9 @@ footer {
     color: #6b8e23;
 }
 
-.text-accent {
+/* .text-accent {
     color: #6b8e23;
-}
+} */
 
 .pagination-container {
     display: flex;
@@ -759,21 +1011,22 @@ footer {
 .form-check-label {
     font-size: 1rem;
     /* color: #3a3a3a; */
-        color: #ffffff;
+    color: #ffffff;
     cursor: pointer;
     transition: color 0.2s;
 }
 
 .form-check-input:checked+.form-check-label {
-    color: #2d7a2d;
+    /* color: #2d7a2d; */
     font-weight: 600;
 }
 
 .form-check-input {
-    accent-color: #2d7a2d;
+    accent-color: #3e660e;
 }
+
 .search-section {
-       background: linear-gradient(135deg, #baddba 0%, #eaf5ea 100%);
+    background: linear-gradient(135deg, #baddba 0%, #eaf5ea 100%);
     border-bottom: 1px solid #e2e2e2;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
@@ -785,10 +1038,19 @@ footer {
     overflow-y: auto;
     padding-right: 8px;
 }
+
 .scrollable-column::-webkit-scrollbar {
     width: 6px;
 }
+
 .scrollable-column::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 3px;
 }
+
+.form-check-input:checked {
+    background-color: #2d7a2d !important;
+    border-color: #2d7a2d !important;
+}
+
+

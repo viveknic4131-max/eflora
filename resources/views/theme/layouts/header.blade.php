@@ -43,70 +43,7 @@
 
 <!-- ======= Styles ======= -->
 <style>
-  /* --- TOPBAR --- */
-  #topbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1040;
-    width: 100%;
-    font-size: 15px;
-    font-family: "Poppins", Arial, sans-serif;
-    transition: all 0.4s ease;
-      background-color: gray !important;
-  }
 
-  /* Hidden on scroll */
-  .topbar-hidden {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-
-  /* Visible normally */
-  .topbar-visible {
-    transform: translateY(0);
-    opacity: 1;
-  }
-
-  #topbar a {
-    color: #000;
-    transition: color 0.2s ease;
-
-  }
-
-  #topbar a:hover {
-    color: #198754;
-    text-decoration: underline;
-  }
-
-  #topbar select {
-    font-size: 13px;
-    height: 24px;
-    padding: 0 6px;
-    border-radius: 4px;
-  }
-
-  
-
-
-
-  @media (max-width: 768px) {
-    #topbar {
-      font-size: 12px;
-      text-align: center;
-    }
-    #topbar .d-flex {
-      justify-content: center !important;
-      flex-wrap: wrap;
-      /* gap: 4px; */
-    }
-    .sticky-top {
-      /* top: 48px; */
-    }
-    body {
-      /* padding-top: 100px; */
-    }
-  }
 </style>
 
 <!-- ======= jQuery Scroll Script ======= -->

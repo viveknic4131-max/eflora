@@ -158,7 +158,7 @@
 @endsection
 
 
-{{-- <script>
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.querySelector('.hero-search-form');
 
@@ -247,12 +247,12 @@
             }
         });
     });
-</script> --}}
+</script>
 
 {{-- ✅ jQuery for AJAX --}}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-{{--
+
 <script>
     $(function() {
 
@@ -300,248 +300,6 @@
         $(document).on('click', '#floraOfIndiaContainer .pagination a', function(e) {
             e.preventDefault();
             loadFloraOfIndia($(this).attr('href'));
-        });
-    });
-</script> --}}
-
-{{-- <script>
-    $(function() {
-
-        // Initial load
-        loadBsiVolume("{{ route('bsi.volume') }}");
-        loadFloraOfIndia("{{ route('flora.india') }}");
-
-        // ===== Loader Functions =====
-        function showLoader() {
-            $('.loader-overlay').fadeIn(200);
-        }
-
-        function hideLoader() {
-            $('.loader-overlay').fadeOut(200);
-        }
-
-        // ===== AJAX Loaders for Sections =====
-        function loadBsiVolume(url) {
-            showLoader();
-            $.get(url, function(data) {
-                $('#bsiVolumeContainer').html(data);
-            }).always(function() {
-                hideLoader();
-            });
-        }
-
-        function loadFloraOfIndia(url) {
-            showLoader();
-            $.get(url, function(data) {
-                $('#floraOfIndiaContainer').html(data);
-            }).always(function() {
-                hideLoader();
-            });
-        }
-
-        // ===== Pagination Events =====
-        $(document).on('click', '#bsiVolumeContainer .pagination a', function(e) {
-            e.preventDefault();
-            loadBsiVolume($(this).attr('href'));
-        });
-
-        $(document).on('click', '#floraOfIndiaContainer .pagination a', function(e) {
-            e.preventDefault();
-            loadFloraOfIndia($(this).attr('href'));
-        });
-
-        // ===== Search Input & Suggestions =====
-        const input = $("#searchInput");
-        const suggestionsBox = $("#suggestions");
-
-        input.on("input", function() {
-            const query = $(this).val().trim();
-            const plantType = $('input[name="plant_type"]:checked').val() || '';
-
-            if (query.length < 2) {
-                suggestionsBox.addClass("d-none");
-                return;
-            }
-
-            const url =
-                `{{ route('search.suggest') }}?q=${encodeURIComponent(query)}&plant_type=${encodeURIComponent(plantType)}`;
-
-            fetch(url)
-                .then(res => res.json())
-                .then(data => {
-                    suggestionsBox.empty();
-                    let hasResults = false;
-
-                    $.each(data, function(type, items) {
-                        if (items.length > 0) {
-                            hasResults = true;
-                            suggestionsBox.append(
-                                `<li class="list-group-item fw-bold text-uppercase bg-light">${type}</li>`
-                            );
-                            $.each(items, function(i, item) {
-                                suggestionsBox.append(
-                                    `<li class="list-group-item list-group-item-action suggestion-item" data-name="${item.name}">
-                                    ${item.name}
-                                </li>`
-                                );
-                            });
-                        }
-                    });
-
-                    if (hasResults) suggestionsBox.removeClass("d-none");
-                    else suggestionsBox.addClass("d-none");
-                })
-                .catch(() => suggestionsBox.addClass("d-none"));
-        });
-
-        // ===== Click on Suggestion Redirect =====
-        $(document).on("click", ".suggestion-item", function() {
-            const keyword = $(this).data("name");
-            const plantType = $('input[name="plant_type"]:checked').val() || '';
-            const searchUrl =
-                `{{ route('search') }}?q=${encodeURIComponent(keyword)}&plant_type=${encodeURIComponent(plantType)}`;
-            window.location.href = searchUrl;
-        });
-
-        // ===== Press Enter to Search =====
-        input.on("keypress", function(e) {
-            if (e.which === 13) { // Enter key
-                e.preventDefault();
-                const keyword = $(this).val().trim();
-                const plantType = $('input[name="plant_type"]:checked').val() || '';
-                if (keyword !== '') {
-                    const searchUrl =
-                        `{{ route('search') }}?q=${encodeURIComponent(keyword)}&plant_type=${encodeURIComponent(plantType)}`;
-                    window.location.href = searchUrl;
-                }
-            }
-        });
-
-        // ===== Hide Suggestions on Outside Click =====
-        $(document).on("click", function(e) {
-            if (!$(e.target).closest("#suggestions, #searchInput").length) {
-                suggestionsBox.addClass("d-none");
-            }
-        });
-
-    });
-</script> --}}
-
-<script>
-    $(function() {
-
-        // ===== Initial Load =====
-        loadBsiVolume("{{ route('bsi.volume') }}");
-        loadFloraOfIndia("{{ route('flora.india') }}");
-
-        function showLoader() {
-            $('.loader-overlay').fadeIn(200);
-        }
-
-        function hideLoader() {
-            $('.loader-overlay').fadeOut(200);
-        }
-
-        function loadBsiVolume(url) {
-            showLoader();
-            $.get(url, function(data) {
-                $('#bsiVolumeContainer').html(data);
-            }).always(hideLoader);
-        }
-
-        function loadFloraOfIndia(url) {
-            showLoader();
-            $.get(url, function(data) {
-                $('#floraOfIndiaContainer').html(data);
-            }).always(hideLoader);
-        }
-
-        // ===== Pagination =====
-        $(document).on('click', '#bsiVolumeContainer .pagination a', function(e) {
-            e.preventDefault();
-            loadBsiVolume($(this).attr('href'));
-        });
-
-        $(document).on('click', '#floraOfIndiaContainer .pagination a', function(e) {
-            e.preventDefault();
-            loadFloraOfIndia($(this).attr('href'));
-        });
-
-        // ===== Search Suggestion Logic =====
-        const input = $("#searchInput");
-        const suggestionsBox = $("#suggestions");
-
-        input.on("input", function() {
-            const query = $(this).val().trim();
-            const plantType = $('input[name="plant_type"]:checked').val() || '';
-
-            if (query.length < 2) {
-                suggestionsBox.addClass("d-none");
-                return;
-            }
-
-            const url =
-                `{{ route('search.suggest') }}?q=${encodeURIComponent(query)}&plant_type=${encodeURIComponent(plantType)}`;
-
-            fetch(url)
-                .then(res => res.json())
-                .then(data => {
-                    suggestionsBox.empty();
-                    let hasResults = false;
-
-                    $.each(data, function(type, items) {
-                        if (items.length > 0) {
-                            hasResults = true;
-                            // ✅ Colorful Bootstrap heading (no custom CSS)
-                            suggestionsBox.append(`
-                            <li class="list-group-item fw-bold text-uppercase bg-success text-white small py-2">
-                                ${type}
-                            </li>
-                        `);
-                            $.each(items, function(i, item) {
-                                suggestionsBox.append(`
-                                <li class="list-group-item list-group-item-action suggestion-item" data-name="${item.name}">
-                                    ${item.name}
-                                </li>
-                            `);
-                            });
-                        }
-                    });
-
-                    if (hasResults) suggestionsBox.removeClass("d-none");
-                    else suggestionsBox.addClass("d-none");
-                })
-                .catch(() => suggestionsBox.addClass("d-none"));
-        });
-
-        // ===== Click Suggestion → Redirect =====
-        $(document).on("click", ".suggestion-item", function() {
-            const keyword = $(this).data("name");
-            const plantType = $('input[name="plant_type"]:checked').val() || '';
-            const searchUrl =
-                `{{ route('search') }}?q=${encodeURIComponent(keyword)}&plant_type=${encodeURIComponent(plantType)}`;
-            window.location.href = searchUrl;
-        });
-
-        // ===== Enter Key → Redirect =====
-        input.on("keypress", function(e) {
-            if (e.which === 13) {
-                e.preventDefault();
-                const keyword = $(this).val().trim();
-                const plantType = $('input[name="plant_type"]:checked').val() || '';
-                if (keyword !== '') {
-                    const searchUrl =
-                        `{{ route('search') }}?q=${encodeURIComponent(keyword)}&plant_type=${encodeURIComponent(plantType)}`;
-                    window.location.href = searchUrl;
-                }
-            }
-        });
-
-        // ===== Hide Suggestions on Outside Click =====
-        $(document).on("click", function(e) {
-            if (!$(e.target).closest("#suggestions, #searchInput").length) {
-                suggestionsBox.addClass("d-none");
-            }
         });
     });
 </script>

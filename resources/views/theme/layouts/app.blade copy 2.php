@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@yield('title')</title>
+
+    <!-- Bootstrap & Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+
+    <!-- Florize Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="{{ asset('images/bsi_logo.png') }}" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ asset('css/animate.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/owl.theme.default.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/magnific-popup.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/flaticon.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+    {{-- <div class="loader-overlay" style="display:none;">
+        <div class="loader"></div>
+    </div> --}}
+    <div class="container-fluid"> <!-- ===== Florize Navbar ===== -->
+        <nav class="navbar navbar-expand-lg navbar-florize bg-light sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    eFlora<span style="color:#198754;">.</span>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-center" id="mainNav">
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item"><a href="{{ url('/') }}" class="nav-link active">Home</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Create Checklist</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">About Us</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Cite</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="social-icons d-none d-lg-block">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-x-twitter"></i></a>
+                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+
+
+    <main >
+        @yield('content')
+    </main>
+
+    @include('theme.layouts.footer')
+    <!-- Bootstrap JS Bundle with Popper -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- @stack('scripts') --}}
+</body>
+
+</html>
