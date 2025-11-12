@@ -354,61 +354,124 @@ class HomeController extends Controller
     //     ]);
     // }
 
+
+    // old function
+    // public function getFamilyOrVolume(Request $request)
+    // {
+    //     // ✅ If viewing a Volume
+    //     if ($request->filled('volume')) {
+    //         $volumeCode = trim($request->volume);
+    //         $volume = Volume::where('volume_code', $volumeCode)->firstOrFail();
+
+    //         $familyIds = FamilyVolumes::where('volume_id', $volume->id)->pluck('family_id');
+    //         $families = Family::whereIn('id', $familyIds)->get();
+
+    //         return view('theme.family-view', [
+    //             'mode' => 'volume',
+    //             'volume' => $volume,
+    //             'families' => $families,
+    //         ]);
+    //     }
+
+    //     // ✅ If viewing a Family
+    //     $family = Family::where('family_code', $request->family)->firstOrFail();
+
+    //     $genusQuery = Genus::where('family_id', $family->id);
+    //     $speciesQuery = Species::whereHas('genus', fn($q) => $q->where('family_id', $family->id));
+
+    //     $selectedGenus = null;
+
+    //     // ✅ If user clicked a specific genus
+    //     if ($request->filled('genus')) {
+    //         $selectedGenus = Genus::where('genus_code', $request->genus)
+    //             ->where('family_id', $family->id)
+    //             ->firstOrFail();
+
+    //         // only load species from this genus
+    //         $speciesQuery->where('genus_id', $selectedGenus->id);
+    //     }
+
+    //     // ✅ Handle search filters
+    //     if ($request->filled('genus_search')) {
+    //         $genusQuery->where('name', 'like', '%' . $request->genus_search . '%');
+    //     }
+
+    //     if ($request->filled('species_search')) {
+    //         $speciesQuery->where('name', 'like', '%' . $request->species_search . '%');
+    //     }
+
+    //     $genusList = $genusQuery->paginate(10);
+    //     $speciesList = $speciesQuery->paginate(10);
+
+    //     return view('theme.family-view', [
+    //         'mode' => 'family',
+    //         'family' => $family,
+    //         'genusList' => $genusList,
+    //         'speciesList' => $speciesList,
+    //         'selectedGenus' => $selectedGenus,
+    //     ]);
+    // }
+
+
     public function getFamilyOrVolume(Request $request)
-    {
-        // ✅ If viewing a Volume
-        if ($request->filled('volume')) {
-            $volumeCode = trim($request->volume);
-            $volume = Volume::where('volume_code', $volumeCode)->firstOrFail();
+{
+    // ✅ 1. Volume Mode — show Families
+    if ($request->filled('volume')) {
+        $volumeCode = trim($request->volume);
+        $volume = Volume::where('volume_code', $volumeCode)->firstOrFail();
 
-            $familyIds = FamilyVolumes::where('volume_id', $volume->id)->pluck('family_id');
-            $families = Family::whereIn('id', $familyIds)->get();
+        $familyIds = FamilyVolumes::where('volume_id', $volume->id)->pluck('family_id');
+        $families = Family::whereIn('id', $familyIds)->get();
 
-            return view('theme.family-view', [
-                'mode' => 'volume',
-                'volume' => $volume,
-                'families' => $families,
-            ]);
-        }
+        return view('theme.family-view', [
+            'mode' => 'volume',
+            'volume' => $volume,
+            'families' => $families,
+        ]);
+    }
 
-        // ✅ If viewing a Family
+    // ✅ 2. Family Mode — show only Genus list
+    if ($request->filled('family') && !$request->filled('genus')) {
         $family = Family::where('family_code', $request->family)->firstOrFail();
 
         $genusQuery = Genus::where('family_id', $family->id);
-        $speciesQuery = Species::whereHas('genus', fn($q) => $q->where('family_id', $family->id));
 
-        $selectedGenus = null;
-
-        // ✅ If user clicked a specific genus
-        if ($request->filled('genus')) {
-            $selectedGenus = Genus::where('genus_code', $request->genus)
-                ->where('family_id', $family->id)
-                ->firstOrFail();
-
-            // only load species from this genus
-            $speciesQuery->where('genus_id', $selectedGenus->id);
-        }
-
-        // ✅ Handle search filters
         if ($request->filled('genus_search')) {
             $genusQuery->where('name', 'like', '%' . $request->genus_search . '%');
         }
 
-        if ($request->filled('species_search')) {
-            $speciesQuery->where('name', 'like', '%' . $request->species_search . '%');
-        }
-
-        $genusList = $genusQuery->paginate(10);
-        $speciesList = $speciesQuery->paginate(10);
+        $genusList = $genusQuery->paginate(12);
 
         return view('theme.family-view', [
             'mode' => 'family',
             'family' => $family,
             'genusList' => $genusList,
-            'speciesList' => $speciesList,
-            'selectedGenus' => $selectedGenus,
         ]);
     }
+
+    // ✅ 3. Genus Mode — show species under selected genus
+    if ($request->filled('genus')) {
+        $genus = Genus::where('genus_code', $request->genus)->firstOrFail();
+        $family = Family::findOrFail($genus->family_id);
+
+        $speciesQuery = Species::where('genus_id', $genus->id);
+
+        if ($request->filled('species_search')) {
+            $speciesQuery->where('name', 'like', '%' . $request->species_search . '%');
+        }
+
+        $speciesList = $speciesQuery->paginate(12);
+
+        return view('theme.family-view', [
+            'mode' => 'genus',
+            'family' => $family,
+            'genus' => $genus,
+            'speciesList' => $speciesList,
+        ]);
+    }
+
+    abort(404);
+}
 
 
 
