@@ -122,10 +122,29 @@ img.rounded.shadow {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.card:hover {
+/* .card-genus {
+    border: none;
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-genus:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+} */
+ .card-genus {
+    border: 2px solid #4CAF50;
+    border-radius: 15px;
+    background: #f8fff8;
+    transition: all 0.3s ease;
 }
+
+.card-genus:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.25);
+    background: #eaffea;
+}
+
 
 .card-title {
     font-weight: 600;

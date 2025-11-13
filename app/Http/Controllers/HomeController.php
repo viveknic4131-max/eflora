@@ -440,7 +440,7 @@ class HomeController extends Controller
             $genusQuery->where('name', 'like', '%' . $request->genus_search . '%');
         }
 
-        $genusList = $genusQuery->paginate(12);
+        $genusList = $genusQuery->paginate(24);
 
         return view('theme.family-view', [
             'mode' => 'family',
@@ -454,13 +454,13 @@ class HomeController extends Controller
         $genus = Genus::where('genus_code', $request->genus)->firstOrFail();
         $family = Family::findOrFail($genus->family_id);
 
-        $speciesQuery = Species::where('genus_id', $genus->id);
+        $speciesQuery = Species::with('images')->where('genus_id', $genus->id);
 
         if ($request->filled('species_search')) {
             $speciesQuery->where('name', 'like', '%' . $request->species_search . '%');
         }
 
-        $speciesList = $speciesQuery->paginate(12);
+        $speciesList = $speciesQuery->paginate(24);
 
         return view('theme.family-view', [
             'mode' => 'genus',
