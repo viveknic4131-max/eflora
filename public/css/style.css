@@ -133,10 +133,13 @@ img.rounded.shadow {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 } */
  .card-genus {
-    border: 2px solid #4CAF50;
-    border-radius: 15px;
+border: 1px solid #4caf5054;
+    border-radius: 5px;
     background: #f8fff8;
-    transition: all 0.3s ease;
+    transition: all 0.3s
+ease;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+
 }
 
 .card-genus:hover {
@@ -726,20 +729,10 @@ footer {
 
 /* footer */
 /* --- Footer Styling --- */
-.flora-footer {
-    font-family: 'Poppins', sans-serif;
-    color: #fff;
-    /* background-color: #3e660e; */
-    margin-top: 4rem;
-}
+
 
 /* Top Section */
-.footer-top {
-    background: #eaf3ea;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-}
+
 
 .footer-logo {
     font-weight: 700;
@@ -853,6 +846,11 @@ footer {
     position: relative;
     top: -60px;
     z-index: 2;
+
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
     /* padding: 40px 20px; */
 }
 
@@ -1072,4 +1070,81 @@ footer {
     border-color: #2d7a2d !important;
 }
 
+
+
+
+/* species details page */
+
+
+        .species-hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                url('{{ asset('storage/plants/' . ($species->image ?? 'default.jpg')) }}') center/cover no-repeat;
+            color: #fff;
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .species-card {
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .details-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .details-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .details-list strong {
+            width: 160px;
+            display: inline-block;
+            color: #198754;
+        }
+
+        .synonyms span {
+            background-color: #e9f7ef;
+            color: #198754;
+            padding: 5px 10px;
+            border-radius: 10px;
+            margin-right: 5px;
+            display: inline-block;
+        }
+
+        .thumb-img:hover {
+            border-color: #198754;
+            transform: scale(1.05);
+        }
+
+        .thumb-img.active-thumb {
+            border: 2px solid #198754 !important;
+        }
+
+        .main-img {
+            width: 100%;
+            height: 370px;
+            object-fit: cover;
+        }
+
+        #thumbnails::-webkit-scrollbar {
+            height: 4px;
+            /* scrollbar thickness */
+        }
+
+        #thumbnails::-webkit-scrollbar-track {
+            background: #e9e9e9;
+            border-radius: 5px;
+        }
+
+        #thumbnails::-webkit-scrollbar-thumb {
+            background: #198754;
+            border-radius: 5px;
+        }
+
+        #thumbnails::-webkit-scrollbar-thumb:hover {
+            background: #198754;
+        }
 

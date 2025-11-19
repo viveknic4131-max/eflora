@@ -421,7 +421,7 @@ class HomeController extends Controller
         $volume = Volume::where('volume_code', $volumeCode)->firstOrFail();
 
         $familyIds = FamilyVolumes::where('volume_id', $volume->id)->pluck('family_id');
-        $families = Family::whereIn('id', $familyIds)->get();
+        $families = Family::whereIn('id', $familyIds)->paginate(50);
 
         return view('theme.family-view', [
             'mode' => 'volume',

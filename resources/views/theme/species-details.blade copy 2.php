@@ -4,6 +4,22 @@
 
 @section('content')
 
+    <style>
+        .thumb-img:hover {
+            border-color: #198754;
+            transform: scale(1.05);
+        }
+
+        .thumb-img.active-thumb {
+            border: 2px solid #198754 !important;
+        }
+
+        .main-img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+        }
+    </style>
 
     <!-- 🌿 Header Section -->
     <section class="d-flex align-items-center text-white position-relative"
@@ -22,7 +38,7 @@
 
                 <!-- 🖼️ Image + Thumbnails -->
                 <div class="col-md-5">
-                    <div class="species-card p-2">
+                    <div class="card p-2">
 
                         @php
                             $images = $species->images->pluck('pic')->toArray();
@@ -37,40 +53,23 @@
                             alt="{{ $species->name }}">
 
                         <!-- Thumbnails -->
-                        {{-- <div id="thumbnails" class="d-flex flex-wrap gap-2 justify-content-center">
+                        <div id="thumbnails" class="d-flex flex-wrap gap-2">
                             @foreach ($images as $img)
                                 @if (file_exists(public_path('storage/plants/' . $img)))
                                     <img src="{{ asset('storage/plants/' . $img) }}" class="thumb-img"
                                         style="width:70px; height:70px; object-fit:cover; cursor:pointer; border-radius:6px; border:2px solid #eee;">
                                 @endif
                             @endforeach
-                        </div> --}}
-
-                        <div class="position-relative">
-
-                            <button class="btn btn-light position-absolute start-0 top-50 translate-middle-y"
-                                onclick="slideThumbs(-150)">‹</button>
-
-                            <div id="thumbnails" class="d-flex gap-2"
-                                style="overflow-x:auto; white-space:nowrap; padding:5px 40px;">
-                                @foreach ($images as $img)
-                                    <img src="{{ asset('storage/plants/' . $img) }}" style="width:70px; height:70px;">
-                                @endforeach
-                            </div>
-
-                            <button class="btn btn-light position-absolute end-0 top-50 translate-middle-y"
-                                onclick="slideThumbs(150)">›</button>
-
                         </div>
-
 
                     </div>
                 </div>
 
+                <!-- 📘 Species Details Text -->
                 <div class="col-md-7">
-                    <div class="species-card p-4">
+                    <div class="card p-4">
                         <h3 class="fw-bold text-success mb-4">Species Information</h3>
-                        <ul class="details-list">
+                        <ul class="details-list list-unstyled">
                             <li><strong>Scientific Name:</strong> {{ $species->name }}</li>
                             <li><strong>Author:</strong> {{ $species->author ?? '—' }}</li>
                             <li><strong>Publication:</strong> {{ $species->publication ?? '—' }}</li>
@@ -86,7 +85,7 @@
             </div>
 
             <!-- 📖 Description -->
-            <div class="species-card mt-5 p-4">
+            <div class="card mt-5 p-4">
                 <h4 class="fw-bold text-success mb-3">Description</h4>
                 <p class="text-muted" style="text-align: justify;">
                     {{ $species->description ?? 'No description available.' }}
@@ -95,7 +94,7 @@
 
             <!-- 🌼 Synonyms -->
             @if (!empty($species->synonyms))
-                <div class="species-card mt-4 p-4">
+                <div class="card mt-4 p-4">
                     <h4 class="fw-bold text-success mb-3">Synonyms</h4>
                     <div class="synonyms">
                         @foreach (json_decode($species->synonyms, true) as $syn)
@@ -144,12 +143,5 @@
 
         });
     </script>
-    <script>
-        function slideThumbs(amount) {
-            document.getElementById('thumbnails').scrollBy({
-                left: amount,
-                behavior: 'smooth'
-            });
-        }
-    </script>
+
 @endsection

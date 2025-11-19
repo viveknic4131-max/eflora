@@ -15,30 +15,91 @@
             </div>
         </section>
 
-        <section class="py-5 bg-light">
+
+
+
+        {{-- new  --}}
+
+        <section class="py-5 bg-light search-section">
             <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-8 col-md-10">
-                        <div class="card border-0 shadow-sm rounded-4">
-                            <div class="card-header bg-success text-white text-center fw-semibold">
-                                Families in {{ $volume->volume }}
-                            </div>
-                            <ul class="list-group list-group-flush">
-                                @foreach ($families as $family)
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <span class="fw-semibold text-success">{{ $family->name }}</span>
-                                        <a href="{{ route('get.family', ['family' => $family->family_code]) }}"
-                                            class="btn btn-outline-success btn-sm rounded-pill px-3">
-                                            View Genus
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold text-success">{{ $volume->volume }}</h2>
+                    {{-- <p class="text-muted">Family: <strong>{{ $family->name }}</strong></p> --}}
+                </div>
+
+                <form method="GET" class="row g-2 mb-4">
+                    <input type="hidden" name="volume" value="{{ $volume->volume_code }}">
+                    <div class="col-md-10">
+                        <input type="text" name="family_search" class="form-control" placeholder="Search Family..."
+                            value="{{ request('family_search') }}">
                     </div>
+                    <div class="col-md-2 d-flex gap-2">
+                        <button class="btn btn-success w-100">Search</button>
+                        @if (request()->filled('family_search'))
+                            <a href="{{ route('get.family', ['family' => $family->family_code]) }}"
+                                class="btn btn-outline-danger">×</a>
+                        @endif
+                    </div>
+                </form>
+
+
+                <div class="row g-2">
+                    @forelse ($families as $family)
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex">
+                            <a href="{{ route('get.family', ['family' => $family->family_code]) }}"
+                                class="card card-genus text-dark text-decoration-none flex-fill shadow-sm border-0 rounded-4 overflow-hidden">
+                                @if (!empty($species->images) && count($species->images) > 0)
+                                    @php
+
+                                        $firstImage = is_array($species->images)
+                                            ? $species->images[0]
+                                            : $species->images->first();
+
+                                        // dd($firstImage->pic);
+
+                                    @endphp
+
+                                    <img src="{{ asset('storage/plants/' . $firstImage->pic) }}"
+                                        class="card-img-top img-fluid" alt="{{ $species->name }}">
+                                @else
+                                    <img src="{{ asset('storage/images/species.jpg') }}" class="card-img-top img-fluid"
+                                        alt="No Image">
+                                @endif
+
+
+                                <div class="card-body d-flex flex-column">
+                                    {{-- <div class="mb-2">
+                                        <span
+                                            class="badge
+                                        @if (strtolower($plant['type']) == 'family') bg-success
+                                        @elseif (strtolower($plant['type']) == 'genus') bg-primary
+                                        @else bg-info text-dark @endif">
+                                            🌿 {{ $plant['type'] }}
+                                        </span>
+                                    </div> --}}
+                                    <h6 class="card-title text-truncate mb-2">{{ $family->name }}</h6>
+                                    {{-- <p class="card-text text-muted small mb-0 text-truncate">{{ $plant['details'] }}</p> --}}
+                                    {{-- <p class="text-muted small mb-0">
+                                        {{ $species->author ?? '-' }}<br>
+                                        Vol: {{ $species->volume ?? '-' }}, Pg: {{ $species->page ?? '-' }}
+                                    </p> --}}
+                                </div>
+                            </a>
+                        </div>
+
+
+
+                    @empty
+                        <p class="text-center text-muted">No family found under this {{ $volume->volume }}.</p>
+                    @endforelse
+                </div>
+
+                <div class="mt-4">
+                    {{ $families->appends(request()->query())->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </section>
+
 
         {{-- 🌱 FAMILY MODE --}}
     @elseif ($mode === 'family')
@@ -74,7 +135,7 @@
                         </div>
                     </form>
 
-                    <div class="row g-4 ">
+                    <div class="row g-2">
                         @forelse ($genusList as $genus)
                             <div class="col-lg-3 col-md-4 col-sm-6 ">
                                 <a href="{{ route('get.family', ['genus' => $genus->genus_code]) }}"
@@ -82,7 +143,7 @@
                                     {{-- <div class="card h-100 border-0 shadow-sm rounded-4 text-center hover-shadow"> --}}
                                     <div class="card-genus">
                                         <div class="card-body d-flex align-items-center justify-content-center">
-                                            <h5 class="fw-semibold text-success mb-0">{{ $genus->name }}</h5>
+                                            <h6 class="fw-semibold text-success mb-0">{{ $genus->name }}</h6>
                                         </div>
                                     </div>
                                 </a>
@@ -110,7 +171,7 @@
             </div>
         </section>
 
-        <section class="py-5 bg-light">
+        <section class="py-5 bg-light search-section">
             <div class="container">
                 <div class="text-center mb-5">
                     <h2 class="fw-bold text-success">{{ $genus->name }}</h2>
@@ -133,7 +194,7 @@
                 </form>
 
 
-                <div class="row g-4">
+                <div class="row g-2">
                     @forelse ($speciesList as $species)
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex">
                             <a href="{{ route('get.species', ['species' => $species->species_code]) }}"
@@ -167,7 +228,7 @@
                                             🌿 {{ $plant['type'] }}
                                         </span>
                                     </div> --}}
-                                    <h5 class="card-title text-truncate mb-2">{{ $species->name }}</h5>
+                                    <h6 class="card-title text-truncate mb-2">{{ $species->name }}</h6>
                                     {{-- <p class="card-text text-muted small mb-0 text-truncate">{{ $plant['details'] }}</p> --}}
                                     <p class="text-muted small mb-0">
                                         {{ $species->author ?? '-' }}<br>
