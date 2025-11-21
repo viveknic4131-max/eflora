@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\FamilyController;
+use App\Http\Controllers\admin\GenusController;
+use App\Http\Controllers\admin\SpeciesController;
 use App\Http\Controllers\Admin\VolumeController;
 
 
@@ -38,6 +40,14 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
     Route::get('/ajax/families', [FamilyController::class, 'searchFamilies'])->name('ajax.families');
     Route::get('/ajax/volumes', [VolumeController::class, 'searchVolumes'])->name('ajax.volumes');
+
+
+
+    Route::resource('genera', GenusController::class);
+    Route::resource('species', SpeciesController::class);
+    Route::get('/ajax/genus-by-family', [GenusController::class, 'ajaxByFamily'])
+    ->name('ajax.genus.by.family');
+
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 

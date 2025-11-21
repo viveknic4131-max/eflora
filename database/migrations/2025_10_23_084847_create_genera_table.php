@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreign('family_id')->references('id')->on('families')->onDelete('cascade');
             $table->unsignedBigInteger('volume_id');
             $table->foreign('volume_id')->references('id')->on('volumes')->onDelete('cascade');
+             $table->foreignId('family_id')->constrained('families');
               $table->softDeletes();
             $table->timestamps();
         });

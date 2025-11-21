@@ -7,13 +7,13 @@
         <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
             aria-hidden="true" id="iconSidenav"></i>
         {{-- <a class="navbar-brand m-0 d-flex text-wrap align-items-center" href=" {{ route('dashboard') }} "> --}}
-        <a class="navbar-brand m-0 d-flex text-wrap align-items-center" href=" {{route('dashboard')}} ">
+        <a class="navbar-brand m-0 d-flex text-wrap align-items-center" href=" {{ route('dashboard') }} ">
             {{-- <img src="{{ asset('assets') }}/img/logo-ct.png" class="navbar-brand-img h-100" alt="main_logo"> --}}
             <span class="ms-2 font-weight-bold text-white">🌿 E Flora 🌿</span>
         </a>
     </div>
     <hr class="horizontal light mt-0 mb-2">
- <div >
+    <div>
         <ul class="navbar-nav">
             {{-- <li class="nav-item mt-3">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">E Flora By BSI</h6>
@@ -41,7 +41,7 @@
                 </a>
             </li> --}}
 
-             <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link text-white {{ $activePage == 'taxon' ? ' active bg-gradient-primary' : '' }} "
                     href="{{ route('taxon.index') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -50,7 +50,7 @@
                     <span class="nav-link-text ms-1">Taxon</span>
                 </a>
             </li>
-              <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link text-white {{ $activePage == 'family' ? ' active bg-gradient-primary' : '' }} "
                     href="{{ route('family.index') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -69,7 +69,7 @@
                     <span class="nav-link-text ms-1">Volume</span>
                 </a>
             </li>
- <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link text-white {{ $activePage == 'assign_volume' ? ' active bg-gradient-primary' : '' }} "
                     href="{{ route('assign-volume-family') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -78,14 +78,33 @@
                     <span class="nav-link-text ms-1">Assign Volume Family </span>
                 </a>
             </li>
-             <li class="nav-item mt-3">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">User Management</h6>
+             <li class="nav-item">
+                <a class="nav-link text-white {{ $activePage == 'genus' ? ' active bg-gradient-primary' : '' }} "
+                    href="{{ route('genera.index') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">dashboard</i>
+                    </div>
+                    <span class="nav-link-text ms-1">Genus</span>
+                </a>
+            </li>
+             <li class="nav-item">
+                <a class="nav-link text-white {{ $activePage == 'species' ? ' active bg-gradient-primary' : '' }} "
+                    href="{{ route('species.index') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">dashboard</i>
+                    </div>
+                    <span class="nav-link-text ms-1">Species</span>
+                </a>
+            </li>
+            <li class="nav-item mt-3">
+                <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">User Management
+                </h6>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white {{ $activePage == 'user-management' ? ' active bg-gradient-primary' : '' }} "
                     href="{{ route('user-management') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                         <i class="material-icons opacity-10">dashboard</i>
+                        <i class="material-icons opacity-10">dashboard</i>
                     </div>
                     <span class="nav-link-text ms-1">Users</span>
                 </a>
@@ -99,20 +118,20 @@
                     <span class="nav-link-text ms-1">Assign Permissions</span>
                 </a>
             </li> --}}
-             <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link text-white {{ $activePage == 'permissions' ? ' active bg-gradient-primary' : '' }} "
                     href="{{ route('permissions.index') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                         <i class="material-icons opacity-10">dashboard</i>
+                        <i class="material-icons opacity-10">dashboard</i>
                     </div>
                     <span class="nav-link-text ms-1">Permissions</span>
                 </a>
             </li>
-              <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link text-white {{ $activePage == 'roles' ? ' active bg-gradient-primary' : '' }} "
                     href="{{ route('roles.index') }}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                         <i class="material-icons opacity-10">dashboard</i>
+                        <i class="material-icons opacity-10">dashboard</i>
                     </div>
                     <span class="nav-link-text ms-1">Roles</span>
                 </a>

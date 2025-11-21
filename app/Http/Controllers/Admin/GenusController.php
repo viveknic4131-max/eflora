@@ -3,16 +3,21 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Genus;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Str;
 class GenusController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+      $perPage = $request->get('perPage', 50);
+        $genus = Genus::with('family')->orderBy('id', 'desc')->paginate($perPage);
+        // dd($genus);
+
+        return view('pages.genera.index', compact('genus'));
     }
 
     /**
@@ -20,16 +25,31 @@ class GenusController extends Controller
      */
     public function create()
     {
-        //
+   return view('pages.genera.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
+   public function store(Request $request)
+{
+    $request->validate([
+        'genus' => 'required|string|max:255|unique:genera,name',
+        'family_id' => 'required|exists:families,id',
+        'description' => 'nullable|string',
+    ]);
+
+    Genus::create([
+        'genus_code' => Str::uuid(),
+        'name'       => $request->genus,
+        'description'=> $request->description,
+        'family_id'  => $request->family_id,
+        'volume_id'  => 0,
+    ]);
+
+    return redirect()->route('genera.index')->with('success', 'Genus created successfully.');
+}
+
 
     /**
      * Display the specified resource.
@@ -62,4 +82,16 @@ class GenusController extends Controller
     {
         //
     }
+
+    public function ajaxByFamily(Request $request)
+{
+    $familyId = $request->family_id;
+
+    $genera = Genus::where('family_id', $familyId)
+                ->select('id', 'name')
+                ->get();
+
+    return response()->json($genera);
+}
+
 }
