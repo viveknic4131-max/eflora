@@ -14,15 +14,15 @@
                                 <i class="material-icons opacity-10">weekend</i>
                             </div>
                             <div class="text-end pt-1">
-                                <p class="text-sm mb-0 text-capitalize">Today's Money</p>
-                                <h4 class="mb-0">$53k</h4>
+                                <p class="text-sm mb-0 text-capitalize">Total Volumes</p>
+                                <h4 class="mb-0">{{$volumes}}</h4>
                             </div>
                         </div>
                         <hr class="dark horizontal my-0">
-                        <div class="card-footer p-3">
+                        {{-- <div class="card-footer p-3">
                             <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+55% </span>than
                                 lask week</p>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
@@ -33,15 +33,15 @@
                                 <i class="material-icons opacity-10">person</i>
                             </div>
                             <div class="text-end pt-1">
-                                <p class="text-sm mb-0 text-capitalize">Today's Users</p>
-                                <h4 class="mb-0">2,300</h4>
+                                <p class="text-sm mb-0 text-capitalize">Total Families</p>
+                                <h4 class="mb-0">{{$families}}</h4>
                             </div>
                         </div>
                         <hr class="dark horizontal my-0">
-                        <div class="card-footer p-3">
+                        {{-- <div class="card-footer p-3">
                             <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+3% </span>than
                                 lask month</p>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
@@ -52,15 +52,15 @@
                                 <i class="material-icons opacity-10">person</i>
                             </div>
                             <div class="text-end pt-1">
-                                <p class="text-sm mb-0 text-capitalize">New Clients</p>
-                                <h4 class="mb-0">3,462</h4>
+                                <p class="text-sm mb-0 text-capitalize">Total Genus</p>
+                                <h4 class="mb-0">{{$genera}}</h4>
                             </div>
                         </div>
                         <hr class="dark horizontal my-0">
-                        <div class="card-footer p-3">
+                        {{-- <div class="card-footer p-3">
                             <p class="mb-0"><span class="text-danger text-sm font-weight-bolder">-2%</span> than
                                 yesterday</p>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="col-xl-3 col-sm-6">
@@ -71,15 +71,15 @@
                                 <i class="material-icons opacity-10">weekend</i>
                             </div>
                             <div class="text-end pt-1">
-                                <p class="text-sm mb-0 text-capitalize">Sales</p>
-                                <h4 class="mb-0">$103,430</h4>
+                                <p class="text-sm mb-0 text-capitalize">Total Species</p>
+                                <h4 class="mb-0">{{$species}}</h4>
                             </div>
                         </div>
                         <hr class="dark horizontal my-0">
-                        <div class="card-footer p-3">
+                        {{-- <div class="card-footer p-3">
                             <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+5% </span>than
                                 yesterday</p>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -145,8 +145,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row mb-4">
+            </div> --}}
+            {{-- <div class="row mb-4">
                 <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
                     <div class="card">
                         <div class="card-header pb-0">

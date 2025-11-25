@@ -24,11 +24,11 @@
             <li class="nav-item dropdown list-unstyled">
                 <a class="nav-link p-0 d-flex align-items-center" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="{{ asset('assets/img/team-1.jpg') }}" class="avatar avatar-sm rounded-circle me-2">
-                    <span class="d-none d-sm-inline">John Doe</span>
+                    <span class="d-none d-sm-inline">{{auth()->user()->name ?? 'Admin'}}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end px-2 py-3" aria-labelledby="profileDropdown">
                     <li>
-                        <a class="dropdown-item border-radius-md" href="#">Profile</a>
+                        <a class="dropdown-item border-radius-md" href="{{route('profile')}}">Profile</a>
                     </li>
                        <form method="POST" action="{{ route('logout') }}" class="d-none" id="logout-form">
                 @csrf

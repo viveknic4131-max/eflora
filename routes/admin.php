@@ -10,10 +10,10 @@ use App\Http\Controllers\Admin\FamilyController;
 use App\Http\Controllers\admin\GenusController;
 use App\Http\Controllers\admin\SpeciesController;
 use App\Http\Controllers\Admin\VolumeController;
-
-
-
-
+use App\Models\Family;
+use App\Models\Genus;
+use App\Models\Species;
+use App\Models\Volume;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -56,7 +56,15 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     })->name('home');
 
     Route::get('/dashboard', function () {
-        return view('dashboard.index');
+
+        // dd("lkhj");
+
+        $volumes = Volume::count();
+        // dd($volumes);
+        $families = Family::count();
+        $genera = Genus::count();
+        $species = Species::count();
+        return view('dashboard.index' ,compact('volumes', 'families', 'genera', 'species'));
     })->name('dashboard');
 
     Route::get('/user-profile', function () {
