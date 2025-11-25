@@ -75,6 +75,10 @@
                                                 class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
                                                 CREATION DATE
                                             </th>
+                                             <th
+                                                class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
+                                            ACTIONS
+                                            </th>
                                             <th class="text-secondary opacity-7"></th>
                                         </tr>
                                     </thead>
@@ -112,6 +116,12 @@
 
                                                     </h6>
 
+                                                </td>
+                                                <td class="align-middle text-center">
+                                                    <a class="btn btn-success btn-link"><i
+                                                            class="material-icons">edit</i></a>
+                                                    <button type="button" class="btn btn-danger btn-link"><i
+                                                            class="material-icons">close</i></button>
                                                 </td>
 
                                             @empty

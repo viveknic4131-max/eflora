@@ -11,19 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('genera', function (Blueprint $table) {
-            $table->id();
-            $table->uuid('genus_code')->unique();
-            $table->string('name');
-            $table->string('description')->nullable();
-            $table->unsignedBigInteger('family_id');
-            $table->foreign('family_id')->references('id')->on('families')->onDelete('cascade');
-            $table->unsignedBigInteger('volume_id');
-            $table->foreign('volume_id')->references('id')->on('volumes')->onDelete('cascade');
-             $table->foreignId('family_id')->constrained('families');
-              $table->softDeletes();
-            $table->timestamps();
-        });
+       Schema::create('genera', function (Blueprint $table) {
+    $table->id();
+    $table->uuid('genus_code')->unique();
+    $table->string('name');
+    $table->string('description')->nullable();
+
+    $table->unsignedBigInteger('family_id');
+    $table->foreign('family_id')->references('id')->on('families')->onDelete('cascade');
+
+    $table->unsignedBigInteger('volume_id');
+    // $table->foreign('volume_id')->references('id')->on('volumes')->onDelete('cascade');
+
+    $table->softDeletes();
+    $table->timestamps();
+});
+
     }
 
     /**

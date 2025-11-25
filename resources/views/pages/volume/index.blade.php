@@ -72,9 +72,9 @@
                                             <th
                                                 class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
                                                 Volume Name</th>
-                                            <th
+                                            {{-- <th
                                                 class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
-                                                Descriptions</th>
+                                                Descriptions</th> --}}
                                             <th
                                                 class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
                                                 Volume Type</th>
@@ -82,6 +82,10 @@
                                             <th
                                                 class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
                                                 CREATION DATE
+                                            </th>
+                                             <th
+                                                class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
+                                            ACTIONS
                                             </th>
                                             <th class="text-secondary opacity-7"></th>
                                         </tr>
@@ -106,12 +110,12 @@
                                                     <h6 class="mb-0 text-sm text-center">{{ $permission->name }}</h6>
 
                                                 </td>
-                                                <td class="text-uppercase text-secondary text-xxs font-weight-bolder">
+                                                {{-- <td class="text-uppercase text-secondary text-xxs font-weight-bolder">
                                                     <h6 class="mb-0 text-sm text-center">{{ $permission->description }}
                                                     </h6>
 
 
-                                                </td>
+                                                </td> --}}
 
                                                 <td class="text-uppercase text-secondary text-xxs font-weight-bolder">
                                                     <h6 class="mb-0 text-sm text-center">
@@ -122,6 +126,12 @@
                                                     <h6 class="mb-0 text-sm text-center">
                                                         {{ $permission->created_at->format('d-M-Y') }}</h6>
 
+                                                </td>
+                                                <td class="align-middle text-center">
+                                                    <a class="btn btn-success btn-link"><i
+                                                            class="material-icons">edit</i></a>
+                                                    <button type="button" class="btn btn-danger btn-link"><i
+                                                            class="material-icons">close</i></button>
                                                 </td>
 
                                             @empty
@@ -136,7 +146,9 @@
 
 
                             </div>
-                            <div class="card-footer d-flex justify-content-between align-items-center">
+
+                        </div>
+ <div class="card-footer d-flex justify-content-between align-items-center">
                                 <!-- Rows per page selector -->
 
 
@@ -160,8 +172,6 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
-
                     </div>
 
 
