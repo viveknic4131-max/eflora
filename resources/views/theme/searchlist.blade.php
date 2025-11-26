@@ -59,6 +59,19 @@
                     </button>
                 </div>
             </form>
+             @if ($errors->has('plant_type') || $errors->has('q'))
+                        {{-- @php
+                        dd($errors->messages());
+             @endphp --}}
+                        <div class="text-white text-center small mt-2 fw-bold">
+                            {{-- Please select a search type and enter text to search.
+                             --}}
+
+                            {{ $errors->first('q') }}
+                            {{ $errors->first('plant_type') }}
+
+                        </div>
+                    @endif
 
         </div>
     </section>
@@ -148,7 +161,7 @@
         const suggestionsBox = document.getElementById('suggestions');
         let tags = [];
 
-        // ✅ Initialize tags if there’s already a value in hiddenInput (like "Suntaceae,faf,Deleniti spkfaf")
+    
         if (hiddenInput.value) {
             tags = hiddenInput.value.split(',').map(t => t.trim()).filter(Boolean);
         }
