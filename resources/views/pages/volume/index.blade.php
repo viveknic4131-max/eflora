@@ -83,9 +83,9 @@
                                                 class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
                                                 CREATION DATE
                                             </th>
-                                             <th
+                                            <th
                                                 class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
-                                            ACTIONS
+                                                ACTIONS
                                             </th>
                                             <th class="text-secondary opacity-7"></th>
                                         </tr>
@@ -127,12 +127,32 @@
                                                         {{ $permission->created_at->format('d-M-Y') }}</h6>
 
                                                 </td>
-                                                <td class="align-middle text-center">
-                                                    <a class="btn btn-success btn-link"><i
+                                                {{-- <td class="align-middle text-center">
+                                                    <a class="btn btn-success btn-link" href="{{route}}"><i
                                                             class="material-icons">edit</i></a>
                                                     <button type="button" class="btn btn-danger btn-link"><i
                                                             class="material-icons">close</i></button>
+                                                </td> --}}
+                                                <td class="align-middle text-center">
+                                                    {{-- Edit Button --}}
+                                                    <a class="btn btn-success btn-link"
+                                                        href="{{ route('volume.edit', $permission->id) }}">
+                                                        <i class="material-icons">edit</i>
+                                                    </a>
+
+                                                    {{-- Delete Button --}}
+                                                    <form action="{{ route('volume.destroy', $permission->id) }}"
+                                                        method="POST" style="display:inline-block;">
+                                                        @csrf
+                                                        @method('DELETE')
+
+                                                        <button type="submit" class="btn btn-danger btn-link"
+                                                            onclick="return confirm('Are you sure you want to delete this volume?')">
+                                                            <i class="material-icons">close</i>
+                                                        </button>
+                                                    </form>
                                                 </td>
+
 
                                             @empty
                                             <tr>
@@ -148,30 +168,30 @@
                             </div>
 
                         </div>
- <div class="card-footer d-flex justify-content-between align-items-center">
-                                <!-- Rows per page selector -->
+                        <div class="card-footer d-flex justify-content-between align-items-center">
+                            <!-- Rows per page selector -->
 
 
-                                <!-- Pagination links -->
-                                <div>
-                                    {{ $families->links('vendor.pagination.bootstrap-5') }}
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    {{-- <label for="perPage" class="me-2 mb-0">Rows per page:</label><br> --}}
-                                    <select id="perPage" class="form-select form-select-sm"
-                                        onchange="changePerPage(this)">
-
-                                        <option value="5" {{ request('perPage') == 5 ? 'selected' : '' }}>5
-                                        </option>
-                                        <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10
-
-                                        <option value="40" {{ request('perPage') == 40 ? 'selected' : '' }}>40
-                                        </option>
-                                        <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>50
-                                        </option>
-                                    </select>
-                                </div>
+                            <!-- Pagination links -->
+                            <div>
+                                {{ $families->links('vendor.pagination.bootstrap-5') }}
                             </div>
+                            <div class="d-flex align-items-center">
+                                {{-- <label for="perPage" class="me-2 mb-0">Rows per page:</label><br> --}}
+                                <select id="perPage" class="form-select form-select-sm"
+                                    onchange="changePerPage(this)">
+
+                                    <option value="5" {{ request('perPage') == 5 ? 'selected' : '' }}>5
+                                    </option>
+                                    <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10
+
+                                    <option value="40" {{ request('perPage') == 40 ? 'selected' : '' }}>40
+                                    </option>
+                                    <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>50
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
 

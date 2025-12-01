@@ -53,69 +53,44 @@
                         </div>
 
                         <div class="card-body px-5 pb-4">
-
-                            @php
-                                // dd($volume);
-                            @endphp
-                            <form
-                                action="{{ isset($volume) ? route('volume.update', $volume->id) : route('volume.store') }}"
-                                method="POST" id="volumeForm">
+                            <form action="{{ route('volume.store') }}" method="POST">
                                 @csrf
-                                @if (isset($volume))
-                                    @method('PUT')
-                                @endif
-
                                 <div class="row">
-
-                                    {{-- Volume --}}
                                     <div class="col-md-6 mb-3">
                                         <div class="input-group input-group-static">
                                             <input type="text" name="volume" class="form-control"
-                                                placeholder="Enter volume"
-                                                value="{{ old('volume', $volume->volume ?? '') }}">
+                                                placeholder="Enter volume">
                                         </div>
                                         @error('volume')
                                             <p class="text-danger inputerror mt-1">{{ $message }}</p>
                                         @enderror
-                                    </div>
 
-                                    {{-- Volume Name --}}
+                                    </div>
                                     <div class="col-md-6 mb-3">
                                         <div class="input-group input-group-static">
                                             <input type="text" name="volume_name" class="form-control"
-                                                placeholder="Enter volume Name *" required
-                                                value="{{ old('volume_name', $volume->name ?? '') }}">
+                                                placeholder="Enter volume Name *" required>
                                         </div>
                                         @error('volume_name')
                                             <p class="text-danger inputerror mt-1">{{ $message }}</p>
                                         @enderror
                                     </div>
-
-                                    {{-- Description --}}
                                     <div class="col-md-6 mb-3">
                                         <div class="input-group input-group-static">
                                             <input type="text" name="description" class="form-control"
-                                                placeholder="Enter volume Description"
-                                                value="{{ old('description', $volume->description ?? '') }}">
+                                                placeholder="Enter volume Description">
                                         </div>
                                         @error('description')
                                             <p class="text-danger inputerror mt-1">{{ $message }}</p>
                                         @enderror
-                                    </div>
 
-                                    {{-- Volume Type --}}
+                                    </div>
                                     <div class="col-md-6 mb-3">
                                         <div class="input-group input-group-static">
                                             <select name="volume_type" class="form-control">
                                                 <option value="">Select Volume Type</option>
-                                                <option value="0"
-                                                    {{ old('volume_type', $volume->volume_type ?? '') == false ? 'selected' : '' }}>
-                                                    BSI
-                                                </option>
-                                                <option value="1"
-                                                    {{ old('volume_type', $volume->volume_type ?? '') == true ? 'selected' : '' }}>
-                                                    Flora of India
-                                                </option>
+                                                <option value="0">BSI</option>
+                                                <option value="1">Flora of India</option>
                                             </select>
                                         </div>
                                         @error('volume_type')
@@ -123,17 +98,12 @@
                                         @enderror
                                     </div>
 
-                                    {{-- Submit Button --}}
+
                                     <div class="col-12 text-center mt-3">
-                                        <button type="submit" id="submitBtn" class="btn bg-gradient-primary mb-0">
-                                            {{ isset($volume) ? 'Update Volume' : 'Save Volume' }}
-                                        </button>
+                                        <button type="submit" class="btn bg-gradient-primary mb-0">Save
+                                            volume</button>
                                     </div>
-
-                                </div>
                             </form>
-
-
                         </div>
                     </div>
                 </div>
@@ -145,11 +115,3 @@
 
     <x-plugins></x-plugins>
 </x-layout>
-
-<script>
-    document.getElementById("volumeForm").addEventListener("submit", function() {
-        const btn = document.getElementById("submitBtn");
-        btn.disabled = true;
-        btn.innerHTML = "Please wait...";
-    });
-</script>
