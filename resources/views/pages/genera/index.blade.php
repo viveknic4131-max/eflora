@@ -68,6 +68,9 @@
                                             <th
                                                 class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
                                                 Genus Name</th>
+                                                {{-- <th
+                                                class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
+                                                Genus Description</th> --}}
                                             <th
                                                 class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
                                                 Family Name</th>
@@ -78,14 +81,13 @@
                                             </th>
                                             <th
                                                 class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
-                                            ACTIONS
+                                                ACTIONS
                                             </th>
                                             <th class="text-secondary opacity-7"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @forelse ($genus as $index => $permission)
-
                                             <tr>
                                                 <td class="text-uppercase text-secondary text-xxs font-weight-bolder">
 
@@ -101,29 +103,54 @@
                                                     <h6 class="mb-0 text-sm text-center">{{ $permission['name'] }}</h6>
 
                                                 </td>
+                                                 {{-- <td class="text-uppercase text-secondary text-xxs font-weight-bolder">
+                                                    <h6 class="mb-0 text-sm text-center">{{ $permission['description'] }}</h6>
+
+                                                </td> --}}
                                                 <td class="text-uppercase text-secondary text-xxs font-weight-bolder">
-                                                    <h6 class="mb-0 text-sm text-center">{{ $permission->family->name ?? 'N/A' }}
+                                                    <h6 class="mb-0 text-sm text-center">
+                                                        {{ $permission->family->name ?? 'N/A' }}
                                                     </h6>
 
 
                                                 </td>
                                                 <td class="text-uppercase text-secondary text-xxs font-weight-bolder">
                                                     <h6 class="mb-0 text-sm text-center">
-                                                     {{ $permission['created_at']}}
+                                                        {{ $permission['created_at'] }}
 
                                                     </h6>
 
                                                 </td>
-                                                <td class="align-middle text-center">
+                                                {{-- <td class="align-middle text-center">
                                                     <a class="btn btn-success btn-link"><i
                                                             class="material-icons">edit</i></a>
                                                     <button type="button" class="btn btn-danger btn-link"><i
                                                             class="material-icons">close</i></button>
+                                                </td> --}}
+
+                                                <td class="align-middle text-center">
+                                                    {{-- Edit Button --}}
+                                                    <a class="btn btn-success btn-link"
+                                                        href="{{ route('genera.edit', $permission['id']) }}">
+                                                        <i class="material-icons">edit</i>
+                                                    </a>
+
+                                                    {{-- Delete Button --}}
+                                                    <form action="{{ route('genera.destroy', $permission['id']) }}"
+                                                        method="POST" style="display:inline-block;">
+                                                        @csrf
+                                                        @method('DELETE')
+
+                                                        <button type="submit" class="btn btn-danger btn-link"
+                                                            onclick="return confirm('Are you sure you want to delete this genus?')">
+                                                            <i class="material-icons">close</i>
+                                                        </button>
+                                                    </form>
                                                 </td>
 
                                             @empty
                                             <tr>
-                                                <td colspan="4" class="text-center text-xs font-weight-bold">No
+                                                <td colspan="5" class="text-center text-xs font-weight-bold">No
                                                     records found</td>
                                             </tr>
                                         @endforelse

@@ -111,11 +111,30 @@
                                                         {{ $permission->created_at->format('d-M-Y') }}</h6>
 
                                                 </td>
-                                                <td class="align-middle text-center">
+                                                {{-- <td class="align-middle text-center">
                                                     <a class="btn btn-success btn-link"><i
                                                             class="material-icons">edit</i></a>
                                                     <button type="button" class="btn btn-danger btn-link"><i
                                                             class="material-icons">close</i></button>
+                                                </td> --}}
+                                                <td class="align-middle text-center">
+                                                    {{-- Edit Button --}}
+                                                    <a class="btn btn-success btn-link"
+                                                        href="{{ route('family.edit', $permission->id) }}">
+                                                        <i class="material-icons">edit</i>
+                                                    </a>
+
+                                                    {{-- Delete Button --}}
+                                                    <form action="{{ route('family.destroy', $permission->id) }}"
+                                                        method="POST" style="display:inline-block;">
+                                                        @csrf
+                                                        @method('DELETE')
+
+                                                        <button type="submit" class="btn btn-danger btn-link"
+                                                            onclick="return confirm('Are you sure you want to delete this family?')">
+                                                            <i class="material-icons">close</i>
+                                                        </button>
+                                                    </form>
                                                 </td>
 
                                             @empty

@@ -1,4 +1,4 @@
-<h2 class="fw-bold mb-4 section-title text-center">BSI Volume</h2>
+<h2 class="fw-bold mb-4 section-title text-center">Plant Checklist Of India</h2>
 <ul class="list-unstyled mb-4">
     @foreach ($bsiVolume as $volume)
         <li class="mb-3">

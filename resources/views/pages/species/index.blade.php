@@ -65,8 +65,12 @@
                                                 class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
                                                 S.NO.
                                             </th>
-                                            <th class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">Species Name</th>
-                                            <th class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">Genus Name</th>
+                                            <th
+                                                class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
+                                                Species Name</th>
+                                            <th
+                                                class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
+                                                Genus Name</th>
                                             <th
                                                 class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
                                                 Family Name</th>
@@ -75,22 +79,21 @@
                                                 class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
                                                 CREATION DATE
                                             </th>
-                                             <th
+                                            <th
                                                 class="text-center text-uppercase text-secondary text-s font-weight-bolder text-danger">
-                                            ACTIONS
+                                                ACTIONS
                                             </th>
                                             <th class="text-secondary opacity-7"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse ($genus as $index => $permission)
-
+                                        @forelse ($species as $index => $permission)
                                             <tr>
                                                 <td class="text-uppercase text-secondary text-xxs font-weight-bolder">
 
 
                                                     <h6 class="mb-0 text-sm text-center">
-                                                        {{ $genus->firstItem() + $index }}</h6>
+                                                        {{ $species->firstItem() + $index }}</h6>
 
 
                                                 </td>
@@ -100,28 +103,43 @@
                                                     <h6 class="mb-0 text-sm text-center">{{ $permission['name'] }}</h6>
 
                                                 </td>
-                                                 <td class="text-uppercase text-secondary text-xxs font-weight-bolder">
-                                                    <h6 class="mb-0 text-sm text-center">{{ $permission->genus->name ?? 'N/A' }}</h6>
+                                                <td class="text-uppercase text-secondary text-xxs font-weight-bolder">
+                                                    <h6 class="mb-0 text-sm text-center">
+                                                        {{ $permission->genus->name ?? 'N/A' }}</h6>
 
                                                 </td>
                                                 <td class="text-uppercase text-secondary text-xxs font-weight-bolder">
-                                                    <h6 class="mb-0 text-sm text-center">{{ $permission->family->name ?? 'N/A' }}
+                                                    <h6 class="mb-0 text-sm text-center">
+                                                        {{ $permission->family->name ?? 'N/A' }}
                                                     </h6>
 
 
                                                 </td>
                                                 <td class="text-uppercase text-secondary text-xxs font-weight-bolder">
                                                     <h6 class="mb-0 text-sm text-center">
-                                                     {{ $permission['created_at']}}
+                                                        {{ $permission['created_at'] }}
 
                                                     </h6>
 
                                                 </td>
                                                 <td class="align-middle text-center">
-                                                    <a class="btn btn-success btn-link"><i
-                                                            class="material-icons">edit</i></a>
-                                                    <button type="button" class="btn btn-danger btn-link"><i
-                                                            class="material-icons">close</i></button>
+                                                    {{-- Edit Button --}}
+                                                    <a class="btn btn-success btn-link"
+                                                        href="{{ route('species.edit', $permission['id']) }}">
+                                                        <i class="material-icons">edit</i>
+                                                    </a>
+
+                                                    {{-- Delete Button --}}
+                                                    <form action="{{ route('species.destroy', $permission['id']) }}"
+                                                        method="POST" style="display:inline-block;">
+                                                        @csrf
+                                                        @method('DELETE')
+
+                                                        <button type="submit" class="btn btn-danger btn-link"
+                                                            onclick="return confirm('Are you sure you want to delete this genus?')">
+                                                            <i class="material-icons">close</i>
+                                                        </button>
+                                                    </form>
                                                 </td>
 
                                             @empty
@@ -142,7 +160,7 @@
 
                                 <!-- Pagination links -->
                                 <div>
-                                    {{ $genus->links('vendor.pagination.bootstrap-5') }}
+                                    {{ $species->links('vendor.pagination.bootstrap-5') }}
                                 </div>
                                 <div class="d-flex align-items-center">
                                     {{-- <label for="perPage" class="me-2 mb-0">Rows per page:</label><br> --}}

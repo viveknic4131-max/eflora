@@ -53,13 +53,19 @@
                         </div>
 
                         <div class="card-body px-5 pb-4">
-                            <form action="{{ route('family.store') }}" method="POST">
+                            <form id="familyForm"
+                                action="{{ isset($family) ? route('family.update', $family->id) : route('family.store') }}"
+                                method="POST">
+
                                 @csrf
+                                @if (isset($family))
+                                    @method('PUT')
+                                @endif
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <div class="input-group input-group-static">
                                             <input type="text" name="name" class="form-control"
-                                                placeholder="Enter Family Name *" required>
+                                                placeholder="Enter Family Name *" required   value="{{ old('name', $family->name ?? '') }}">
                                         </div>
                                         @error('name')
                                             <p class="text-danger inputerror mt-1">{{ $message }}</p>
@@ -68,17 +74,23 @@
                                     <div class="col-md-6 mb-3">
                                         <div class="input-group input-group-static">
                                             <input type="text" name="description" class="form-control"
-                                                placeholder="Enter Family Description">
+                                                placeholder="Enter Family Description" required  value="{{ old('description', $family->description ?? '') }}">
                                         </div>
                                         @error('description')
                                             <p class="text-danger inputerror mt-1">{{ $message }}</p>
                                         @enderror
 
-                                </div>
-                                 <div class="col-12 text-center mt-3">
+                                    </div>
+
+                                     <div class="col-12 text-center mt-3">
+                                        <button type="submit" id="submitBtn" class="btn bg-gradient-primary mb-0">
+                                            {{ isset($family) ? 'Update Family' : 'Save Family' }}
+                                        </button>
+                                    </div>
+                                    {{-- <div class="col-12 text-center mt-3">
                                         <button type="submit" class="btn bg-gradient-primary mb-0">Save
                                             Family</button>
-                                    </div>
+                                    </div> --}}
                             </form>
                         </div>
                     </div>
@@ -91,3 +103,10 @@
 
     <x-plugins></x-plugins>
 </x-layout>
+<script>
+    document.getElementById("familyForm").addEventListener("submit", function() {
+        const btn = document.getElementById("submitBtn");
+        btn.disabled = true;
+        btn.innerHTML = "Please wait...";
+    });
+</script>

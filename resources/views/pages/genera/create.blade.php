@@ -46,7 +46,7 @@
                             <div
                                 class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3 d-flex justify-content-between align-items-center">
                                 <h6 class="text-white text-capitalize ps-3 mb-0">Genus</h6>
-                                <a class="btn bg-gradient-dark mb-0 me-3" href="{{ route('assign-volume-family') }}">
+                                <a class="btn bg-gradient-dark mb-0 me-3" href="{{ route('genera.index') }}">
                                     <i class="material-icons text-sm">arrow_back</i>&nbsp;&nbsp;Back to list
                                 </a>
                             </div>
@@ -54,8 +54,15 @@
 
 
                         <div class="card-body px-5 pb-4">
-                            <form action="{{ route('genera.store') }}" method="POST">
+                            {{-- <form action="{{ route('genera.store') }}" method="POST"> --}}
+
+                            <form id="genusForm"
+                                action="{{ isset($genus) ? route('genera.update', $genus->id) : route('genera.store') }}"
+                                method="POST">
                                 @csrf
+                                @if (isset($genus))
+                                    @method('PUT')
+                                @endif
                                 <div class="row">
                                     {{-- Searchable Family --}}
                                     <div class="col-md-6 mb-3">
@@ -75,18 +82,20 @@
                                         <div class="input-group input-group-static">
                                             {{-- <label for="volumes" class="ms-0">Enter Genus Name *</label> --}}
                                             <input type="name" name="genus" class="form-control"
-                                                placeholder="Enter Genus Name *" required>
+                                                placeholder="Enter Genus Name *" required
+                                                value="{{ old('name', $genus->name ?? '') }}">
                                         </div>
                                         @error('genus')
                                             <p class="text-danger inputerror mt-1">{{ $message }}</p>
                                         @enderror
                                     </div>
-                                     <div class="col-md-6 mb-3">
+                                    <div class="col-md-6 mb-3">
 
                                         <div class="input-group input-group-static">
                                             {{-- <label for="volumes" class="ms-0">Enter Genus Name *</label> --}}
                                             <input type="name" name="description" class="form-control"
-                                                placeholder="Enter Genus Description *" required>
+                                                placeholder="Enter Genus Description *" required
+                                                value="{{ old('description', $genus->description ?? '') }}">
                                         </div>
                                         @error('description')
                                             <p class="text-danger inputerror mt-1">{{ $message }}</p>
@@ -94,9 +103,14 @@
                                     </div>
                                 </div>
 
-                                <div class="col-12 text-center mt-3">
+                                {{-- <div class="col-12 text-center mt-3">
                                     <button type="submit" class="btn bg-gradient-primary mb-0">Save
                                         Genus</button>
+                                </div> --}}
+                                <div class="col-12 text-center mt-3">
+                                    <button type="submit" id="submitBtn" class="btn bg-gradient-primary mb-0">
+                                        {{ isset($genus) ? 'Update Genus' : 'Save Genus' }}
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -112,6 +126,23 @@
 
     <x-plugins></x-plugins>
 </x-layout>
+<script>
+    document.getElementById("genusForm").addEventListener("submit", function() {
+        const btn = document.getElementById("submitBtn");
+        btn.disabled = true;
+        btn.innerHTML = "Please wait...";
+    });
+
+    @if(isset($selectedFamilyDTO))
+        let option = new Option(
+            "{{ $selectedFamilyDTO->name }}",
+            "{{ $selectedFamilyDTO->id }}",
+            true,
+            true
+        );
+        $('#family_id').append(option).trigger('change');
+    @endif
+</script>
 <script>
     $(document).ready(function() {
         // Family dropdown

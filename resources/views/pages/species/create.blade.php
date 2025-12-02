@@ -54,8 +54,13 @@
 
 
                         <div class="card-body px-5 pb-4">
-                            <form action="{{ route('species.store') }}" method="POST" enctype="multipart/form-data">
+                            <form
+                                action="{{ isset($species) ? route('species.update', $species->id) : route('species.store') }}"
+                                id="speciesForm" method="POST" enctype="multipart/form-data">
                                 @csrf
+                                @if (isset($species))
+                                    @method('PUT')
+                                @endif
                                 <div class="row">
                                     {{-- Searchable Family --}}
                                     <div class="col-md-6 mb-3">
@@ -84,10 +89,10 @@
 
                                         <div class="input-group input-group-static">
 
-                                            <input type="name" name="genus" class="form-control"
+                                            <input type="name" name="species" class="form-control"
                                                 placeholder="Enter Species Name *" required>
                                         </div>
-                                        @error('genus')
+                                        @error('species')
                                             <p class="text-danger inputerror mt-1">{{ $message }}</p>
                                         @enderror
                                     </div>
@@ -217,29 +222,30 @@
                                     </div> --}}
 
                                     <div class="col-md-6 mb-3">
-    <label class="form-label">Synonyms</label>
+                                        <label class="form-label">Synonyms</label>
 
-    <!-- Scrollable box (fixed height) -->
-    <div id="synonyms_box"
-        class="border rounded p-2 bg-white"
-        style="height: 150px; overflow-y: auto; overflow-x: hidden;">
+                                        <!-- Scrollable box (fixed height) -->
+                                        <div id="synonyms_box" class="border rounded p-2 bg-white"
+                                            style="height: 150px; overflow-y: auto; overflow-x: hidden;">
 
-        <div id="synonyms_wrapper">
-            <div class="input-group mb-2 synonym-item">
-                <input type="text" name="synonyms[]" class="form-control"
-                    placeholder="Enter Synonym" required>
-                <button type="button" class="btn btn-danger remove-synonym">X</button>
-            </div>
-        </div>
+                                            <div id="synonyms_wrapper">
+                                                <div class="input-group mb-2 synonym-item">
+                                                    <input type="text" name="synonyms[]" class="form-control"
+                                                        placeholder="Enter Synonym" required>
+                                                    <button type="button"
+                                                        class="btn btn-danger remove-synonym">X</button>
+                                                </div>
+                                            </div>
 
-    </div>
+                                        </div>
 
-    <button type="button" class="btn btn-primary mt-2" id="add_synonym">+ Add More</button>
+                                        <button type="button" class="btn btn-primary mt-2" id="add_synonym">+ Add
+                                            More</button>
 
-    @error('synonyms')
-        <p class="text-danger inputerror mt-1">{{ $message }}</p>
-    @enderror
-</div>
+                                        @error('synonyms')
+                                            <p class="text-danger inputerror mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
 
                                     <div class="col-md-12 mb-3">
                                         <label class="form-label">Upload Images</label>
@@ -259,8 +265,9 @@
 
 
                                 <div class="col-12 text-center mt-3">
-                                    <button type="submit" class="btn bg-gradient-primary mb-0">Save
-                                        Species</button>
+                                    <button type="submit" id="submitBtn" class="btn bg-gradient-primary mb-0">
+                                        {{ isset($species) ? 'Update Species' : 'Save Species' }}
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -277,6 +284,13 @@
 
     <x-plugins></x-plugins>
 </x-layout>
+<script>
+    document.getElementById("speciesForm").addEventListener("submit", function() {
+        const btn = document.getElementById("submitBtn");
+        btn.disabled = true;
+        btn.innerHTML = "Please wait...";
+    });
+</script>
 <script>
     $(document).ready(function() {
         // Family dropdown
@@ -369,20 +383,20 @@
 
 
     $(document).ready(function() {
-// Add new synonym
-$('#add_synonym').click(function () {
-    $('#synonyms_wrapper').append(`
+        // Add new synonym
+        $('#add_synonym').click(function() {
+            $('#synonyms_wrapper').append(`
         <div class="input-group mb-2 synonym-item">
             <input type="text" name="synonyms[]" class="form-control" placeholder="Enter Synonym" required>
             <button type="button" class="btn btn-danger remove-synonym">X</button>
         </div>
     `);
-});
+        });
 
-// Remove synonym
-$(document).on('click', '.remove-synonym', function () {
-    $(this).closest('.synonym-item').remove();
-});
+        // Remove synonym
+        $(document).on('click', '.remove-synonym', function() {
+            $(this).closest('.synonym-item').remove();
+        });
 
 
     });
@@ -390,16 +404,16 @@ $(document).on('click', '.remove-synonym', function () {
 
 
     // Multiple Image Preview + Remove
-$('#images').on('change', function(event) {
-    $('#image_preview').empty(); // Clear old previews
+    $('#images').on('change', function(event) {
+        $('#image_preview').empty(); // Clear old previews
 
-    let files = event.target.files;
+        let files = event.target.files;
 
-    Array.from(files).forEach((file, index) => {
-        let reader = new FileReader();
+        Array.from(files).forEach((file, index) => {
+            let reader = new FileReader();
 
-        reader.onload = function(e) {
-            $('#image_preview').append(`
+            reader.onload = function(e) {
+                $('#image_preview').append(`
                 <div class="image-box position-relative" style="width:120px; height:120px;">
                     <img src="${e.target.result}"
                          class="rounded shadow"
@@ -413,35 +427,35 @@ $('#images').on('change', function(event) {
                     </button>
                 </div>
             `);
-        };
+            };
 
-        reader.readAsDataURL(file);
+            reader.readAsDataURL(file);
+        });
     });
-});
 
-// Remove image from preview + input
-$(document).on('click', '.remove-image', function() {
-    let index = $(this).data('index');
-    let fileInput = $('#images')[0];
+    // Remove image from preview + input
+    $(document).on('click', '.remove-image', function() {
+        let index = $(this).data('index');
+        let fileInput = $('#images')[0];
 
-    // Convert FileList to array
-    let filesArray = Array.from(fileInput.files);
+        // Convert FileList to array
+        let filesArray = Array.from(fileInput.files);
 
-    filesArray.splice(index, 1); // Remove image at index
+        filesArray.splice(index, 1); // Remove image at index
 
-    // Rebuild FileList
-    const dataTransfer = new DataTransfer();
-    filesArray.forEach(file => dataTransfer.items.add(file));
+        // Rebuild FileList
+        const dataTransfer = new DataTransfer();
+        filesArray.forEach(file => dataTransfer.items.add(file));
 
-    fileInput.files = dataTransfer.files;
+        fileInput.files = dataTransfer.files;
 
-    // Re-render preview
-    $('#image_preview').empty();
-    Array.from(fileInput.files).forEach((file, index) => {
-        let reader = new FileReader();
+        // Re-render preview
+        $('#image_preview').empty();
+        Array.from(fileInput.files).forEach((file, index) => {
+            let reader = new FileReader();
 
-        reader.onload = function(e) {
-            $('#image_preview').append(`
+            reader.onload = function(e) {
+                $('#image_preview').append(`
                 <div class="image-box position-relative" style="width:120px; height:120px;">
                     <img src="${e.target.result}"
                          class="rounded shadow"
@@ -455,10 +469,9 @@ $(document).on('click', '.remove-image', function() {
                     </button>
                 </div>
             `);
-        };
+            };
 
-        reader.readAsDataURL(file);
+            reader.readAsDataURL(file);
+        });
     });
-});
-
 </script>

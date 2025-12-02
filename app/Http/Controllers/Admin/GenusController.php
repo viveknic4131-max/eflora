@@ -3,19 +3,29 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GenusRequest;
 use App\Models\Genus;
+use App\Repositories\Contracts\GenusRepositoryInterface;
+use App\Services\GenusService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+
 class GenusController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function __construct(GenusRepositoryInterface $genusRepository)
+    {
+        $this->genusRepository = $genusRepository;
+    }
+
     public function index(Request $request)
     {
-      $perPage = $request->get('perPage', 50);
-        $genus = Genus::with('family')->orderBy('id', 'desc')->paginate($perPage);
-        // dd($genus);
+
+
+        $perPage = $request->get('perPage', 50);
+        $genus = $this->genusRepository->getAllGenus($perPage);;
 
         return view('pages.genera.index', compact('genus'));
     }
@@ -25,30 +35,30 @@ class GenusController extends Controller
      */
     public function create()
     {
-   return view('pages.genera.create');
+        return view('pages.genera.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-   public function store(Request $request)
-{
-    $request->validate([
-        'genus' => 'required|string|max:255|unique:genera,name',
-        'family_id' => 'required|exists:families,id',
-        'description' => 'nullable|string',
-    ]);
+    public function store(GenusRequest $request)
+    {
+        // dd($request->all());
+        try {
+            $this->genusRepository->store($request);
 
-    Genus::create([
-        'genus_code' => Str::uuid(),
-        'name'       => $request->genus,
-        'description'=> $request->description,
-        'family_id'  => $request->family_id,
-        'volume_id'  => 0,
-    ]);
+            return redirect()
+                ->route('genera.index')
+                ->with('success', 'Genus created successfully.');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            return redirect()
+                ->back()
+                ->with('error', 'Something went wrong while creating genus.');
+        }
 
-    return redirect()->route('genera.index')->with('success', 'Genus created successfully.');
-}
+        // return redirect()->route('genera.index')->with('success', 'Genus created successfully.');
+    }
 
 
     /**
@@ -62,17 +72,28 @@ class GenusController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id, GenusService $service)
     {
-        //
+        $genus = $this->genusRepository->find($id);
+        $selectedFamilyDTO = $service->getSelectedFamilyDTO($genus);
+
+        return view('pages.genera.create', compact('genus', 'selectedFamilyDTO'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(GenusRequest $request, string $id)
     {
-        //
+        try {
+            $this->genusRepository->update($id, $request);
+
+            return redirect()
+                ->route('genera.index')
+                ->with('success', 'Genus updated successfully.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to update genus.');
+        }
     }
 
     /**
@@ -80,18 +101,25 @@ class GenusController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $this->genusRepository->delete($id);
+
+            return redirect()
+                ->route('genera.index')
+                ->with('success', 'Genus deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to delete genus.');
+        }
     }
 
     public function ajaxByFamily(Request $request)
-{
-    $familyId = $request->family_id;
+    {
+        $familyId = $request->family_id;
+// dd($familyId);
+      $genera=   $this->genusRepository->getGenusByFamilyId($familyId);
 
-    $genera = Genus::where('family_id', $familyId)
-                ->select('id', 'name')
-                ->get();
+    //    dd($genera);
 
-    return response()->json($genera);
-}
-
+        return response()->json($genera);
+    }
 }

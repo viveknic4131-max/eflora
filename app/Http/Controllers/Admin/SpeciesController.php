@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SpeciesRequest;
 use App\Models\Species;
 use App\Models\SpeciesImage;
+use App\Repositories\Contracts\SpeciesRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -13,13 +15,17 @@ class SpeciesController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function __construct(SpeciesRepositoryInterface $speciesRepository)
+    {
+        $this->speciesRepository = $speciesRepository;
+    }
     public function index(Request $request)
     {
         $perPage = $request->get('perPage', 50);
-        $genus = Species::with(['family', 'genus'])->orderBy('id', 'desc')->paginate($perPage);
-        // dd($genus);
+        $species = $this->speciesRepository->getAllSpecies($perPage);;
 
-        return view('pages.species.index', compact('genus'));
+        return view('pages.species.index', compact('species'));
     }
 
     /**
@@ -33,61 +39,22 @@ class SpeciesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(SpeciesRequest $request)
     {
-        // dd($request->synonyms);
-
-        $validated = $request->validate([
-            'family_id'       => 'required|exists:families,id',
-            'genus_id'        => 'required|exists:genera,id',
-            'genus'           => 'required|string|max:255',
-            'description'     => 'required|string',
-            'author'          => 'required|string|max:255',
-            'publication'     => 'required|string|max:255',
-            'year_described'  => 'required|string|max:50',
-            'volume'          => 'required|string|max:100',
-            'page'            => 'required|string|max:100',
-            'common_name'     => 'nullable|string|max:255',
-
-            'synonyms'        => 'nullable|array',
-            // 'synonyms.*'      => 'nullable|string|max:255',
-
-            'images'          => 'nullable|array',
-            'images.*'        => 'image|mimes:jpg,jpeg,png,webp|max:2048',
-        ]);
-
-// dd();
-
-        $species = Species::create([
-             'species_code' => Str::uuid(),
-            'family_id'      => $validated['family_id'],
-            'genus_id'       => $validated['genus_id'],
-            'name'           => $validated['genus'],
-            'description'    => $validated['description'],
-            'author'         => $validated['author'],
-            'publication'    => $validated['publication'],
-            'year_described' => $validated['year_described'],
-            'volume'         => $validated['volume'],
-            'page'           => $validated['page'],
-            'common_name'    => $validated['common_name'] ?? null,
-            'synonyms'       => json_encode( $validated['synonyms']) ?? [],
-        ]);
 
 
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+        try {
+            $this->speciesRepository->store($request);
 
-             $image->storeAs('plants', $filename, 'public');
-// dd(  $image->storeAs('public/plants', $filename));
-                SpeciesImage::create([
-                    'species_id' => $species->id,
-                    'pic' => $filename
-                ]);
-            }
+            return redirect()
+                ->route('species.index')
+                ->with('success', 'Species created successfully.');
+        } catch (\Exception $e) {
+
+            return redirect()
+                ->back()
+                ->with('error', 'Something went wrong while creating species.');
         }
-
-        return redirect()->route('species.index')->with('status', 'Species added successfully!');
     }
 
 
@@ -106,6 +73,8 @@ class SpeciesController extends Controller
     public function edit(string $id)
     {
         //
+        $species = $this->speciesRepository->find($id);
+        return view('pages.species.create', compact('species'));
     }
 
     /**
@@ -121,6 +90,14 @@ class SpeciesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $this->speciesRepository->delete($id);
+
+            return redirect()
+                ->route('species.index')
+                ->with('success', 'Species deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to delete Species.');
+        }
     }
 }

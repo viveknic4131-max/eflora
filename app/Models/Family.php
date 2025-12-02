@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Family extends Model
 {
-    use HasFactory;
+    use HasFactory ,SoftDeletes;
     protected $fillable = ['family_code', 'name', 'description'];
 
 
@@ -25,7 +26,7 @@ class Family extends Model
     {
         return $this->hasMany(Genus::class);
     }
-    
+
     public function species()
     {
         return $this->hasManyThrough(Species::class, Genus::class);

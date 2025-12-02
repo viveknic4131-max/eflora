@@ -18,17 +18,18 @@
                 <div class="col-12 col-md-6 mt-3">
 
                     <div class="input-group position-relative mb-3 justify-content-center">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" id="floraOfIndia" name="plant_type"
-                                value="flora_india">
-                            <label class="form-check-label flora-label" for="floraOfIndia">Flora of India</label>
-                        </div>
+
 
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" id="plantChecklist" name="plant_type"
                                 value="checklist" checked>
                             <label class="form-check-label flora-label" for="plantChecklist">Plant Checklist of
                                 India</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="floraOfIndia" name="plant_type"
+                                value="flora_india">
+                            <label class="form-check-label flora-label" for="floraOfIndia">Flora of India</label>
                         </div>
                     </div>
 
@@ -70,8 +71,8 @@
             <div class="text-center mb-5">
                 <h1 class="display-6 fw-bold section-heading flora-primary">Explore Botanical Volumes</h1>
                 <p class="text-muted">
-                    Browse detailed records of <span class="text-accent">BSI Volumes</span> and
-                    <span class="text-accent">Flora of India</span>.
+                    Browse detailed records of <span class="text-accent">Plant Checklist Of India</span> and
+                    <span class="text-accent">Flora Of India</span>.
                 </p>
             </div>
 
@@ -79,8 +80,30 @@
                 <!-- BSI Volume -->
                 <div class="col-md-6 ">
                     <div class="modern-card glass-card">
-                        <div class="card-body p-4" id="bsiVolumeContainer">
-                            <div class="loader"></div>
+                        <div class="card-body p-4" id="floraOfIndiaContainer">
+                            <h2 class="fw-bold mb-4 section-title text-center">Plant Checklist Of India</h2>
+                            <ul class="list-unstyled mb-4">
+                                <li class="mb-3">
+                                    <a href="{{ route('get.family') }}" class="volume-link">
+                                        <i class="fa-solid fa-seedling me-2 text-accent"></i>
+                                        Volumes
+                                    </a>
+                                </li>
+                                <li class="mb-3">
+                                    <a href="{{ route('get.family') }}" class="volume-link">
+                                        <i class="fa-solid fa-seedling me-2 text-accent"></i>
+                                        Familes
+                                    </a>
+                                </li>
+                                <li class="mb-3">
+                                    <a href="{{ route('get.family') }}" class="volume-link">
+                                        <i class="fa-solid fa-seedling me-2 text-accent"></i>
+                                        Generas
+                                    </a>
+                                </li>
+
+                            </ul>
+
                         </div>
                     </div>
                 </div>
@@ -88,8 +111,31 @@
                 <!-- Flora of India -->
                 <div class="col-md-6 ">
                     <div class="modern-card glass-card">
+
                         <div class="card-body p-4" id="floraOfIndiaContainer">
-                            <div class="loader"></div>
+                            <h2 class="fw-bold mb-4 section-title text-center">Flora Of India</h2>
+                            <ul class="list-unstyled mb-4">
+                                <li class="mb-3">
+                                    <a href="{{ route('get.family') }}" class="volume-link">
+                                        <i class="fa-solid fa-tree me-2 text-accent"></i>
+                                        Volumes
+                                    </a>
+                                </li>
+                                <li class="mb-3">
+                                    <a href="{{ route('get.family') }}" class="volume-link">
+                                        <i class="fa-solid fa-tree me-2 text-accent"></i>
+                                        Families
+                                    </a>
+                                </li>
+                                <li class="mb-3">
+                                    <a href="{{ route('get.family') }}" class="volume-link">
+                                        <i class="fa-solid fa-tree me-2 text-accent"></i>
+                                        Generas
+                                    </a>
+                                </li>
+
+                            </ul>
+
                         </div>
                     </div>
                 </div>
