@@ -10,7 +10,7 @@
             style="background: url('{{ asset('images/breadcrumb.jpg') }}') center center / cover no-repeat; min-height: 350px;">
             <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
             <div class="container position-relative text-center py-5">
-                <h1 class="display-5 fw-bold text-white">{{ $volume->volume }}</h1>
+                <h1 class="display-5 fw-bold text-white text-uppercase">{{ $volume->name }}</h1>
                 <p class="lead mb-4">Select a Family to Explore</p>
             </div>
         </section>
@@ -48,23 +48,30 @@
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex">
                             <a href="{{ route('get.family', ['family' => $family->family_code]) }}"
                                 class="card card-genus text-dark text-decoration-none flex-fill shadow-sm border-0 rounded-4 overflow-hidden">
-                                @if (!empty($species->images) && count($species->images) > 0)
-                                    @php
 
-                                        $firstImage = is_array($species->images)
-                                            ? $species->images[0]
-                                            : $species->images->first();
+                                @php
+                                    $genus = $family->genera->first();
+                                    $species = $genus ? $genus->species->first() : null;
+                                    $images = $species ? $species->images : null;
 
-                                        // dd($firstImage->pic);
+                                    $firstImage = null;
 
-                                    @endphp
+                                    if ($images instanceof \Illuminate\Support\Collection && $images->isNotEmpty()) {
+                                        $firstImage = $images->first()->pic;
+                                    } elseif (is_array($images) && !empty($images)) {
+                                        $firstImage = $images[0]['pic'] ?? null;
+                                    }
+                                @endphp
 
-                                    <img src="{{ asset('storage/plants/' . $firstImage->pic) }}"
-                                        class="card-img-top img-fluid" alt="{{ $species->name }}">
+                                @if ($firstImage)
+                                    <img src="{{ asset($firstImage) }}" class="card-img-top img-fluid"
+                                        alt="{{ $family->name }}">
                                 @else
                                     <img src="{{ asset('storage/images/species.jpg') }}" class="card-img-top img-fluid"
                                         alt="No Image">
                                 @endif
+
+
 
 
                                 <div class="card-body d-flex flex-column">
@@ -135,12 +142,11 @@
                         </div>
                     </form>
 
-                    <div class="row g-2">
+                    {{-- <div class="row g-2">
                         @forelse ($genusList as $genus)
                             <div class="col-lg-3 col-md-4 col-sm-6 ">
                                 <a href="{{ route('get.family', ['genus' => $genus->genus_code]) }}"
                                     class="text-decoration-none">
-                                    {{-- <div class="card h-100 border-0 shadow-sm rounded-4 text-center hover-shadow"> --}}
                                     <div class="card-genus">
                                         <div class="card-body d-flex align-items-center justify-content-center">
                                             <h6 class="fw-semibold text-success mb-0">{{ $genus->name }}</h6>
@@ -151,7 +157,61 @@
                         @empty
                             <p class="text-center text-muted">No genus found.</p>
                         @endforelse
+                    </div> --}}<div class="row g-2">
+                        @forelse ($genusList as $genus)
+                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                <a href="{{ route('get.family', ['genus' => $genus->genus_code]) }}"
+                                    class="text-decoration-none">
+                                    {{--
+                                    @php
+
+                                        $image = $genus->species->first()?->images->first()?->pic;
+                                    @endphp --}}
+                                    @php
+                                        $species = $genus->species->first() ?? null;
+                                        $images = $species ? $species->images : null;
+
+                                        $image = null;
+
+                                        if (
+                                            $images instanceof \Illuminate\Support\Collection &&
+                                            $images->isNotEmpty()
+                                        ) {
+                                            $image = $images->first()->pic;
+                                        } elseif (is_array($images) && !empty($images)) {
+                                            $image = $images[0]['pic'] ?? null;
+                                        }
+                                    @endphp
+
+
+                                    <div class="card h-100 border-0 shadow-sm rounded-4 hover-shadow card-genus">
+
+                                        {{-- IMAGE AREA --}}
+                                        <div class="card-img-top-wrapper"
+                                            style="height:140px; overflow:hidden; border-radius: 1rem 1rem 0 0;">
+                                            @if ($image)
+                                                <img src="{{ asset($image) }}" class="w-100 h-100 object-fit-cover"
+                                                    alt="{{ $genus->name }}">
+                                            @else
+                                                <img src="{{ asset('storage/images/species.jpg') }}"
+                                                    class="w-100 h-100 object-fit-cover" alt="No Image">
+                                            @endif
+                                        </div>
+
+                                        {{-- TEXT --}}
+                                        <div class="card-body text-center py-2">
+                                            <h6 class="fw-semibold text-success mb-0">{{ $genus->name }}</h6>
+                                        </div>
+
+                                    </div>
+
+                                </a>
+                            </div>
+                        @empty
+                            <p class="text-center text-muted">No genus found.</p>
+                        @endforelse
                     </div>
+
 
                     <div class="mt-4">
                         {{ $genusList->appends(request()->query())->links('pagination::bootstrap-5') }}
@@ -194,56 +254,55 @@
                 </form>
 
 
-                <div class="row g-2">
+                <div class="row g-3">
                     @forelse ($speciesList as $species)
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex">
+
                             <a href="{{ route('get.species', ['species' => $species->species_code]) }}"
                                 class="card card-genus text-dark text-decoration-none flex-fill shadow-sm border-0 rounded-4 overflow-hidden">
-                                @if (!empty($species->images) && count($species->images) > 0)
-                                    @php
 
-                                        $firstImage = is_array($species->images)
-                                            ? $species->images[0]
-                                            : $species->images->first();
 
-                                        // dd($firstImage->pic);
+                                @php
 
-                                    @endphp
+                                    $firstImage = null;
 
-                                    <img src="{{ asset('storage/plants/' . $firstImage->pic) }}"
-                                        class="card-img-top img-fluid" alt="{{ $species->name }}">
+                                    if (!empty($species->images)) {
+                                        if (is_array($species->images) && isset($species->images[0])) {
+                                            $firstImage = $species->images[0];
+                                        } elseif (
+                                            $species->images instanceof \Illuminate\Support\Collection &&
+                                            $species->images->first()
+                                        ) {
+                                            $firstImage = $species->images->first();
+                                        }
+                                    }
+                                @endphp
+
+                                @if ($firstImage && !empty($firstImage->pic))
+                                    <img src="{{ asset($firstImage->pic) }}" class="card-img-top img-fluid"
+                                        style="height:180px; object-fit:cover;" alt="{{ $species->name }}">
                                 @else
                                     <img src="{{ asset('storage/images/species.jpg') }}" class="card-img-top img-fluid"
-                                        alt="No Image">
+                                        style="height:180px; object-fit:cover;" alt="No Image">
                                 @endif
 
-
+                                {{-- CARD BODY --}}
                                 <div class="card-body d-flex flex-column">
-                                    {{-- <div class="mb-2">
-                                        <span
-                                            class="badge
-                                        @if (strtolower($plant['type']) == 'family') bg-success
-                                        @elseif (strtolower($plant['type']) == 'genus') bg-primary
-                                        @else bg-info text-dark @endif">
-                                            🌿 {{ $plant['type'] }}
-                                        </span>
-                                    </div> --}}
-                                    <h6 class="card-title text-truncate mb-2">{{ $species->name }}</h6>
-                                    {{-- <p class="card-text text-muted small mb-0 text-truncate">{{ $plant['details'] }}</p> --}}
+                                    <h6 class="card-title text-truncate mb-1">{{ $species->name }}</h6>
+
                                     <p class="text-muted small mb-0">
-                                        {{ $species->author ?? '-' }}<br>
+                                        {{ $species->author ?? '-' }} <br>
                                         Vol: {{ $species->volume ?? '-' }}, Pg: {{ $species->page ?? '-' }}
                                     </p>
                                 </div>
                             </a>
                         </div>
 
-
-
                     @empty
                         <p class="text-center text-muted">No species found under this genus.</p>
                     @endforelse
                 </div>
+
 
                 <div class="mt-4">
                     {{ $speciesList->appends(request()->query())->links('pagination::bootstrap-5') }}

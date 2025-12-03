@@ -78,4 +78,22 @@ class VolumeRepository implements VolumeRepositoryInterface
             throw $e;
         }
     }
+
+    // public function getVolumesByType(bool $type, int $perPage = 50)
+    // {
+    //     return Volume::where('type', $type)->orderBy('name', 'asc')->paginate($perPage);
+    // }
+    public function getVolumesByType(bool $type, ?string $letter = null, int $perPage = 50)
+{
+
+    return Volume::when($type !== null, function ($q) use ($type) {
+            $q->where('type', $type);
+        })
+        ->when($letter, function ($q) use ($letter) {
+            $q->where('name', 'LIKE', Str::lower($letter). '%');
+        })
+        ->orderBy('name', 'asc')
+        ->paginate($perPage);
+}
+
 }

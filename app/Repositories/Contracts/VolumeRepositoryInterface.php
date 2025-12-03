@@ -11,4 +11,6 @@ interface VolumeRepositoryInterface
     public function update($id, $data);
     public function delete($id);
     public function store($request);
+
+    public function getVolumesByType(bool $type, ?string $letter = null, int $perPage = 50);
 }

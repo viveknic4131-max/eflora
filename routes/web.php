@@ -26,7 +26,10 @@ Route::get('/flora', [HomeController::class, 'getFamilyOrVolume'])->name('get.fa
 Route::get('/get-genus', [HomeController::class, 'getGenus'])->name('get.genus');
 Route::get('/get-species', [HomeController::class, 'getSpecies'])->name('get.species');
 
-Route::get('/bsi-volume', [HomeController::class, 'getBsiVolume'])->name('bsi.volume');
-Route::get('/flora-of-india', [HomeController::class, 'getFloraOfIndia'])->name('flora.india');
+Route::get('/checklist-volume', [HomeController::class, 'getPlantChecklistVolume'])->name('checklist.volume');
+Route::get('/flora-of-india-volume', [HomeController::class, 'getFloraOfIndiaVolumes'])->name('flora.india.volume');
+
+// Route::get('/plant-checklist-volumes', [HomeController::class, 'getPlantChecklistVolumes'])->name('plant.checklist.volumes');
+// Route::get('/flora-of-india-volumes', [HomeController::class, 'getFloraVolumes'])->name('flora.checklist.volumes');
 
 include 'admin.php';

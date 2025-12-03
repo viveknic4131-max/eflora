@@ -84,7 +84,7 @@
                             <h2 class="fw-bold mb-4 section-title text-center">Plant Checklist Of India</h2>
                             <ul class="list-unstyled mb-4">
                                 <li class="mb-3">
-                                    <a href="{{ route('get.family') }}" class="volume-link">
+                                    <a href="{{ route('checklist.volume', ['code' => true]) }}" class="volume-link">
                                         <i class="fa-solid fa-seedling me-2 text-accent"></i>
                                         Volumes
                                     </a>
@@ -116,7 +116,7 @@
                             <h2 class="fw-bold mb-4 section-title text-center">Flora Of India</h2>
                             <ul class="list-unstyled mb-4">
                                 <li class="mb-3">
-                                    <a href="{{ route('get.family') }}" class="volume-link">
+                                    <a href="{{ route('checklist.volume', ['code' => false]) }}" class="volume-link">
                                         <i class="fa-solid fa-tree me-2 text-accent"></i>
                                         Volumes
                                     </a>
@@ -143,19 +143,114 @@
         </div>
     </section>
 
+    <!--=====whats new=====-->
+    <section class="py-5 bg-light">
+        <div class="container text-center">
+            <div class="row align-items-center">
+                <h2 class="fw-bold mb-4 flora-primary">Whats New</h2>
+                <div class="col-md-6">
+                    <div class="card-body ">
+                        {{-- <h5 class="card-title">Whats New</h5> --}}
+                        <div class="scroll-wn" id="style-3">
+                            <marquee behavior="scroll" scrollamount="2" direction="up" onmouseover="stop();"
+                                onmouseout="start();">
+
+
+                                <p class="card-text"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"
+                                        style="color:#F00; font-size:18px;"></i>
+                                    <a href="uploads/documents/whatsnew/english/Draft_Seniority_list_of_Botanist_Plant_Chemist.pdf"
+                                        target="_blank">
+                                        Seniority List of Botanist and Plant Chemist in Botanical Survey of India
+                                        (Draft)</a>
+                                </p>
+
+
+
+                                <p class="card-text"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"
+                                        style="color:#F00; font-size:18px;"></i>
+                                    <a href="uploads/documents/whatsnew/english/List_of_Selected_candidates_-_GNI_project.pdf"
+                                        target="_blank">
+                                        List of Selected candidates under Great Nicobar Islands project</a>
+                                </p>
+
+
+
+                                <p class="card-text"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"
+                                        style="color:#F00; font-size:18px;"></i>
+                                    <a href="uploads/documents/whatsnew/english/Work_order_of_Dr__O_N_Maurya.pdf"
+                                        target="_blank">
+                                        Work order of Dr. O.N Maurya</a>
+                                </p>
+
+
+
+                                <p class="card-text"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"
+                                        style="color:#F00; font-size:18px;"></i>
+                                    <a href="uploads/documents/whatsnew/english/Advertisement-Plant_based_wildlife_health_managment_2025_01_12_2025.pdf"
+                                        target="_blank">
+                                        Extension for submission of application in connection with Recruitment of Research
+                                        Associate-II (01), Project Associate– I (08), Project Assistant (16) under MoEFandCC
+                                        funded Project</a>
+                                </p>
+
+
+
+                                <p class="card-text"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"
+                                        style="color:#F00; font-size:18px;"></i>
+                                    <a href="uploads/documents/whatsnew/english/Duty_order.pdf" target="_blank">
+                                        Order</a>
+                                </p>
+
+
+
+                                <p class="card-text"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"
+                                        style="color:#F00; font-size:18px;"></i>
+                                    <a href="uploads/documents/whatsnew/english/document.pdf" target="_blank">
+                                        Information for the purchaser Acharya Jagadish Chandra Bose Indian Botanic
+                                        Garden</a>
+                                </p>
+
+
+
+                                <p class="card-text"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"
+                                        style="color:#F00; font-size:18px;"></i>
+                                    <a href="uploads/documents/whatsnew/english/NOC_during_documents_verification.pdf"
+                                        target="_blank">
+                                        NOC during documents verification</a>
+                                </p>
+
+
+
+                            </marquee>
+                        </div>
+                        <a href="https://bsi.gov.in/whats-new/en" class="card-link"><i class="fa fa-arrow-right"
+                                aria-hidden="true"></i>View all </a>
+                    </div>
+                    {{-- <p class="lead text-muted">
+                        E-Flora is your digital gateway to discover, learn, and explore the beautiful world of plants.
+                        Whether you're a student, researcher, or nature enthusiast — we bring plant knowledge closer to you.
+                    </p> --}}
+                </div>
+                <div class="col-md-6">
+                    <img src="{{ asset('images/about.jpg') }}" class="img-fluid rounded shadow" alt="About Plants">
+                </div>
+            </div>
+        </div>
+    </section>
     <!--=====About Section=====-->
     <section class="py-5 bg-light">
         <div class="container text-center">
             <div class="row align-items-center">
+
+                <div class="col-md-6">
+                    <img src="{{ asset('images/about.jpg') }}" class="img-fluid rounded shadow" alt="About Plants">
+                </div>
                 <div class="col-md-6">
                     <h2 class="fw-bold mb-4 flora-primary">About E-Flora</h2>
                     <p class="lead text-muted">
                         E-Flora is your digital gateway to discover, learn, and explore the beautiful world of plants.
                         Whether you're a student, researcher, or nature enthusiast — we bring plant knowledge closer to you.
                     </p>
-                </div>
-                <div class="col-md-6">
-                    <img src="{{ asset('images/about.jpg') }}" class="img-fluid rounded shadow" alt="About Plants">
                 </div>
             </div>
         </div>
@@ -221,42 +316,6 @@
 <script>
     $(function() {
 
-        // ===== Initial Load =====
-        loadBsiVolume("{{ route('bsi.volume') }}");
-        loadFloraOfIndia("{{ route('flora.india') }}");
-
-        function showLoader() {
-            $('.loader-overlay').fadeIn(200);
-        }
-
-        function hideLoader() {
-            $('.loader-overlay').fadeOut(200);
-        }
-
-        function loadBsiVolume(url) {
-            showLoader();
-            $.get(url, function(data) {
-                $('#bsiVolumeContainer').html(data);
-            }).always(hideLoader);
-        }
-
-        function loadFloraOfIndia(url) {
-            showLoader();
-            $.get(url, function(data) {
-                $('#floraOfIndiaContainer').html(data);
-            }).always(hideLoader);
-        }
-
-        // ===== Pagination =====
-        $(document).on('click', '#bsiVolumeContainer .pagination a', function(e) {
-            e.preventDefault();
-            loadBsiVolume($(this).attr('href'));
-        });
-
-        $(document).on('click', '#floraOfIndiaContainer .pagination a', function(e) {
-            e.preventDefault();
-            loadFloraOfIndia($(this).attr('href'));
-        });
 
         // ===== Search Suggestion Logic =====
         const input = $("#searchInput");

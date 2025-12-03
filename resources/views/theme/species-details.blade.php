@@ -27,8 +27,8 @@
                         @php
                             $images = $species->images->pluck('pic')->toArray();
                             $main =
-                                !empty($images) && file_exists(public_path('storage/plants/' . $images[0]))
-                                    ? asset('storage/plants/' . $images[0])
+                                !empty($images)
+                                    ? asset( $images[0])
                                     : asset('images/as.jpg');
                         @endphp
 
@@ -54,7 +54,7 @@
                             <div id="thumbnails" class="d-flex gap-2"
                                 style="overflow-x:auto; white-space:nowrap; padding:5px 40px;">
                                 @foreach ($images as $img)
-                                    <img src="{{ asset('storage/plants/' . $img) }}" style="width:70px; height:70px;">
+                                    <img src="{{ $img }}" style="width:70px; height:70px;">
                                 @endforeach
                             </div>
 

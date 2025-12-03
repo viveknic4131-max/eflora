@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Genus extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory, SoftDeletes;
     protected $fillable = [
         'genus_code',
         'name',
@@ -20,5 +20,17 @@ class Genus extends Model
     public function family()
     {
         return $this->belongsTo(Family::class);
+    }
+
+    public function species()
+    {
+        return $this->hasMany(Species::class);
+    }
+
+    public function firstImage()
+    {
+        return $this->species()
+            ->with('images')
+            ->first()?->images->first()?->pic;
     }
 }

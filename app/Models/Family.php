@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Family extends Model
 {
-    use HasFactory ,SoftDeletes;
+    use HasFactory, SoftDeletes;
     protected $fillable = ['family_code', 'name', 'description'];
 
 
@@ -35,5 +35,11 @@ class Family extends Model
     public function volumes()
     {
         return $this->hasMany(FamilyVolumes::class);
+    }
+
+
+    public function firstImage()
+    {
+        return $this->genera()->with(['species.images'])->first()?->species->first()?->images->first()?->pic;
     }
 }

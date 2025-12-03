@@ -42,4 +42,9 @@ class Species extends Model
     {
         return $this->hasMany(SpeciesImage::class);
     }
+
+     public function firstImage()
+    {
+        return $this->images()->first()?->pic;
+    }
 }

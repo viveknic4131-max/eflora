@@ -77,6 +77,6 @@ class FamilyRepository implements FamilyRepositoryInterface
                 'description' => $request->description,
             ]);
         });
-     
+
     }
 }

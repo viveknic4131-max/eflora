@@ -8,13 +8,17 @@ use App\Models\FamilyVolumes;
 use App\Models\Genus;
 use App\Models\Species;
 use App\Models\Volume;
+use App\Repositories\Contracts\VolumeRepositoryInterface;
 use App\Services\SearchService;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
 
-    public function __construct(protected SearchService $searchService) {}
+    public function __construct(protected SearchService $searchService,  VolumeRepositoryInterface $volumeRepository)
+    {
+        $this->volumeRepository = $volumeRepository;
+    }
 
 
     public function search(SearchRequest $request)
@@ -225,23 +229,68 @@ class HomeController extends Controller
         // return view('theme.home');
     }
 
-    public function getBsiVolume(Request $request)
-    {
-        $bsiVolume = Volume::where('type', false)->paginate(5);
+    // public function getPlantChecklistVolume(Request $request)
+    // {
+    //     // dd($request->all());
 
-        if ($request->ajax()) {
-            return view('theme.components.bsi_volume', compact('bsiVolume'))->render();
-        }
+
+    //     $type = $request->boolean('code', false);
+
+    //     $mode = $type ? 'Plant Checklist Of India' : 'Flora Of India';
+
+    //     $perPage = $request->get('perPage', 50);
+    //         $letter = null;
+    //     // Fetch volumes
+    //     $bsiVolume = $this->volumeRepository->getVolumesByType($letter,$type, $perPage);
+
+    //     if ($request->letter) {
+
+    //         $letter = $request->letter;
+    //         $bsiVolume = $this->volumeRepository->getVolumesByType($letter,$type, $perPage);
+    //           dd( $bsiVolume);
+    //     }
+
+    //     // Return view with mode
+    //     return view('theme.volumes', compact('bsiVolume', 'mode'));
+    // }
+
+
+    public function getPlantChecklistVolume(Request $request)
+    {
+        $type = $request->boolean('code', false);
+        $letter = $request->get('letter');
+        $perPage = $request->get('perPage', 50);
+
+        $mode = $type ? 'Plant Checklist Of India' : 'Flora Of India';
+
+        // Pass both type & letter
+        $bsiVolume = $this->volumeRepository->getVolumesByType($type, $letter, $perPage);
+
+        return view('theme.volumes', compact('bsiVolume', 'mode', 'letter'));
     }
 
-    // Flora of India AJAX
-    public function getFloraOfIndia(Request $request)
-    {
-        $floraofIndia = Volume::where('type', true)->paginate(5);
 
-        if ($request->ajax()) {
-            return view('theme.components.flora_of_india', compact('floraofIndia'))->render();
-        }
+
+    // Flora of India AJAX
+    public function getFloraOfIndiaVolumes(Request $request)
+    {
+        $perPage = $request->get('perPage', 50);
+        $floraofIndia =  $bsiVolume =  $this->volumeRepository->getVolumesByType(false, $perPage);;
+
+        // if ($request->ajax()) {
+        return view('theme.volumes', compact('floraofIndia'))->render();
+        // }
+    }
+
+    public function getVolumesList(Request $request)
+    {
+        $mode = $request->get('mode', 'all');
+        $perPage = $request->get('perPage', 50);
+        $volumes =  $this->volumeRepository->getAllVolumes($perPage);
+
+        // if ($request->ajax()) {
+        return view('theme.volumes', compact('volumes'))->render();
+        // }
     }
 
 
@@ -289,13 +338,13 @@ class HomeController extends Controller
 
     public function getFamilyOrVolume(Request $request)
     {
-        // ✅ 1. Volume Mode — show Families
+
         if ($request->filled('volume')) {
             $volumeCode = trim($request->volume);
             $volume = Volume::where('volume_code', $volumeCode)->firstOrFail();
 
             $familyIds = FamilyVolumes::where('volume_id', $volume->id)->pluck('family_id');
-            $families = Family::whereIn('id', $familyIds)->paginate(50);
+            $families = Family::with('genera.species.images')->whereIn('id', $familyIds)->paginate(50);
 
             return view('theme.family-view', [
                 'mode' => 'volume',
