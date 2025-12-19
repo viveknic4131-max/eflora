@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('volume');
             $table->string('name');
             $table->string('description')->nullable();
-            $table->boolean('type')->default(true)->comment('1=flora, 0=bsi');
+            $table->boolean('type')->default(true)->comment('1=flora_of_india, 0=plant_checklist');
             $table->softDeletes();
             $table->timestamps();
         });

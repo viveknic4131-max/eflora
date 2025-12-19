@@ -115,7 +115,7 @@
                             <a href="{{ $link }}"
                                 class="card text-dark text-decoration-none flex-fill shadow-sm border-0 rounded-4 overflow-hidden">
                                 @if (!empty($plant['images']))
-                                    <img src="{{ asset('storage/plants/' . $plant['images']) }}"
+                                    <img src="{{ $plant['images'] }}"
                                         class="card-img-top img-fluid" alt="{{ $plant['name'] }}">
                                 @else
                                     <img src="{{ asset('storage/images/species.jpg') }}" class="card-img-top img-fluid"
@@ -161,7 +161,7 @@
         const suggestionsBox = document.getElementById('suggestions');
         let tags = [];
 
-    
+
         if (hiddenInput.value) {
             tags = hiddenInput.value.split(',').map(t => t.trim()).filter(Boolean);
         }

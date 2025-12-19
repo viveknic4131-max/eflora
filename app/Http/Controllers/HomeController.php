@@ -338,7 +338,9 @@ class HomeController extends Controller
 
     public function getFamilyOrVolume(Request $request)
     {
+        // dd($request->all());
 
+        // Volume Mode — show only family list
         if ($request->filled('volume')) {
             $volumeCode = trim($request->volume);
             $volume = Volume::where('volume_code', $volumeCode)->firstOrFail();
@@ -353,7 +355,7 @@ class HomeController extends Controller
             ]);
         }
 
-        // ✅ 2. Family Mode — show only Genus list
+        //  Family Mode — show only Genus list
         if ($request->filled('family') && !$request->filled('genus')) {
             $family = Family::where('family_code', $request->family)->firstOrFail();
 
@@ -372,7 +374,7 @@ class HomeController extends Controller
             ]);
         }
 
-        // ✅ 3. Genus Mode — show species under selected genus
+        //  Genus Mode — show species under selected genus
         if ($request->filled('genus')) {
             $genus = Genus::where('genus_code', $request->genus)->firstOrFail();
             $family = Family::findOrFail($genus->family_id);
@@ -393,7 +395,52 @@ class HomeController extends Controller
             ]);
         }
 
-        abort(404);
+        // flora of India Mode — show all families  or generas
+
+        // Checklist / Flora of India Mode — show all families or genera
+        if ($request->filled('type') && $request->has('code')) {
+
+
+            $isFloraIndia = $request->boolean('code');
+            $modePrefix  = $isFloraIndia ? 'flora_india' : 'checklist';
+
+            if ($request->type === 'family') {
+
+                  $volume = Volume::where('type',$isFloraIndia )->get();
+
+                  if($volume->isEmpty()) {
+                      abort(404, 'No volumes found for the specified type.');
+                  }
+                  foreach($volume as $vol) {
+                    $getFamilyIds = FamilyVolumes::where('volume_id', $vol->id)->pluck('family_id');
+                    dd($getFamilyIds);
+                    $families = Family::with('genera.species.images')->whereIn('id', $getFamilyIds)->paginate(50);
+                  }
+
+            // $familyIds = FamilyVolumes::where('volume_id', $volume->id)->pluck('family_id');
+            // $families = Family::with('genera.species.images')->whereIn('id', $familyIds)->paginate(50);
+
+            //     $families = Family::paginate(50);
+
+                return view('theme.family-view', [
+                    'mode'     => "{$modePrefix}_family",
+                    'families' => $families,
+                ]);
+            }
+
+            if ($request->type === 'generas') {
+
+                $generas = Genus::paginate(50);
+
+                return view('theme.family-view', [
+                    'mode'  => "{$modePrefix}_genus",
+                    'genus' => $generas,
+                ]);
+            }
+        }
+
+
+        abort(404, 'Invalid parameters provided.');
     }
 
 

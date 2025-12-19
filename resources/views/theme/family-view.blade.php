@@ -4,6 +4,7 @@
 
 @section('content')
 
+
     {{-- 🌿 VOLUME MODE --}}
     @if ($mode === 'volume')
         <section class="d-flex align-items-center text-white position-relative"
@@ -309,6 +310,115 @@
                 </div>
             </div>
         </section>
+    @elseif ($mode === 'flora_india_family')
+        <section class="d-flex align-items-center text-white position-relative"
+            style="background: url('{{ asset('images/breadcrumb.jpg') }}') center center / cover no-repeat; min-height: 300px;">
+            <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
+            <div class="container position-relative text-center py-5">
+                <h1 class="display-5 fw-bold text-white">Flora of India Families</h1>
+                <p class="lead mb-0">Explore all families documented in Flora of India</p>
+            </div>
+        </section>
+
+
+        <section class="py-5 bg-light search-section">
+            <div class="container">
+                <div class="text-center mb-5">
+                    {{-- <h2 class="fw-bold text-success">{{ $volume->volume }}</h2> --}}
+                    {{-- <p class="text-muted">Family: <strong>{{ $family->name }}</strong></p> --}}
+                </div>
+
+                <form method="GET" class="row g-2 mb-4">
+                    {{-- <input type="hidden" name="volume" value="{{ $volume->volume_code }}"> --}}
+                    <div class="col-md-10">
+                        <input type="text" name="family_search" class="form-control" placeholder="Search Family..."
+                            value="{{ request('family_search') }}">
+                    </div>
+                    <div class="col-md-2 d-flex gap-2">
+                        <button class="btn btn-success w-100">Search</button>
+                        @if (request()->filled('family_search'))
+                            <a href="{{ route('get.family', ['family' => $family->family_code]) }}"
+                                class="btn btn-outline-danger">×</a>
+                        @endif
+                    </div>
+                </form>
+
+
+                <div class="row g-2">
+                    @forelse ($families as $family)
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex">
+                            <a href="{{ route('get.family', ['family' => $family->family_code]) }}"
+                                class="card card-genus text-dark text-decoration-none flex-fill shadow-sm border-0 rounded-4 overflow-hidden">
+
+                                @php
+                                    $genus = $family->genera->first();
+                                    $species = $genus ? $genus->species->first() : null;
+                                    $images = $species ? $species->images : null;
+
+                                    $firstImage = null;
+
+                                    if ($images instanceof \Illuminate\Support\Collection && $images->isNotEmpty()) {
+                                        $firstImage = $images->first()->pic;
+                                    } elseif (is_array($images) && !empty($images)) {
+                                        $firstImage = $images[0]['pic'] ?? null;
+                                    }
+                                @endphp
+
+                                @if ($firstImage)
+                                    <img src="{{ asset($firstImage) }}" class="card-img-top img-fluid"
+                                        alt="{{ $family->name }}">
+                                @else
+                                    <img src="{{ asset('storage/images/species.jpg') }}" class="card-img-top img-fluid"
+                                        alt="No Image">
+                                @endif
+
+
+
+
+                                <div class="card-body d-flex flex-column">
+                                    {{-- <div class="mb-2">
+                                        <span
+                                            class="badge
+                                        @if (strtolower($plant['type']) == 'family') bg-success
+                                        @elseif (strtolower($plant['type']) == 'genus') bg-primary
+                                        @else bg-info text-dark @endif">
+                                            🌿 {{ $plant['type'] }}
+                                        </span>
+                                    </div> --}}
+                                    <h6 class="card-title text-truncate mb-2">{{ $family->name }}</h6>
+                                    {{-- <p class="card-text text-muted small mb-0 text-truncate">{{ $plant['details'] }}</p> --}}
+                                    {{-- <p class="text-muted small mb-0">
+                                        {{ $species->author ?? '-' }}<br>
+                                        Vol: {{ $species->volume ?? '-' }}, Pg: {{ $species->page ?? '-' }}
+                                    </p> --}}
+                                </div>
+                            </a>
+                        </div>
+
+
+
+                    @empty
+                        <p class="text-center text-muted">No family found under this .</p>
+                    @endforelse
+                </div>
+
+                <div class="mt-4">
+                    {{ $families->appends(request()->query())->links('pagination::bootstrap-5') }}
+                </div>
+            </div>
+        </section>
+
+    @elseif ($mode === 'checklist_family')
+        <section class="d-flex align-items-center text-white position-relative"
+            style="background: url('{{ asset('images/breadcrumb.jpg') }}') center center / cover no-repeat; min-height: 300px;">
+            <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
+            <div class="container position-relative text-center py-5">
+                <h1 class="display-5 fw-bold text-white">Plant Checklist of India Families</h1>
+                <p class="lead mb-0">Explore all families documented in Plant Checklist of India</p>
+            </div>
+        </section>
     @endif
+
+
 
 @endsection

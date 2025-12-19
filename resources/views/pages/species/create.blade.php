@@ -7,8 +7,6 @@
         <div class="container-fluid py-4">
             <div class="row justify-content-center">
                 <div class="col-12">
-                    {{-- @include('components.alerts.alerts.success')
-                    @include('components.alerts.alerts.errors') --}}
                     @if (session('status'))
                         <div class="row">
                             <div class="col-sm-12">
@@ -65,7 +63,6 @@
                                     {{-- Searchable Family --}}
                                     <div class="col-md-6 mb-3">
                                         <div class="input-group input-group-static">
-                                            {{-- <label for="family_id" class="ms-0">Select Family *</label> --}}
                                             <select name="family_id" id="family_id" class="form-control"
                                                 required></select>
                                         </div>
@@ -83,8 +80,6 @@
                                         @enderror
                                     </div>
 
-
-                                    {{-- Searchable Multiple Volumes --}}
                                     <div class="col-md-6 mb-3">
 
                                         <div class="input-group input-group-static">
@@ -96,21 +91,6 @@
                                             <p class="text-danger inputerror mt-1">{{ $message }}</p>
                                         @enderror
                                     </div>
-
-
-                                    <div class="col-md-6 mb-3">
-
-                                        <div class="input-group input-group-static">
-
-                                            <input type="name" name="description" class="form-control"
-                                                placeholder="Enter Species Description *" required>
-                                        </div>
-                                        @error('description')
-                                            <p class="text-danger inputerror mt-1">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-
-
 
                                     <div class="col-md-6 mb-3">
 
@@ -124,7 +104,6 @@
                                         @enderror
                                     </div>
 
-
                                     <div class="col-md-6 mb-3">
 
                                         <div class="input-group input-group-static">
@@ -136,8 +115,6 @@
                                             <p class="text-danger inputerror mt-1">{{ $message }}</p>
                                         @enderror
                                     </div>
-
-
 
                                     <div class="col-md-6 mb-3">
 
@@ -176,75 +153,63 @@
                                         @enderror
                                     </div>
 
-                                    <div class="col-md-6 mb-3">
+                                    <div class="row form-check">
+                                        <input type="checkbox"
+                                            class="form-check-input species_infraspecific-check">Infraspecific
 
-                                        <div class="input-group input-group-static">
+                                    </div>
 
-                                            <input type="name" name="common_name" class="form-control"
-                                                placeholder="Enter Common Name" required>
+                                    <div class="row mt-2 infraspecific-fields d-none">
+                                        <div class="col-md-3">
+                                            <div class="input-group input-group-static">
+                                                <input type="text" name="rank"
+                                                    class="form-control infraspecific-input" placeholder="Rank">
+                                            </div>
                                         </div>
-                                        @error('common_name')
-                                            <p class="text-danger inputerror mt-1">{{ $message }}</p>
-                                        @enderror
+
+                                        <div class="col-md-3">
+                                            <div class="input-group input-group-static">
+                                                <input type="text" name="taxon_name"
+                                                    class="form-control infraspecific-input" placeholder="Taxon Name">
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="row form-check">
+                                        <input type="checkbox"
+                                            class="form-check-input species_in-check form-check-label">In
+
+                                    </div>
+
+                                    <div class="row  mt-2 in-fields d-none">
+                                        <div class="col-md-3">
+                                            <div class="input-group input-group-static">
+                                                <input type="text" name="in_author_1"
+                                                    class="form-control in-input" placeholder="In Author 1">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="input-group input-group-static">
+                                                <input type="text" name="in_author_2"
+                                                    class="form-control in-input" placeholder="In Author 2">
+                                            </div>
+                                        </div>
+
                                     </div>
 
 
+                                    <div class="col-12">
+                                        <label class="fw-bold">Synonyms</label>
 
-                                    {{-- <div class="col-md-6 mb-3">
-
-                                        <div class="input-group input-group-static">
-
-                                            <input type="name" name="synonyms" class="form-control"
-                                                placeholder="Enter Synonyms" required>
-                                        </div>
-                                        @error('synonyms')
-                                            <p class="text-danger inputerror mt-1">{{ $message }}</p>
-                                        @enderror
-                                    </div> --}}
-                                    {{-- <div class="col-md-6 mb-3">
-                                        <label class="form-label">Synonyms</label>
-
-                                        <div id="synonyms_wrapper">
-                                            <div class="input-group mb-2 synonym-item">
-                                                <input type="text" name="synonyms[]" class="form-control"
-                                                    placeholder="Enter Synonym" required>
-                                                <button type="button"
-                                                    class="btn btn-danger remove-synonym">X</button>
-                                            </div>
-                                        </div>
-
-                                        <button type="button" class="btn btn-primary" id="add_synonym">+ Add
-                                            More</button>
-
-                                        @error('synonyms')
-                                            <p class="text-danger inputerror mt-1">{{ $message }}</p>
-                                        @enderror
-                                    </div> --}}
-
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Synonyms</label>
-
-                                        <!-- Scrollable box (fixed height) -->
-                                        <div id="synonyms_box" class="border rounded p-2 bg-white"
-                                            style="height: 150px; overflow-y: auto; overflow-x: hidden;">
-
-                                            <div id="synonyms_wrapper">
-                                                <div class="input-group mb-2 synonym-item">
-                                                    <input type="text" name="synonyms[]" class="form-control"
-                                                        placeholder="Enter Synonym" required>
-                                                    <button type="button"
-                                                        class="btn btn-danger remove-synonym">X</button>
-                                                </div>
-                                            </div>
+                                        <div id="authors_wrapper">
 
                                         </div>
 
-                                        <button type="button" class="btn btn-primary mt-2" id="add_synonym">+ Add
-                                            More</button>
-
-                                        @error('synonyms')
-                                            <p class="text-danger inputerror mt-1">{{ $message }}</p>
-                                        @enderror
+                                        <button type="button" id="add_author" class="btn btn-primary btn-sm">
+                                            + Add Synonyms
+                                        </button>
                                     </div>
 
                                     <div class="col-md-12 mb-3">
@@ -265,6 +230,9 @@
 
 
                                 <div class="col-12 text-center mt-3">
+                                    <button type="button" id="previewBtn" class="btn bg-gradient-info me-2">
+                                        Preview
+                                    </button>
                                     <button type="submit" id="submitBtn" class="btn bg-gradient-primary mb-0">
                                         {{ isset($species) ? 'Update Species' : 'Save Species' }}
                                     </button>
@@ -283,6 +251,36 @@
     </main>
 
     <x-plugins></x-plugins>
+
+
+    {{-- model --}}
+    <!-- Preview Modal -->
+    <div class="modal fade" id="previewModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+
+                <div class="modal-header bg-gradient-primary text-white">
+                    <h5 class="modal-title">Species Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body" id="previewContent">
+                    <!-- Preview HTML -->
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Edit
+                    </button>
+                    <button type="button" id="confirmSubmit" class="btn btn-success">
+                        Confirm & Submit
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 </x-layout>
 <script>
     document.getElementById("speciesForm").addEventListener("submit", function() {
@@ -473,5 +471,320 @@
 
             reader.readAsDataURL(file);
         });
+    });
+</script>
+{{-- //  for authors --}}
+
+
+
+<script>
+    $(document).ready(function() {
+
+        let index = 0;
+
+        $('#add_author').click(function() {
+
+
+            let lastAuthor = $('#authors_wrapper .author-item').last();
+
+            if (lastAuthor.length) {
+                let isValid = true;
+
+                lastAuthor.find('input[required]').each(function() {
+                    if ($(this).val().trim() === '') {
+                        isValid = false;
+                        $(this).addClass('is-invalid');
+                    } else {
+                        $(this).removeClass('is-invalid');
+                    }
+                });
+
+                if (!isValid) {
+                    alert('Please fill all required fields before adding another author.');
+                    return;
+                }
+            }
+
+            $('#authors_wrapper').append(`
+          <div class="author-item border rounded p-3 mb-3">
+                <div class="row g-2">
+
+                    <div class="col-md-2">
+                        <div class="input-group input-group-static">
+                            <input type="text" name="authors[${index}][species]" class="form-control"
+                                placeholder="Species Name *" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="input-group input-group-static">
+                            <input type="text" name="authors[${index}][genus]" class="form-control"
+                                placeholder="Genus Name *" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="input-group input-group-static">
+                            <input type="text" name="authors[${index}][name]" class="form-control"
+                                placeholder="Author Name *" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="input-group input-group-static">
+                            <input type="text" name="authors[${index}][publication]" class="form-control"
+                                placeholder="Publication *" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="input-group input-group-static">
+                            <input type="text" name="authors[${index}][volume]" class="form-control"
+                                placeholder="Volume">
+                        </div>
+                    </div>
+
+                    <div class="col-md-1">
+                        <div class="input-group input-group-static">
+                            <input type="number" name="authors[${index}][page]" class="form-control"
+                                placeholder="Page">
+                        </div>
+                    </div>
+
+                    <div class="col-md-1">
+                        <div class="input-group input-group-static">
+                            <input type="number" name="authors[${index}][year]" class="form-control"
+                                placeholder="Year">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row form-check">
+                    <input type="checkbox" class="form-check-input infraspecific-check">Infraspecific
+
+                </div>
+
+                <div class="row mt-2 infraspecific-fields d-none">
+                    <div class="col-md-3">
+                        <div class="input-group input-group-static">
+                            <input type="text" name="authors[${index}][rank]"
+                                class="form-control infraspecific-input" placeholder="Rank">
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="input-group input-group-static">
+                            <input type="text" name="authors[${index}][taxon_name]"
+                                class="form-control infraspecific-input" placeholder="Taxon Name">
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="row form-check">
+                    <input type="checkbox" class="form-check-input in-check">In
+
+                </div>
+
+                <div class="row  mt-2 in-fields d-none">
+                    <div class="col-md-3">
+                        <div class="input-group input-group-static">
+                            <input type="text" name="authors[${index}][in_author_1]" class="form-control in-input"
+                                placeholder="In Author 1">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group input-group-static">
+                            <input type="text" name="authors[${index}][in_author_2]" class="form-control in-input"
+                                placeholder="In Author 2">
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <button type="button" class="btn btn-danger btn-sm mt-2 remove-author">
+                Remove
+            </button>        `);
+
+            index++;
+        });
+
+        $(document).on('click', '.remove-author', function() {
+            $(this).closest('.author-item').remove();
+        });
+
+        $(document).on('change', '.infraspecific-check', function() {
+            let block = $(this).closest('.author-item');
+            let fields = block.find('.infraspecific-fields');
+
+            fields.toggleClass('d-none', !this.checked);
+            fields.find('.infraspecific-input').prop('required', this.checked);
+        });
+
+        $(document).on('change', '.in-check', function() {
+            let block = $(this).closest('.author-item');
+            let fields = block.find('.in-fields');
+
+            fields.toggleClass('d-none', !this.checked);
+            fields.find('.in-input').prop('required', this.checked);
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const infraCheck = document.querySelector('.species_infraspecific-check');
+        const infraFields = document.querySelector('.infraspecific-fields');
+        const infraInputs = document.querySelectorAll('.infraspecific-input');
+
+        const inCheck = document.querySelector('.species_in-check');
+        const inFields = document.querySelector('.in-fields');
+        const inInputs = document.querySelectorAll('.in-input');
+
+        // Infraspecific toggle
+        infraCheck.addEventListener('change', function() {
+            if (this.checked) {
+                infraFields.classList.remove('d-none');
+            } else {
+                infraFields.classList.add('d-none');
+                infraInputs.forEach(input => input.value = '');
+            }
+        });
+
+        // In toggle
+        inCheck.addEventListener('change', function() {
+            if (this.checked) {
+                inFields.classList.remove('d-none');
+            } else {
+                inFields.classList.add('d-none');
+                inInputs.forEach(input => input.value = '');
+            }
+        });
+
+    });
+</script>
+
+<script>
+    // Collect all form data
+    function collectFormData() {
+        let data = {};
+
+        $('#speciesForm').serializeArray().forEach(item => {
+            data[item.name] = item.value;
+        });
+
+        // Synonyms
+        data.authors = [];
+        $('#authors_wrapper .author-item').each(function() {
+            let author = {};
+            $(this).find('input').each(function() {
+                author[$(this).attr('name')] = $(this).val();
+            });
+            data.authors.push(author);
+        });
+
+        return data;
+    }
+
+    // Build preview HTML
+    function buildPreview(data) {
+
+
+    let html = `
+        <h6 class="text-primary">Basic Information</h6>
+        <div class="border rounded p-3">
+            <strong><em>${$('#genus_id option:selected').text()} ${data.species || '-'}</em></strong>
+            ${data.author || ''},
+             ${(data.rank && data.taxon_name)
+        ? ` ${data.rank} ${data.taxon_name}`
+        : ''}
+
+    ${(data.in_author_1 && data.in_author_2)
+        ? ` ${data.in_author_1} <b>in</b> ${data.in_author_2}`
+        : ''}
+            ${data.publication || ''}
+            <em>${data.volume || ''}</em>:
+            ${data.page || ''}
+            ${data.year_described ? `. ${data.year_described}.` : ''}
+        </div>
+    `;
+
+    /* ================= SYNONYMS (PLAIN TEXT) ================= */
+    if (data.authors && data.authors.length) {
+
+        html += `<div class="mt-3 ps-2">`;
+
+        data.authors.forEach((a, i) => {
+
+            html += `
+               <div class="mb-1">
+    <strong><em>
+        ${a[`authors[${i}][genus]`] || ''}
+        ${a[`authors[${i}][species]`] || ''}
+    </em></strong>
+
+    ${a[`authors[${i}][name]`]
+        ? ` ${a[`authors[${i}][name]`]}`
+        : ''}
+
+    ${(a[`authors[${i}][rank]`] && a[`authors[${i}][taxon_name]`])
+        ? ` ${a[`authors[${i}][rank]`]} ${a[`authors[${i}][taxon_name]`]}`
+        : ''}
+
+    ${(a[`authors[${i}][in_author_1]`] && a[`authors[${i}][in_author_2]`])
+        ? ` ${a[`authors[${i}][in_author_1]`]} <b>in</b> ${a[`authors[${i}][in_author_2]`]}`
+        : ''}
+
+    ${a[`authors[${i}][publication]`]
+        ? `, ${a[`authors[${i}][publication]`]}`
+        : ''}
+
+    ${a[`authors[${i}][volume]`]
+        ? ` <em>${a[`authors[${i}][volume]`]}</em>`
+        : ''}
+
+    ${a[`authors[${i}][page]`]
+        ? `: ${a[`authors[${i}][page]`]}`
+        : ''}
+
+    ${a[`authors[${i}][year]`]
+        ? `. ${a[`authors[${i}][year]`]}.`
+        : ''}
+</div>
+
+            `;
+        });
+
+        html += `</div>`;
+    }
+
+    return html;
+}
+
+
+    // Preview button click
+    $('#previewBtn').on('click', function() {
+
+        let formData = collectFormData();
+
+        // Save to localStorage
+        localStorage.setItem('species_preview', JSON.stringify(formData));
+
+        // Build preview
+        $('#previewContent').html(buildPreview(formData));
+
+        // Show modal
+        $('#previewModal').modal('show');
+    });
+
+    // Confirm submit
+    $('#confirmSubmit').on('click', function() {
+        localStorage.removeItem('species_preview');
+        $('#submitBtn').removeClass('d-none');
+        $('#speciesForm').submit();
     });
 </script>

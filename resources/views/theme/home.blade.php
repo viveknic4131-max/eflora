@@ -84,19 +84,19 @@
                             <h2 class="fw-bold mb-4 section-title text-center">Plant Checklist Of India</h2>
                             <ul class="list-unstyled mb-4">
                                 <li class="mb-3">
-                                    <a href="{{ route('checklist.volume', ['code' => true]) }}" class="volume-link">
+                                    <a href="{{ route('checklist.volume', ['code' => false]) }}" class="volume-link">
                                         <i class="fa-solid fa-seedling me-2 text-accent"></i>
                                         Volumes
                                     </a>
                                 </li>
                                 <li class="mb-3">
-                                    <a href="{{ route('get.family') }}" class="volume-link">
+                                    <a href="{{ route('get.family' ,['code' => false ,'type'=>'family']) }}" class="volume-link">
                                         <i class="fa-solid fa-seedling me-2 text-accent"></i>
                                         Familes
                                     </a>
                                 </li>
                                 <li class="mb-3">
-                                    <a href="{{ route('get.family') }}" class="volume-link">
+                                    <a href="{{ route('get.family' ,['code' => false ,'type'=>'generas']) }}" class="volume-link">
                                         <i class="fa-solid fa-seedling me-2 text-accent"></i>
                                         Generas
                                     </a>
@@ -116,19 +116,19 @@
                             <h2 class="fw-bold mb-4 section-title text-center">Flora Of India</h2>
                             <ul class="list-unstyled mb-4">
                                 <li class="mb-3">
-                                    <a href="{{ route('checklist.volume', ['code' => false]) }}" class="volume-link">
+                                    <a href="{{ route('checklist.volume', ['code' => true]) }}" class="volume-link">
                                         <i class="fa-solid fa-tree me-2 text-accent"></i>
                                         Volumes
                                     </a>
                                 </li>
                                 <li class="mb-3">
-                                    <a href="{{ route('get.family') }}" class="volume-link">
+                                    <a href="{{ route('get.family' ,['code' => true ,'type'=>'family']) }}" class="volume-link">
                                         <i class="fa-solid fa-tree me-2 text-accent"></i>
                                         Families
                                     </a>
                                 </li>
                                 <li class="mb-3">
-                                    <a href="{{ route('get.family') }}" class="volume-link">
+                                    <a href="{{ route('get.family' ,['code' => true ,'type'=>'generas']) }}" class="volume-link">
                                         <i class="fa-solid fa-tree me-2 text-accent"></i>
                                         Generas
                                     </a>
