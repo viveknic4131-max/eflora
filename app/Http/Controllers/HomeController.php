@@ -473,7 +473,7 @@ class HomeController extends Controller
 
     public function getSpecies(Request $request)
     {
-        $species = Species::with(['genus', 'family', 'images'])->where('species_code', $request->species)->firstOrFail();
+        $species = Species::with(['genus', 'family', 'images' ,'synonyms'])->where('species_code', $request->species)->firstOrFail();
 
         return view('theme.species-details', compact('species'));
     }

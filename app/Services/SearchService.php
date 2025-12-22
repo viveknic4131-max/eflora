@@ -30,12 +30,27 @@ class SearchService
         $volumeType = $plantType === 'flora_india' ? 1 : 0;
         $volumeIds = Volume::where('type', $volumeType)->pluck('id');
 
+
+
         $familyIds = FamilyVolumes::whereIn('volume_id', $volumeIds)
             ->pluck('family_id')->unique();
-        //  dd($volumeIds);
+
         $families = $this->familyRepo->search($keyword, $volumeIds->toArray());
+
         $genus = $this->genusRepo->search($keyword, $familyIds->toArray());
+
         $species = $this->speciesRepo->search($keyword, $familyIds->toArray());
+        //
+
+        // if (count($species) === 0 || count($genus) === 0 || count($families) === 0) {
+        //     $families = $this->familyRepo->searchByName($keyword);
+
+        //     $genus = $this->genusRepo->searchByName($keyword);
+
+        //     $species = $this->speciesRepo->searchByName($keyword);
+        // }
+
+        // later solve this issue
 
         $combined = collect()
             ->merge($families->map(fn($f) => new SearchDTO('Family', $f->name, $f->family_code, $f->description)))

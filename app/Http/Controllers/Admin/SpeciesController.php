@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SpeciesRequest;
 use App\Models\Species;
 use App\Models\SpeciesImage;
+use App\Models\SpeciesSynonym;
 use App\Repositories\Contracts\SpeciesRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -44,16 +45,26 @@ class SpeciesController extends Controller
 
 
         try {
-            $this->speciesRepository->store($request);
+            $species =    $this->speciesRepository->store($request);
 
-            return redirect()
-                ->route('species.index')
-                ->with('success', 'Species created successfully.');
+            // return redirect()
+            //     ->route('species.index')
+            //     ->with('success', 'Species created successfully.');
+
+            return response()->json([
+                'success' => true,
+                'species_id' => $species->id
+            ]);
         } catch (\Exception $e) {
 
-            return redirect()
-                ->back()
-                ->with('error', 'Something went wrong while creating species.');
+            return response()->json([
+                'error' => true,
+                'message' => 'Something went wrong while creating species.'
+            ]);
+
+            // return redirect()
+            //     ->back()
+            //     ->with('error', 'Something went wrong while creating species.');
         }
     }
 
@@ -99,5 +110,49 @@ class SpeciesController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to delete Species.');
         }
+    }
+
+
+    public function synonyms(Request $request)
+    {
+
+        $speciesId = $request->species_id;
+
+        foreach ($request->authors as $author) {
+
+            SpeciesSynonym::create([
+                'species_id'     => $speciesId,
+                'spcies'         => $author['species'] ?? null,
+                'genus'          => $author['genus'] ?? null,
+                'author'         => $author['name'] ?? null,
+                'publication'    => $author['publication'] ?? null,
+                'volume'         => $author['volume'] ?? null,
+                'page'           => $author['page'] ?? null,
+                'year_described' => $author['year'] ?? null,
+
+
+                'is_infra'       => !empty($author['rank']),
+                'infra_values'   => !empty($author['rank'])
+                    ? json_encode([
+                        'rank' => $author['rank'],
+                        'taxon_name' => $author['taxon_name']
+                    ])
+                    : null,
+
+                'is_in' => !empty($author['in_author_1']) || !empty($author['in_author_2']),
+
+                'in_author' => (!empty($author['in_author_1']) || !empty($author['in_author_2']))
+                    ? json_encode([
+                        'in_author_1' => $author['in_author_1'],
+                        'in_author_2' => $author['in_author_2'],
+                    ])
+                    : null,
+
+            ]);
+        }
+
+        return redirect()
+            ->route('species.index')
+            ->with('success', 'Species created successfully.');
     }
 }

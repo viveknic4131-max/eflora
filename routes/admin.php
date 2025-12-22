@@ -50,6 +50,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/species/synonyms', [SpeciesController::class, 'synonyms'])->name('species.synonyms.store');
 
     Route::get('/home', function () {
         return view('admin.dashboard');

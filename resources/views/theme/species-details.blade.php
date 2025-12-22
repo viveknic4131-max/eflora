@@ -26,10 +26,7 @@
 
                         @php
                             $images = $species->images->pluck('pic')->toArray();
-                            $main =
-                                !empty($images)
-                                    ? asset( $images[0])
-                                    : asset('images/as.jpg');
+                            $main = !empty($images) ? asset($images[0]) : asset('images/as.jpg');
                         @endphp
 
                         <!-- Main Image -->
@@ -69,17 +66,80 @@
 
                 <div class="col-md-7">
                     <div class="species-card p-4">
-                        <h3 class="fw-bold text-success mb-4">Species Information</h3>
-                        <ul class="details-list">
-                            <li><strong>Scientific Name:</strong> {{ $species->name }}</li>
-                            <li><strong>Author:</strong> {{ $species->author ?? '—' }}</li>
-                            <li><strong>Publication:</strong> {{ $species->publication ?? '—' }}</li>
-                            <li><strong>Year Described:</strong> {{ $species->year_described ?? '—' }}</li>
-                            <li><strong>Volume:</strong> {{ $species->volume ?? '—' }}</li>
-                            <li><strong>Page:</strong> {{ $species->page ?? '—' }}</li>
-                            <li><strong>Family:</strong> {{ $species->family->name ?? '—' }}</li>
-                            <li><strong>Genus:</strong> {{ $species->genus->name ?? '—' }}</li>
-                        </ul>
+                        <h4 class="fw-bold text-success mb-3">About</h4>
+                @php
+
+                    $parts = [];
+
+                    $parts[] = strtoupper($species->genus->name);
+                    $parts[] = '<i>' . $species->name . '</i>';
+
+                    if ($species->author) {
+                        $parts[] = $species->author . ',';
+                    }
+
+                    if ($species->publication) {
+                        $parts[] = $species->publication;
+                    }
+
+                    if ($species->volume || $species->page) {
+                        $parts[] = trim($species->volume . ': ' . $species->page) . '.';
+                    }
+
+                    if ($species->year_described) {
+                        $parts[] = $species->year_described . '.';
+                    }
+
+                @endphp
+
+                @php
+                    $synonymLines = [];
+
+                    // Eager loading is assumed: Species::with('genus','synonyms')->find($id)
+
+                    foreach ($species->synonyms()->get() as $synonym) {
+                        $line = [];
+
+                        // Genus (constant for all synonyms)
+                        $line[] = strtoupper($species->genus->name);
+
+                        // Species epithet
+                        if ($synonym->spcies) {
+                            $line[] = '<i>' . e($synonym->spcies) . '</i>';
+                        }
+
+                        // Author
+                        if ($synonym->author) {
+                            $line[] = e($synonym->author) . ',';
+                        }
+
+                        // Publication
+                        if ($synonym->publication) {
+                            $line[] = e($synonym->publication);
+                        }
+
+                        // Volume : Page
+                        if ($synonym->volume || $synonym->page) {
+                            $line[] = trim(e($synonym->volume) . ': ' . e($synonym->page)) . '.';
+                        }
+
+                        // Year
+                        if ($synonym->year_described) {
+                            $line[] = e($synonym->year_described) . '.';
+                        }
+
+                        $synonymLines[] = implode(' ', $line);
+                    }
+                @endphp
+
+
+
+                <p class="text-muted" style="text-align: justify;">
+                    {!! implode(' ', $parts) !!}
+                </p>
+                <p class="text-muted" style="text-align: justify; line-height: 1.6;">
+                    {!! implode('<br>', $synonymLines) !!}
+                </p>
                     </div>
                 </div>
 
@@ -87,26 +147,90 @@
 
             <!-- 📖 Description -->
             <div class="species-card mt-5 p-4">
-                <h4 class="fw-bold text-success mb-3">Description</h4>
+                <h4 class="fw-bold text-success mb-3">About</h4>
+                @php
+
+                    $parts = [];
+
+                    $parts[] = strtoupper($species->genus->name);
+                    $parts[] = '<i>' . $species->name . '</i>';
+
+                    if ($species->author) {
+                        $parts[] = $species->author . ',';
+                    }
+
+                    if ($species->publication) {
+                        $parts[] = $species->publication;
+                    }
+
+                    if ($species->volume || $species->page) {
+                        $parts[] = trim($species->volume . ': ' . $species->page) . '.';
+                    }
+
+                    if ($species->year_described) {
+                        $parts[] = $species->year_described . '.';
+                    }
+
+
+                @endphp
+
+                @php
+                    $synonymLines = [];
+
+                    // Eager loading is assumed: Species::with('genus','synonyms')->find($id)
+
+                    foreach ($species->synonyms()->get() as $synonym) {
+                        $line = [];
+
+                        // Genus (constant for all synonyms)
+                        $line[] = strtoupper($species->genus->name);
+
+                        // Species epithet
+                        if ($synonym->spcies) {
+                            $line[] = '<i>' . e($synonym->spcies) . '</i>';
+                        }
+
+                        // Author
+                        if ($synonym->author) {
+                            $line[] = e($synonym->author) . ',';
+                        }
+
+                        // Publication
+                        if ($synonym->publication) {
+                            $line[] = e($synonym->publication);
+                        }
+
+                        // Volume : Page
+                        if ($synonym->volume || $synonym->page) {
+                            $line[] = trim(e($synonym->volume) . ': ' . e($synonym->page)) . '.';
+                        }
+
+                        // Year
+                        if ($synonym->year_described) {
+                            $line[] = e($synonym->year_described) . '.';
+                        }
+
+                        $synonymLines[] = implode(' ', $line);
+                    }
+
+                    //  states
+
+                @endphp
+
+
+
                 <p class="text-muted" style="text-align: justify;">
-                    {{ $species->description ?? 'No description available.' }}
+                    {!! implode(' ', $parts) !!}
                 </p>
+                <p class="text-muted" style="text-align: justify; line-height: 1.6;">
+                    {!! implode('<br>', $synonymLines) !!}
+                </p>
+
+
             </div>
 
             <!-- 🌼 Synonyms -->
-            @if (!empty($species->synonyms))
-                <div class="species-card mt-4 p-4">
-                    <h4 class="fw-bold text-success mb-3">Synonyms</h4>
-                    <div class="synonyms">
-                        @foreach (json_decode($species->synonyms, true) as $syn)
-                            <span
-                                style="background:#e9f7ef; color:#198754; padding:5px 10px; border-radius:10px; margin-right:5px;">
-                                {{ $syn }}
-                            </span>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
+
 
             <!-- 📅 Footer Info -->
             <div class="text-center mt-5 text-muted small">

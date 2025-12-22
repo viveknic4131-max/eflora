@@ -5,6 +5,7 @@ namespace App\Repositories\Contracts;
 interface FamilyRepositoryInterface
 {
     public function search(string $keyword, array $volumeIds);
+     public function searchByName(string $name);
 
     public function getAllFamilies(int $perPage);
     public function find($id);

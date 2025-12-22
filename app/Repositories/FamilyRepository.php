@@ -16,6 +16,11 @@ class FamilyRepository implements FamilyRepositoryInterface
             ->get();
     }
 
+    public function searchByName(string $name)
+    {
+        return Family::where('name','LIKE', '%' . $name . '%')->first();
+    }
+
     public function getAllFamilies(int $perPage)
     {
         return Family::orderby('id', 'DESC')->paginate($perPage);

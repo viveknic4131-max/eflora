@@ -17,6 +17,12 @@ class GenusRepository implements GenusRepositoryInterface
             ->get();
     }
 
+    public function searchByName(string $name)
+    {
+        return Genus::where('name' ,'LIKE', '%' . $name . '%')
+            ->first();
+    }
+
     public function getAllGenus(int $perPage)
     {
         return Genus::with('family')->orderBy('id', 'desc')->paginate($perPage);
@@ -83,7 +89,7 @@ class GenusRepository implements GenusRepositoryInterface
                 'volume_id'   => 0,
             ]);
         });
-       
+
     }
 
     public function getGenusByFamilyIds(array $familyIds)

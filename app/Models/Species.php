@@ -47,4 +47,10 @@ class Species extends Model
     {
         return $this->images()->first()?->pic;
     }
+
+    public function synonyms()
+    {
+        return $this->hasMany(SpeciesSynonym::class ,'species_id',
+        'id' );
+    }
 }

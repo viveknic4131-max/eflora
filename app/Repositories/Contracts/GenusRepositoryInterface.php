@@ -11,6 +11,7 @@ interface GenusRepositoryInterface
     public function store($request);
 
     public function search(string $keyword, array $familyIds);
+     public function searchByName(string $name);
     public function getAllGenus(int $perPage);
 
     public function getGenusByFamilyIds(array $request);

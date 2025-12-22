@@ -26,7 +26,7 @@ class SpeciesRequest extends FormRequest
         'genus_id'         => 'required|exists:genera,id,deleted_at,NULL',
 
         'species'          => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
-        'description'      => 'required|string|max:5000',
+        // 'description'      => 'required|string|max:5000',
 
         'author'           => 'nullable|string|max:255|regex:/^[A-Za-z\s]+$/',
         'publication'      => 'nullable|string|max:255|regex:/^[A-Za-z\s]+$/',
@@ -37,10 +37,10 @@ class SpeciesRequest extends FormRequest
 
         'page'             => 'nullable|numeric',
 
-        'common_name'      => 'nullable|string|max:25|regex:/^[A-Za-z\s]+$/',
+        // 'common_name'      => 'nullable|string|max:25|regex:/^[A-Za-z\s]+$/',
 
-        'synonyms'         => 'nullable|array',
-        'synonyms.*'       => 'nullable|string|max:255|regex:/^[A-Za-z\s]+$/',
+        // 'synonyms'         => 'nullable|array',
+        // 'synonyms.*'       => 'nullable|string|max:255|regex:/^[A-Za-z\s]+$/',
 
         'images'           => 'nullable|array',
         'images.*'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
@@ -61,7 +61,7 @@ class SpeciesRequest extends FormRequest
         'species.required'     => 'Species name is required.',
         'species.regex'        => 'Species may only contain letters and spaces.',
 
-        'description.required' => 'Description is required.',
+        // 'description.required' => 'Description is required.',
 
         'author.regex'         => 'Author name may only contain letters and spaces.',
         'publication.regex'    => 'Publication name may only contain letters and spaces.',
@@ -71,10 +71,10 @@ class SpeciesRequest extends FormRequest
 
         'page.numeric'        => 'Page must be a numeric value.',
 
-        'common_name.regex'   => 'Common name may only contain letters and spaces.',
+        // 'common_name.regex'   => 'Common name may only contain letters and spaces.',
 
-        'synonyms.array'      => 'Synonyms must be a list.',
-        'synonyms.*.string'   => 'Each synonym must be a valid string.',
+        // 'synonyms.array'      => 'Synonyms must be a list.',
+        // 'synonyms.*.string'   => 'Each synonym must be a valid string.',
 
         'images.array'        => 'Images must be an array.',
         'images.*.image'      => 'Each file must be an image.',

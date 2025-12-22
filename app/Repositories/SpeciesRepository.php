@@ -18,6 +18,11 @@ class SpeciesRepository implements SpeciesRepositoryInterface
             ->get();
     }
 
+    public function searchByName(string $name)
+    {
+        return Species::where('name' ,'LIKE', '%' . $name . '%')
+            ->first();
+    }
 
     public function getAllSpecies(int $perPage)
     {

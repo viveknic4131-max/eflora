@@ -200,17 +200,7 @@
                                     </div>
 
 
-                                    <div class="col-12">
-                                        <label class="fw-bold">Synonyms</label>
 
-                                        <div id="authors_wrapper">
-
-                                        </div>
-
-                                        <button type="button" id="add_author" class="btn btn-primary btn-sm">
-                                            + Add Synonyms
-                                        </button>
-                                    </div>
 
                                     <div class="col-md-12 mb-3">
                                         <label class="form-label">Upload Images</label>
@@ -230,11 +220,37 @@
 
 
                                 <div class="col-12 text-center mt-3">
+
+                                    <button type="submit" id="submitBtn" class="btn bg-gradient-primary mb-0">
+                                        {{ isset($species) ? 'Update Species' : 'Save Species' }}
+                                    </button>
+                                </div>
+                            </form>
+
+                            <form id="synonymsForm" class="mt-5">
+                                @csrf
+
+                                <input type="hidden" name="species_id"
+                                    value="{{ isset($species) ? $species->id : '' }}">
+                                <div class="col-12">
+                                    <label class="fw-bold">Synonyms</label>
+
+                                    <div id="authors_wrapper">
+
+                                    </div>
+
+                                    <button type="button" id="add_author" class="btn btn-primary btn-sm">
+                                        + Add Synonyms
+                                    </button>
+                                </div>
+
+                                <div class="col-12 text-center mt-3">
                                     <button type="button" id="previewBtn" class="btn bg-gradient-info me-2">
                                         Preview
                                     </button>
-                                    <button type="submit" id="submitBtn" class="btn bg-gradient-primary mb-0">
-                                        {{ isset($species) ? 'Update Species' : 'Save Species' }}
+                                    <button type="submit" id="synonymssubmitBtn"
+                                        class="btn bg-gradient-primary mb-0">
+                                        Save Synonyms
                                     </button>
                                 </div>
                             </form>
@@ -282,13 +298,7 @@
     </div>
 
 </x-layout>
-<script>
-    document.getElementById("speciesForm").addEventListener("submit", function() {
-        const btn = document.getElementById("submitBtn");
-        btn.disabled = true;
-        btn.innerHTML = "Please wait...";
-    });
-</script>
+
 <script>
     $(document).ready(function() {
         // Family dropdown
@@ -485,6 +495,8 @@
         $('#add_author').click(function() {
 
 
+            let genusName = $('#genus_id').select2('data')[0].text;
+
             let lastAuthor = $('#authors_wrapper .author-item').last();
 
             if (lastAuthor.length) {
@@ -519,7 +531,7 @@
                     <div class="col-md-2">
                         <div class="input-group input-group-static">
                             <input type="text" name="authors[${index}][genus]" class="form-control"
-                                placeholder="Genus Name *" required>
+                                placeholder="Genus Name *" required value="${genusName}">
                         </div>
                     </div>
 
@@ -636,22 +648,23 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-
         const infraCheck = document.querySelector('.species_infraspecific-check');
         const infraFields = document.querySelector('.infraspecific-fields');
-        const infraInputs = document.querySelectorAll('.infraspecific-input');
+        const infraInputs = infraFields.querySelectorAll('input');
 
         const inCheck = document.querySelector('.species_in-check');
         const inFields = document.querySelector('.in-fields');
-        const inInputs = document.querySelectorAll('.in-input');
+        const inInputs = inFields.querySelectorAll('input');
 
         // Infraspecific toggle
         infraCheck.addEventListener('change', function() {
             if (this.checked) {
+
                 infraFields.classList.remove('d-none');
+                infraInputs.forEach(input => input.disabled = false); // enable fields
             } else {
                 infraFields.classList.add('d-none');
-                infraInputs.forEach(input => input.value = '');
+                infraInputs.forEach(input => input.disabled = true); // disable fields
             }
         });
 
@@ -659,12 +672,20 @@
         inCheck.addEventListener('change', function() {
             if (this.checked) {
                 inFields.classList.remove('d-none');
+                inInputs.forEach(input => input.disabled = false); // enable fields
             } else {
                 inFields.classList.add('d-none');
-                inInputs.forEach(input => input.value = '');
+                inInputs.forEach(input => input.disabled = true); // disable fields
             }
         });
 
+        // Initially disable fields if checkboxes are unchecked
+        if (!infraCheck.checked) {
+            infraInputs.forEach(input => input.disabled = true);
+        }
+        if (!inCheck.checked) {
+            inInputs.forEach(input => input.disabled = true);
+        }
     });
 </script>
 
@@ -694,7 +715,7 @@
     function buildPreview(data) {
 
 
-    let html = `
+        let html = `
         <h6 class="text-primary">Basic Information</h6>
         <div class="border rounded p-3">
             <strong><em>${$('#genus_id option:selected').text()} ${data.species || '-'}</em></strong>
@@ -713,14 +734,14 @@
         </div>
     `;
 
-    /* ================= SYNONYMS (PLAIN TEXT) ================= */
-    if (data.authors && data.authors.length) {
+        /* ================= SYNONYMS (PLAIN TEXT) ================= */
+        if (data.authors && data.authors.length) {
 
-        html += `<div class="mt-3 ps-2">`;
+            html += `<div class="mt-3 ps-2">`;
 
-        data.authors.forEach((a, i) => {
+            data.authors.forEach((a, i) => {
 
-            html += `
+                html += `
                <div class="mb-1">
     <strong><em>
         ${a[`authors[${i}][genus]`] || ''}
@@ -757,34 +778,168 @@
 </div>
 
             `;
-        });
+            });
 
-        html += `</div>`;
+            html += `</div>`;
+        }
+
+        return html;
     }
 
-    return html;
-}
-
-
-    // Preview button click
     $('#previewBtn').on('click', function() {
 
         let formData = collectFormData();
 
-        // Save to localStorage
         localStorage.setItem('species_preview', JSON.stringify(formData));
 
-        // Build preview
+
         $('#previewContent').html(buildPreview(formData));
 
-        // Show modal
         $('#previewModal').modal('show');
     });
 
-    // Confirm submit
     $('#confirmSubmit').on('click', function() {
         localStorage.removeItem('species_preview');
         $('#submitBtn').removeClass('d-none');
-        $('#speciesForm').submit();
+        // $('#speciesForm').submit();
+    });
+</script>
+<script>
+    let SAVED_SPECIES_ID = null;
+
+    $('#speciesForm').on('submit', function(e) {
+        e.preventDefault();
+
+        const btn = $('#submitBtn');
+        btn.prop('disabled', true).text('Please wait...');
+
+        // Collect form data
+        let formData = new FormData(this);
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(res) {
+                SAVED_SPECIES_ID = res.species_id;
+                $('#synonymsForm input[name="species_id"]').val(SAVED_SPECIES_ID);
+
+                $('#speciesForm')
+                    .find('input, select, textarea')
+                    .prop('disabled', true);
+
+                btn.text('Saved');
+
+                alert('Species saved successfully. Now add synonyms.');
+
+
+                // btn.text('Saved');
+                // alert('Species & Synonyms saved successfully');
+                // // Optional: disable inputs to prevent double submission
+                // $('#speciesForm').find('input, select, textarea').prop('disabled', true);
+            },
+            error: function(xhr) {
+                btn.prop('disabled', false).text('Save Species');
+
+                if (xhr.status === 422) {
+                    // validation error
+                    alert('Please fill all required fields correctly.');
+                } else {
+                    alert('Something went wrong!');
+                }
+            }
+        });
+    });
+</script>
+
+
+<script>
+    $('#synonymsForm').on('submit', function(e) {
+        e.preventDefault();
+
+        if (!SAVED_SPECIES_ID) {
+            alert('Please save species first');
+            return;
+        }
+
+        const btn = $('#submitBtn');
+        btn.prop('disabled', true).text('Please wait...');
+
+        // Collect form data
+        let formData = new FormData(this);
+
+        // Add authors/synonyms dynamically to FormData
+        $('#authors_wrapper .author-item').each(function(i) {
+            $(this).find('input').each(function() {
+                const name = $(this).attr('name');
+                formData.append(name, $(this).val());
+                formData.append('_token', '{{ csrf_token() }}');
+            });
+        });
+
+        $.ajax({
+            url: '{{ route('species.synonyms.store') }}',
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(res) {
+                btn.text('Saved');
+                alert(' Synonyms saved successfully');
+
+                alert('Synonyms saved successfully');
+                $('#synonymsForm').find('input, select, textarea').prop('disabled', true);
+            },
+            error: function(xhr) {
+                // btn.prop('disabled', false).text('Save Synonyms');
+
+                if (xhr.status === 422) {
+                    // validation error
+                    alert('Please fill all required fields correctly.');
+                } else {
+                    alert('Something went wrong!');
+                }
+            }
+        });
+    });
+
+
+    $('#confirmSubmit').on('click', function() {
+
+        if (!SAVED_SPECIES_ID) {
+            alert('Please save species first');
+            return;
+        }
+
+        let synonyms = [];
+
+        $('#authors_wrapper .author-item').each(function() {
+            let obj = {};
+            $(this).find('input').each(function() {
+                obj[$(this).attr('name')] = $(this).val();
+            });
+            synonyms.push(obj);
+        });
+
+        $.ajax({
+            url: "{{ route('species.synonyms.store') }}",
+            type: "POST",
+            data: {
+                species_id: SAVED_SPECIES_ID,
+                synonyms: synonyms,
+                _token: "{{ csrf_token() }}"
+            },
+
+            success: function() {
+                $('#previewModal').modal('hide');
+                alert('Species + Synonyms saved successfully');
+            },
+
+            error: function() {
+                alert('Failed to save synonyms');
+            }
+        });
     });
 </script>
