@@ -63,6 +63,8 @@
                                     {{-- Searchable Family --}}
                                     <div class="col-md-6 mb-3">
                                         <div class="input-group input-group-static">
+                                            <label for="family_id" class="ms-0">Select Family
+                                                *</label>
                                             <select name="family_id" id="family_id" class="form-control"
                                                 required></select>
                                         </div>
@@ -72,6 +74,8 @@
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <div class="input-group input-group-static">
+                                             <label for="genus_id" class="ms-0">Select Genus
+                                                *</label>
                                             <select name="genus_id" id="genus_id" class="form-control"
                                                 disabled></select>
                                         </div>
@@ -153,6 +157,20 @@
                                         @enderror
                                     </div>
 
+
+                                    <div class="col-md-6 mb-3">
+
+                                        <div class="input-group input-group-static">
+                                            <label for="states" class="ms-0">For Distribution Select States
+                                                *</label>
+                                            <select name="states[]" id="states" class="form-control" multiple
+                                                required></select>
+                                        </div>
+                                        @error('states')
+                                            <p class="text-danger inputerror mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+
                                     <div class="row form-check">
                                         <input type="checkbox"
                                             class="form-check-input species_infraspecific-check">Infraspecific
@@ -184,6 +202,8 @@
                                     </div>
 
                                     <div class="row  mt-2 in-fields d-none">
+
+
                                         <div class="col-md-3">
                                             <div class="input-group input-group-static">
                                                 <input type="text" name="in_author_1"
@@ -245,9 +265,9 @@
                                 </div>
 
                                 <div class="col-12 text-center mt-3">
-                                    <button type="button" id="previewBtn" class="btn bg-gradient-info me-2">
+                                    {{-- <button type="button" id="previewBtn" class="btn bg-gradient-info me-2">
                                         Preview
-                                    </button>
+                                    </button> --}}
                                     <button type="submit" id="synonymssubmitBtn"
                                         class="btn bg-gradient-primary mb-0">
                                         Save Synonyms
@@ -494,7 +514,12 @@
 
         $('#add_author').click(function() {
 
+            let genusData = $('#genus_id').select2('data');
 
+            if (!genusData || genusData.length === 0) {
+                alert('Please select a genus first.');
+                return;
+            }
             let genusName = $('#genus_id').select2('data')[0].text;
 
             let lastAuthor = $('#authors_wrapper .author-item').last();
@@ -520,7 +545,12 @@
             $('#authors_wrapper').append(`
           <div class="author-item border rounded p-3 mb-3">
                 <div class="row g-2">
-
+                    <div class="col-md-2">
+                        <div class="input-group input-group-static">
+                            <input type="text" name="authors[${index}][genus]" class="form-control"
+                                placeholder="Genus Name *" required value="${genusName}">
+                        </div>
+                    </div>
                     <div class="col-md-2">
                         <div class="input-group input-group-static">
                             <input type="text" name="authors[${index}][species]" class="form-control"
@@ -528,12 +558,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-2">
-                        <div class="input-group input-group-static">
-                            <input type="text" name="authors[${index}][genus]" class="form-control"
-                                placeholder="Genus Name *" required value="${genusName}">
-                        </div>
-                    </div>
+
 
                     <div class="col-md-2">
                         <div class="input-group input-group-static">
@@ -891,6 +916,7 @@
 
                 alert('Synonyms saved successfully');
                 $('#synonymsForm').find('input, select, textarea').prop('disabled', true);
+                window.location.href = "{{ route('species.index') }}";
             },
             error: function(xhr) {
                 // btn.prop('disabled', false).text('Save Synonyms');
@@ -900,6 +926,7 @@
                     alert('Please fill all required fields correctly.');
                 } else {
                     alert('Something went wrong!');
+                    window.location.href = "{{ route('species.index') }}";
                 }
             }
         });
@@ -941,5 +968,33 @@
                 alert('Failed to save synonyms');
             }
         });
+    });
+
+
+    //  states list
+
+    $('#states').select2({
+        placeholder: 'Search and select States...',
+        multiple: true,
+        ajax: {
+            url: '{{ route('state.list') }}',
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
+                return {
+                    q: params.term
+                };
+            },
+            processResults: function(data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.name
+                    }))
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 1
     });
 </script>

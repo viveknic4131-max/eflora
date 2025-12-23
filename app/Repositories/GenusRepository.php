@@ -78,7 +78,9 @@ class GenusRepository implements GenusRepositoryInterface
     public function store($request)
     {
 
-        // dd($request);
+        // dd($request->all());
+
+        // $findVolmeId =
         return DB::transaction(function () use ($request) {
 
             return Genus::create([

@@ -7,6 +7,7 @@ use App\Http\Requests\SpeciesRequest;
 use App\Models\Species;
 use App\Models\SpeciesImage;
 use App\Models\SpeciesSynonym;
+use App\Models\State;
 use App\Repositories\Contracts\SpeciesRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -43,7 +44,7 @@ class SpeciesController extends Controller
     public function store(SpeciesRequest $request)
     {
 
-
+// dd($request->states);
         try {
             $species =    $this->speciesRepository->store($request);
 
@@ -154,5 +155,18 @@ class SpeciesController extends Controller
         return redirect()
             ->route('species.index')
             ->with('success', 'Species created successfully.');
+    }
+
+
+     public function getStateList(Request $request)
+    {
+        $search = $request->get('q', '');
+        $states = State::query()
+            ->where('name', 'like', "%{$search}%")
+            ->select('id', 'name')
+            ->limit(20)
+            ->get();
+
+        return response()->json($states);
     }
 }

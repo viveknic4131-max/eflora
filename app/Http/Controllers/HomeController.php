@@ -406,22 +406,34 @@ class HomeController extends Controller
 
             if ($request->type === 'family') {
 
-                  $volume = Volume::where('type',$isFloraIndia )->get();
+                $volume = Volume::where('type', $isFloraIndia)->get();
 
-                  if($volume->isEmpty()) {
-                      abort(404, 'No volumes found for the specified type.');
-                  }
-                  foreach($volume as $vol) {
-                    $getFamilyIds = FamilyVolumes::where('volume_id', $vol->id)->pluck('family_id');
-                    dd($getFamilyIds);
-                    $families = Family::with('genera.species.images')->whereIn('id', $getFamilyIds)->paginate(50);
-                  }
+                if ($volume->isEmpty()) {
+                    abort(404, 'No volumes found for the specified type.');
+                }
 
-            // $familyIds = FamilyVolumes::where('volume_id', $volume->id)->pluck('family_id');
-            // $families = Family::with('genera.species.images')->whereIn('id', $familyIds)->paginate(50);
+                $familyIds = [];
 
-            //     $families = Family::paginate(50);
+                foreach ($volume as $vol) {
+                    $ids = FamilyVolumes::where('volume_id', $vol->id)
+                        ->pluck('family_id')
+                        ->toArray();
 
+                    $familyIds = array_merge($familyIds, $ids);
+                }
+
+                $familyIds = array_unique($familyIds);
+                $families = Family::with('genera.species.images')->whereIn('id', $familyIds)->paginate(50);
+
+
+                // foreach ($volume as $vol) {
+                //     $getFamilyIds = FamilyVolumes::where('volume_id', $vol->id)->pluck('family_id');
+
+                //     $families = Family::with('genera.species.images')->whereIn('id', $getFamilyIds)->paginate(50);
+                //     dd($families);
+                // }
+
+                // dd($families);
                 return view('theme.family-view', [
                     'mode'     => "{$modePrefix}_family",
                     'families' => $families,
@@ -429,8 +441,30 @@ class HomeController extends Controller
             }
 
             if ($request->type === 'generas') {
+                $volume = Volume::where('type', $isFloraIndia)->get();
 
-                $generas = Genus::paginate(50);
+                if ($volume->isEmpty()) {
+                    abort(404, 'No volumes found for the specified type.');
+                }
+
+                $familyIds = [];
+
+                foreach ($volume as $vol) {
+                    $ids = FamilyVolumes::where('volume_id', $vol->id)
+                        ->pluck('family_id')
+                        ->toArray();
+
+                    $familyIds = array_merge($familyIds, $ids);
+                }
+
+                $familyIds = array_unique($familyIds);
+                $families = Family::whereIn('id', $familyIds)->pluck('id');
+
+
+                $generas = Genus::with('species.images')->whereIn('family_id', $families)->paginate(50);
+
+                // dd($generas);
+                // $generas = Genus::paginate(50);
 
                 return view('theme.family-view', [
                     'mode'  => "{$modePrefix}_genus",
@@ -473,7 +507,7 @@ class HomeController extends Controller
 
     public function getSpecies(Request $request)
     {
-        $species = Species::with(['genus', 'family', 'images' ,'synonyms'])->where('species_code', $request->species)->firstOrFail();
+        $species = Species::with(['genus', 'family', 'images', 'synonyms'])->where('species_code', $request->species)->firstOrFail();
 
         return view('theme.species-details', compact('species'));
     }

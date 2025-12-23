@@ -41,6 +41,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/ajax/families', [FamilyController::class, 'searchFamilies'])->name('ajax.families');
     Route::get('/ajax/volumes', [VolumeController::class, 'searchVolumes'])->name('ajax.volumes');
 
+    Route::get('/state-list', [SpeciesController::class, 'getStateList'])->name('state.list');
+
 
 
     Route::resource('genera', GenusController::class);

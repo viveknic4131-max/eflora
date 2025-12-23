@@ -20,7 +20,7 @@ class SpeciesRepository implements SpeciesRepositoryInterface
 
     public function searchByName(string $name)
     {
-        return Species::where('name' ,'LIKE', '%' . $name . '%')
+        return Species::where('name', 'LIKE', '%' . $name . '%')
             ->first();
     }
 
@@ -57,8 +57,43 @@ class SpeciesRepository implements SpeciesRepositoryInterface
     public function store($request)
     {
         return DB::transaction(function () use ($request) {
+            $is_infra = false;
+            $infra_values = null;
+            $is_in = false;
+            $in_author = null;
+
+            $states = null;
+
+            if ($request->filled('states') && is_array($request->states)) {
+                $states = array_values(
+                    array_map(
+                        'intval',
+                        array_filter($request->states, fn($v) => $v !== null && $v !== '')
+                    )
+                );
+            }
+
+            if (isset($request->rank) && isset($request->taxon_name) && !empty($request->rank) && !empty($request->taxon_name)) {
+                // dd($request->rank);
+                $is_infra = true;
+                $infra_values = json_encode([
+                    'rank' => $request->rank,
+                    'taxon_name' => $request->taxon_name
+                ]);
+            }
 
 
+            if (isset($request->in_author_1) && isset($request->in_author_2) && !empty($request->in_author_1) && !empty($request->in_author_2)) {
+                // dd($request->rank);
+
+                $is_in = true;
+                $is_infra = true;
+                $in_author = json_encode([
+                    'in_author_1' => $request->in_author_1,
+                    'in_author_2' => $request->in_author_2
+                ]);
+            }
+            // dd('there');
             $species = Species::create([
                 'species_code'   => Str::uuid(),
                 'name'           => $request->species,
@@ -72,6 +107,11 @@ class SpeciesRepository implements SpeciesRepositoryInterface
                 'page'           => $request->page,
                 'common_name'    => $request->common_name,
                 'synonyms'       => $request->synonyms ? json_encode($request->synonyms) : null,
+                'is_infra'       => $is_infra,
+                'infra_values'   => $infra_values,
+                'is_in'          => $is_in,
+                'in_author'      => $in_author,
+                'state_ids'      => $states,
             ]);
 
 
