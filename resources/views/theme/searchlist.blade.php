@@ -17,17 +17,18 @@
 
                 <!-- Radio Buttons -->
                 <div class="mb-3 d-flex flex-wrap justify-content-center align-items-center gap-3">
+                     <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="plantChecklist" name="plant_type"
+                            value="checklist" {{ $searchType == 'checklist' ? 'checked' : '' }}>
+                        <label class="form-check-label fw-semibold" for="plantChecklist">Plant Checklist of India</label>
+                    </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" id="floraOfIndia" name="plant_type"
                             value="flora_india" {{ $searchType == 'flora_india' ? 'checked' : '' }}>
                         <label class="form-check-label fw-semibold" for="floraOfIndia">Flora of India</label>
                     </div>
 
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="plantChecklist" name="plant_type"
-                            value="checklist" {{ $searchType == 'checklist' ? 'checked' : '' }}>
-                        <label class="form-check-label fw-semibold" for="plantChecklist">Plant Checklist of India</label>
-                    </div>
+
                 </div>
 
                 <!-- Search Box -->

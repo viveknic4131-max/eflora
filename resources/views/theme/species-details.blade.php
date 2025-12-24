@@ -115,7 +115,7 @@
                             }
 
                             if ($species->volume || $species->page) {
-                                $parts[] = '<i>' . trim($species->volume . '</i>' . ' : ' . $species->page) . '.';
+                                $parts[] =  trim($species->volume .  ': ' . $species->page) . '.';
                             }
 
                             if ($species->year_described) {
@@ -133,11 +133,12 @@
                                 $line = [];
 
                                 // Genus (constant for all synonyms)
-                                $line[] = '<strong>' . strtoupper($species->genus->name) . '</strong>';
+                                // $line[] = '<strong>' . strtoupper($species->genus->name) . '</strong>';
+                                $line[] =  ucfirst(strtoupper($species->genus->name)) ;
 
                                 // Species epithet
                                 if ($synonym->spcies) {
-                                    $line[] = '<strong>' . '<i>' . e($synonym->spcies) . '</i>' . '</strong>';
+                                    $line[] =  e($synonym->spcies) ;
                                 }
 
                                 // Author

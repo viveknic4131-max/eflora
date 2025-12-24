@@ -33,7 +33,7 @@ class SpeciesRequest extends FormRequest
 
         'year_described'   => 'nullable|digits:4|integer',
 
-        'volume'           => 'nullable|string|max:255|regex:/^[A-Za-z\s]+$/',
+        'volume'           => 'nullable|string|max:255|regex:/^[A-Za-z\s]+$/().',
 
         'page'             => 'nullable|numeric',
 
