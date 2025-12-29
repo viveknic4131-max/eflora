@@ -10,9 +10,11 @@ use App\Repositories\FamilyRepository;
 use App\Repositories\Contracts\FamilyRepositoryInterface;
 use App\Repositories\GenusRepository;
 use App\Repositories\Contracts\GenusRepositoryInterface;
+use App\Repositories\Contracts\NewsRepositoryInterface;
 use App\Repositories\SpeciesRepository;
 use App\Repositories\Contracts\SpeciesRepositoryInterface;
 use App\Repositories\Contracts\VolumeRepositoryInterface;
+use App\Repositories\NewsRepository;
 use App\Repositories\VolumeRepository;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SpeciesRepositoryInterface::class, SpeciesRepository::class);
         $this->app->bind(SpeciesRepositoryInterface::class, SpeciesRepository::class);
         $this->app->bind(VolumeRepositoryInterface::class, VolumeRepository::class);
+        $this->app->bind(NewsRepositoryInterface::class, NewsRepository::class);
     }
 
     /**

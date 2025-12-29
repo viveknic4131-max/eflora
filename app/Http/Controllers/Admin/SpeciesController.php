@@ -44,9 +44,11 @@ class SpeciesController extends Controller
     public function store(SpeciesRequest $request)
     {
 
-// dd($request->states);
+        // dd($request->all());
         try {
             $species =    $this->speciesRepository->store($request);
+
+            // dd($species->id);
 
             // return redirect()
             //     ->route('species.index')
@@ -117,6 +119,8 @@ class SpeciesController extends Controller
     public function synonyms(Request $request)
     {
 
+        // dd($request->all());
+
         $speciesId = $request->species_id;
 
         foreach ($request->authors as $author) {
@@ -140,14 +144,10 @@ class SpeciesController extends Controller
                     ])
                     : null,
 
-                'is_in' => !empty($author['in_author_1']) || !empty($author['in_author_2']),
+                // 'is_in' => !empty($author['in_author_1']) || !empty($author['in_author_2']),
 
-                'in_author' => (!empty($author['in_author_1']) || !empty($author['in_author_2']))
-                    ? json_encode([
-                        'in_author_1' => $author['in_author_1'],
-                        'in_author_2' => $author['in_author_2'],
-                    ])
-                    : null,
+                'in_author' =>  $author['in_author_1'] ??
+                    null,
 
             ]);
         }
@@ -158,7 +158,7 @@ class SpeciesController extends Controller
     }
 
 
-     public function getStateList(Request $request)
+    public function getStateList(Request $request)
     {
         $search = $request->get('q', '');
         $states = State::query()

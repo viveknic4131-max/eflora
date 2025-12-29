@@ -90,13 +90,15 @@
                                     </a>
                                 </li>
                                 <li class="mb-3">
-                                    <a href="{{ route('get.family' ,['code' => false ,'type'=>'family']) }}" class="volume-link">
+                                    <a href="{{ route('get.family', ['code' => false, 'type' => 'family']) }}"
+                                        class="volume-link">
                                         <i class="fa-solid fa-seedling me-2 text-accent"></i>
                                         Familes
                                     </a>
                                 </li>
                                 <li class="mb-3">
-                                    <a href="{{ route('get.family' ,['code' => false ,'type'=>'generas']) }}" class="volume-link">
+                                    <a href="{{ route('get.family', ['code' => false, 'type' => 'generas']) }}"
+                                        class="volume-link">
                                         <i class="fa-solid fa-seedling me-2 text-accent"></i>
                                         Generas
                                     </a>
@@ -122,13 +124,15 @@
                                     </a>
                                 </li>
                                 <li class="mb-3">
-                                    <a href="{{ route('get.family' ,['code' => true ,'type'=>'family']) }}" class="volume-link">
+                                    <a href="{{ route('get.family', ['code' => true, 'type' => 'family']) }}"
+                                        class="volume-link">
                                         <i class="fa-solid fa-tree me-2 text-accent"></i>
                                         Families
                                     </a>
                                 </li>
                                 <li class="mb-3">
-                                    <a href="{{ route('get.family' ,['code' => true ,'type'=>'generas']) }}" class="volume-link">
+                                    <a href="{{ route('get.family', ['code' => true, 'type' => 'generas']) }}"
+                                        class="volume-link">
                                         <i class="fa-solid fa-tree me-2 text-accent"></i>
                                         Generas
                                     </a>
@@ -144,99 +148,64 @@
     </section>
 
     <!--=====whats new=====-->
-    <section class="py-5 bg-light">
-        <div class="container text-center">
-            <div class="row align-items-center">
-                <h2 class="fw-bold mb-4 flora-primary">Whats New</h2>
-                <div class="col-md-6">
-                    <div class="card-body ">
-                        {{-- <h5 class="card-title">Whats New</h5> --}}
+ <section class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+
+            <h2 class="fw-bold mb-4 text-center flora-primary">What’s New</h2>
+
+            {{-- LEFT COLUMN --}}
+            <div class="col-md-6">
+                <a href="{{ route('news.list') }}" class="card-link">
+                                View all <i class="fa fa-arrow-down"></i>
+                            </a>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+
+
                         <div class="scroll-wn" id="style-3">
-                            <marquee behavior="scroll" scrollamount="2" direction="up" onmouseover="stop();"
-                                onmouseout="start();">
+                            <marquee behavior="scroll"
+                                     scrollamount="2"
+                                     direction="up"
+                                     onmouseover="this.stop();"
+                                     onmouseout="this.start();">
 
+                                @forelse($news as $item)
+                                    <p class="card-text mb-2">
+                                        <i class="fa fa-arrow-circle-o-right me-2"
+                                           aria-hidden="true"
+                                           style="color:#F00; font-size:16px;"></i>
 
-                                <p class="card-text"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"
-                                        style="color:#F00; font-size:18px;"></i>
-                                    <a href="uploads/documents/whatsnew/english/Draft_Seniority_list_of_Botanist_Plant_Chemist.pdf"
-                                        target="_blank">
-                                        Seniority List of Botanist and Plant Chemist in Botanical Survey of India
-                                        (Draft)</a>
-                                </p>
-
-
-
-                                <p class="card-text"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"
-                                        style="color:#F00; font-size:18px;"></i>
-                                    <a href="uploads/documents/whatsnew/english/List_of_Selected_candidates_-_GNI_project.pdf"
-                                        target="_blank">
-                                        List of Selected candidates under Great Nicobar Islands project</a>
-                                </p>
-
-
-
-                                <p class="card-text"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"
-                                        style="color:#F00; font-size:18px;"></i>
-                                    <a href="uploads/documents/whatsnew/english/Work_order_of_Dr__O_N_Maurya.pdf"
-                                        target="_blank">
-                                        Work order of Dr. O.N Maurya</a>
-                                </p>
-
-
-
-                                <p class="card-text"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"
-                                        style="color:#F00; font-size:18px;"></i>
-                                    <a href="uploads/documents/whatsnew/english/Advertisement-Plant_based_wildlife_health_managment_2025_01_12_2025.pdf"
-                                        target="_blank">
-                                        Extension for submission of application in connection with Recruitment of Research
-                                        Associate-II (01), Project Associate– I (08), Project Assistant (16) under MoEFandCC
-                                        funded Project</a>
-                                </p>
-
-
-
-                                <p class="card-text"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"
-                                        style="color:#F00; font-size:18px;"></i>
-                                    <a href="uploads/documents/whatsnew/english/Duty_order.pdf" target="_blank">
-                                        Order</a>
-                                </p>
-
-
-
-                                <p class="card-text"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"
-                                        style="color:#F00; font-size:18px;"></i>
-                                    <a href="uploads/documents/whatsnew/english/document.pdf" target="_blank">
-                                        Information for the purchaser Acharya Jagadish Chandra Bose Indian Botanic
-                                        Garden</a>
-                                </p>
-
-
-
-                                <p class="card-text"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"
-                                        style="color:#F00; font-size:18px;"></i>
-                                    <a href="uploads/documents/whatsnew/english/NOC_during_documents_verification.pdf"
-                                        target="_blank">
-                                        NOC during documents verification</a>
-                                </p>
-
-
+                                        <a href="{{ asset($item->file_path) }}"
+                                           target="_blank">
+                                            {{ $item->title }}
+                                        </a>
+                                    </p>
+                                @empty
+                                    <p class="text-muted">No updates available.</p>
+                                @endforelse
 
                             </marquee>
                         </div>
-                        <a href="https://bsi.gov.in/whats-new/en" class="card-link"><i class="fa fa-arrow-right"
-                                aria-hidden="true"></i>View all </a>
+
                     </div>
-                    {{-- <p class="lead text-muted">
-                        E-Flora is your digital gateway to discover, learn, and explore the beautiful world of plants.
-                        Whether you're a student, researcher, or nature enthusiast — we bring plant knowledge closer to you.
-                    </p> --}}
                 </div>
-                <div class="col-md-6">
-                    <img src="{{ asset('images/about.jpg') }}" class="img-fluid rounded shadow" alt="About Plants">
-                </div>
+
             </div>
+
+            {{-- RIGHT COLUMN --}}
+            <div class="col-md-6 text-center">
+                <img src="{{ asset('images/about.jpg') }}"
+                     class="img-fluid rounded shadow"
+                     alt="About Plants">
+            </div>
+
         </div>
-    </section>
+    </div>
+</section>
+
+
     <!--=====About Section=====-->
     <section class="py-5 bg-light">
         <div class="container text-center">

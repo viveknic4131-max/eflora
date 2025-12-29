@@ -74,7 +74,7 @@
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <div class="input-group input-group-static">
-                                             <label for="genus_id" class="ms-0">Select Genus
+                                            <label for="genus_id" class="ms-0">Select Genus
                                                 *</label>
                                             <select name="genus_id" id="genus_id" class="form-control"
                                                 disabled></select>
@@ -210,12 +210,12 @@
                                                     class="form-control in-input" placeholder="In Author 1">
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        {{-- <div class="col-md-3">
                                             <div class="input-group input-group-static">
                                                 <input type="text" name="in_author_2"
                                                     class="form-control in-input" placeholder="In Author 2">
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                     </div>
 
@@ -410,24 +410,24 @@
     });
 
 
-    $(document).ready(function() {
-        // Add new synonym
-        $('#add_synonym').click(function() {
-            $('#synonyms_wrapper').append(`
-        <div class="input-group mb-2 synonym-item">
-            <input type="text" name="synonyms[]" class="form-control" placeholder="Enter Synonym" required>
-            <button type="button" class="btn btn-danger remove-synonym">X</button>
-        </div>
-    `);
-        });
+    // $(document).ready(function() {
+    //     // Add new synonym
+    //     $('#add_synonym').click(function() {
+    //         $('#synonyms_wrapper').append(`
+    //     <div class="input-group mb-2 synonym-item">
+    //         <input type="text" name="synonyms[]" class="form-control" placeholder="Enter Synonym" required>
+    //         <button type="button" class="btn btn-danger remove-synonym">X</button>
+    //     </div>
+    // `);
+    //     });
 
-        // Remove synonym
-        $(document).on('click', '.remove-synonym', function() {
-            $(this).closest('.synonym-item').remove();
-        });
+    //     // Remove synonym
+    //     $(document).on('click', '.remove-synonym', function() {
+    //         $(this).closest('.synonym-item').remove();
+    //     });
 
 
-    });
+    // });
 
 
 
@@ -544,11 +544,12 @@
 
             $('#authors_wrapper').append(`
           <div class="author-item border rounded p-3 mb-3">
+
                 <div class="row g-2">
                     <div class="col-md-2">
                         <div class="input-group input-group-static">
                             <input type="text" name="authors[${index}][genus]" class="form-control"
-                                placeholder="Genus Name *" required value="${genusName}">
+                                placeholder="Genus Name *" required value="${genusName}" oninput="updateGenus(this, ${index})">
                         </div>
                     </div>
                     <div class="col-md-2">
@@ -632,20 +633,15 @@
                                 placeholder="In Author 1">
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="input-group input-group-static">
-                            <input type="text" name="authors[${index}][in_author_2]" class="form-control in-input"
-                                placeholder="In Author 2">
-                        </div>
-                    </div>
+
 
                 </div>
-
+ <button type="button" class="btn btn-danger btn-sm mt-2 remove-author">
+                Remove
+            </button>
             </div>
 
-            <button type="button" class="btn btn-danger btn-sm mt-2 remove-author">
-                Remove
-            </button>        `);
+                  `);
 
             index++;
         });
@@ -714,7 +710,7 @@
     });
 </script>
 
-<script>
+{{-- <script>
     // Collect all form data
     function collectFormData() {
         let data = {};
@@ -749,7 +745,7 @@
         ? ` ${data.rank} ${data.taxon_name}`
         : ''}
 
-    ${(data.in_author_1 && data.in_author_2)
+     ${(data.in_author_1 && data.in_author_2)
         ? ` ${data.in_author_1} <b>in</b> ${data.in_author_2}`
         : ''}
             ${data.publication || ''}
@@ -757,58 +753,58 @@
             ${data.page || ''}
             ${data.year_described ? `. ${data.year_described}.` : ''}
         </div>
-    `;
+     `;
 
-        /* ================= SYNONYMS (PLAIN TEXT) ================= */
-        if (data.authors && data.authors.length) {
+    /* ================= SYNONYMS (PLAIN TEXT) ================= */
+    if (data.authors && data.authors.length) {
 
-            html += `<div class="mt-3 ps-2">`;
+        html += `<div class="mt-3 ps-2">`;
 
-            data.authors.forEach((a, i) => {
+        data.authors.forEach((a, i) => {
 
-                html += `
+            html += `
                <div class="mb-1">
-    <strong><em>
+      <strong><em>
         ${a[`authors[${i}][genus]`] || ''}
         ${a[`authors[${i}][species]`] || ''}
-    </em></strong>
+        </em></strong>
 
-    ${a[`authors[${i}][name]`]
+        ${a[`authors[${i}][name]`]
         ? ` ${a[`authors[${i}][name]`]}`
         : ''}
 
-    ${(a[`authors[${i}][rank]`] && a[`authors[${i}][taxon_name]`])
+        ${(a[`authors[${i}][rank]`] && a[`authors[${i}][taxon_name]`])
         ? ` ${a[`authors[${i}][rank]`]} ${a[`authors[${i}][taxon_name]`]}`
         : ''}
 
-    ${(a[`authors[${i}][in_author_1]`] && a[`authors[${i}][in_author_2]`])
+        ${(a[`authors[${i}][in_author_1]`] && a[`authors[${i}][in_author_2]`])
         ? ` ${a[`authors[${i}][in_author_1]`]} <b>in</b> ${a[`authors[${i}][in_author_2]`]}`
         : ''}
 
-    ${a[`authors[${i}][publication]`]
+        ${a[`authors[${i}][publication]`]
         ? `, ${a[`authors[${i}][publication]`]}`
         : ''}
 
-    ${a[`authors[${i}][volume]`]
+        ${a[`authors[${i}][volume]`]
         ? ` <em>${a[`authors[${i}][volume]`]}</em>`
         : ''}
 
-    ${a[`authors[${i}][page]`]
+        ${a[`authors[${i}][page]`]
         ? `: ${a[`authors[${i}][page]`]}`
         : ''}
 
-    ${a[`authors[${i}][year]`]
+        ${a[`authors[${i}][year]`]
         ? `. ${a[`authors[${i}][year]`]}.`
         : ''}
-</div>
+        </div>
 
             `;
-            });
+        });
 
-            html += `</div>`;
-        }
+        html += `</div>`;
+    }
 
-        return html;
+    return html;
     }
 
     $('#previewBtn').on('click', function() {
@@ -828,7 +824,7 @@
         $('#submitBtn').removeClass('d-none');
         // $('#speciesForm').submit();
     });
-</script>
+</script> --}}
 <script>
     let SAVED_SPECIES_ID = null;
 
@@ -911,14 +907,17 @@
             processData: false,
             contentType: false,
             success: function(res) {
+                console.log(res);
                 btn.text('Saved');
                 alert(' Synonyms saved successfully');
 
                 alert('Synonyms saved successfully');
                 $('#synonymsForm').find('input, select, textarea').prop('disabled', true);
-                window.location.href = "{{ route('species.index') }}";
+                // window.location.href = "{{ route('species.index') }}";
             },
             error: function(xhr) {
+                  console.log(res);
+
                 // btn.prop('disabled', false).text('Save Synonyms');
 
                 if (xhr.status === 422) {
@@ -926,7 +925,7 @@
                     alert('Please fill all required fields correctly.');
                 } else {
                     alert('Something went wrong!');
-                    window.location.href = "{{ route('species.index') }}";
+                    // window.location.href = "{{ route('species.index') }}";
                 }
             }
         });
@@ -997,4 +996,9 @@
         },
         minimumInputLength: 1
     });
+
+    function updateGenus(input, index) {
+        authors[index].genus = input.value; // update your JS object
+        updatePreview(); // optional
+    }
 </script>

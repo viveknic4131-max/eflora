@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\FamilyController;
 use App\Http\Controllers\admin\GenusController;
+use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\admin\SpeciesController;
 use App\Http\Controllers\Admin\VolumeController;
 use App\Models\Family;
@@ -34,6 +35,9 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('family', FamilyController::class);
     Route::resource('volume', VolumeController::class);
 
+    Route::resource('news', NewsController::class);
+
+
     Route::get('assign-volume-family', [VolumeController::class, 'assignVolumeFamily'])->name('assign-volume-family');
     Route::get('create-volume-family', [VolumeController::class, 'createVolumeFamily'])->name('create-volume-family');
     Route::post('store-volume-family', [VolumeController::class, 'storeVolumeFamily'])->name('store-volume-family');
@@ -48,7 +52,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('genera', GenusController::class);
     Route::resource('species', SpeciesController::class);
     Route::get('/ajax/genus-by-family', [GenusController::class, 'ajaxByFamily'])
-    ->name('ajax.genus.by.family');
+        ->name('ajax.genus.by.family');
 
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -67,7 +71,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         $families = Family::count();
         $genera = Genus::count();
         $species = Species::count();
-        return view('dashboard.index' ,compact('volumes', 'families', 'genera', 'species'));
+        return view('dashboard.index', compact('volumes', 'families', 'genera', 'species'));
     })->name('dashboard');
 
     Route::get('/user-profile', function () {

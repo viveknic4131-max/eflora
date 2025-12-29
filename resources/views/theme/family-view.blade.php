@@ -77,15 +77,14 @@
 
 
                                 <div class="card-body d-flex flex-column">
-                                    {{-- <div class="mb-2">
+                                    <div class="mb-2">
                                         <span
                                             class="badge
-                                        @if (strtolower($plant['type']) == 'family') bg-success
-                                        @elseif (strtolower($plant['type']) == 'genus') bg-primary
-                                        @else bg-info text-dark @endif">
-                                            🌿 {{ $plant['type'] }}
+                                        bg-success
+ ">
+                                            🌿Family
                                         </span>
-                                    </div> --}}
+                                    </div>
                                     <h6 class="card-title text-truncate mb-2">{{ $family->name }}</h6>
                                     {{-- <p class="card-text text-muted small mb-0 text-truncate">{{ $plant['details'] }}</p> --}}
                                     {{-- <p class="text-muted small mb-0">
@@ -202,7 +201,10 @@
 
                                         {{-- TEXT --}}
                                         <div class="card-body text-center py-2">
-                                            <h6 class="fw-semibold text-success mb-0">{{ $genus->name }}</h6>
+                                            <span class="badge bg-success">
+                                                🌿 Genus
+                                            </span>
+                                            <h6 class="fw-semibold text-success mb-0">{{ $genus->name }} </h6>
                                         </div>
 
                                     </div>
@@ -236,7 +238,7 @@
         <section class="py-5 bg-light search-section">
             <div class="container">
                 <div class="text-center mb-5">
-                    <h2 class="fw-bold text-success">{{ $genus->name }}</h2>
+                    {{-- <h2 class="fw-bold text-success">Genus: <strong>{{ $genus->name }}</strong></h2> --}}
                     <p class="text-muted">Family: <strong>{{ $family->name }}</strong></p>
                 </div>
 
@@ -289,12 +291,27 @@
                                 @endif
 
                                 {{-- CARD BODY --}}
-                                <div class="card-body d-flex flex-column">
+                                {{-- <div class="card-body d-flex flex-column">
+                                    <span class="badge bg-success">🌿 Species</span>
                                     <h6 class="card-title text-truncate mb-1">{{ $species->name }}</h6>
 
                                     <p class="text-muted small mb-0">
                                         {{ $species->author ?? '-' }} <br>
                                         Vol: {{ $species->volume ?? '-' }}, Pg: {{ $species->page ?? '-' }}
+                                    </p>
+                                </div> --}}
+
+                                <div class="card-body d-flex flex-column">
+                                    <div class="mb-2">
+                                        <span class="badge bg-success">
+                                            🌿 Species
+                                        </span>
+                                    </div>
+                                    <h5 class="card-title text-truncate mb-2">{{ $species->name }}</h5>
+                                    {{-- <p class="card-text text-muted small mb-0 text-truncate">{{ $species->name }}</p> --}}
+                                    <p class="text-muted small mb-0">
+                                        {{ $species->author ?? '-' }} <br>
+                                        Vol:{{ $species->volume ?? '-' }}, Pg:{{ $species->page ?? '-' }}
                                     </p>
                                 </div>
                             </a>
@@ -543,7 +560,7 @@
                             <a href="{{ route('get.family', ['family' => $family->family_code]) }}"
                                 class="card card-genus text-dark text-decoration-none flex-fill shadow-sm border-0 rounded-4 overflow-hidden">
 
-                                  @php
+                                @php
                                     $species = $family->species->first();
                                     $firstImage = $species?->images?->first()?->pic;
                                 @endphp

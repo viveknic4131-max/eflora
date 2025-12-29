@@ -6,8 +6,10 @@ use App\Http\Requests\SearchRequest;
 use App\Models\Family;
 use App\Models\FamilyVolumes;
 use App\Models\Genus;
+use App\Models\News;
 use App\Models\Species;
 use App\Models\Volume;
+use App\Repositories\Contracts\NewsRepositoryInterface;
 use App\Repositories\Contracts\VolumeRepositoryInterface;
 use App\Services\SearchService;
 use Illuminate\Http\Request;
@@ -15,9 +17,10 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
 
-    public function __construct(protected SearchService $searchService,  VolumeRepositoryInterface $volumeRepository)
+    public function __construct(protected SearchService $searchService,  VolumeRepositoryInterface $volumeRepository , NewsRepositoryInterface $newsRepository)
     {
         $this->volumeRepository = $volumeRepository;
+        $this->newsRepository = $newsRepository;
     }
 
 
@@ -222,11 +225,13 @@ class HomeController extends Controller
 
     public function index()
     {
-        $bsiVolume = Volume::where('type', false)->paginate(5);
-        $floraofIndia = Volume::where('type', true)->paginate(5);
+        // $bsiVolume = Volume::where('type', false)->paginate(5);
+        // $floraofIndia = Volume::where('type', true)->paginate(5);
 
-        return view('theme.home', compact('bsiVolume', 'floraofIndia'));
-        // return view('theme.home');
+
+        $news = $this->newsRepository->getAllNews(5);
+        // return view('theme.home', compact('bsiVolume', 'floraofIndia'));
+        return view('theme.home' ,compact('news'));
     }
 
     // public function getPlantChecklistVolume(Request $request)

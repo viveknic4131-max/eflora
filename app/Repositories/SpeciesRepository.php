@@ -56,10 +56,12 @@ class SpeciesRepository implements SpeciesRepositoryInterface
 
     public function store($request)
     {
+
+        // dd($request->all());
         return DB::transaction(function () use ($request) {
             $is_infra = false;
             $infra_values = null;
-            $is_in = false;
+            // $is_in = false;
             $in_author = null;
 
             $states = null;
@@ -83,21 +85,18 @@ class SpeciesRepository implements SpeciesRepositoryInterface
             }
 
 
-            if (isset($request->in_author_1) && isset($request->in_author_2) && !empty($request->in_author_1) && !empty($request->in_author_2)) {
+            if (isset($request->in_author_1)  && !empty($request->in_author_1)) {
                 // dd($request->rank);
 
-                $is_in = true;
-                $is_infra = true;
-                $in_author = json_encode([
-                    'in_author_1' => $request->in_author_1,
-                    'in_author_2' => $request->in_author_2
-                ]);
+                // $is_in = true;
+                // $is_infra = true;
+                $in_author =  $request->in_author_1;
             }
             // dd('there');
             $species = Species::create([
                 'species_code'   => Str::uuid(),
                 'name'           => $request->species,
-                'description'    => $request->description,
+                // 'description'    => $request->description,
                 'genus_id'       => $request->genus_id,
                 'family_id'      => $request->family_id,
                 'author'         => $request->author,
@@ -105,11 +104,11 @@ class SpeciesRepository implements SpeciesRepositoryInterface
                 'year_described' => $request->year_described,
                 'volume'         => $request->volume,
                 'page'           => $request->page,
-                'common_name'    => $request->common_name,
-                'synonyms'       => $request->synonyms ? json_encode($request->synonyms) : null,
+                // 'common_name'    => $request->common_name,
+                // 'synonyms'       => $request->synonyms ? json_encode($request->synonyms) : null,
                 'is_infra'       => $is_infra,
                 'infra_values'   => $infra_values,
-                'is_in'          => $is_in,
+                // 'is_in'          => $is_in,
                 'in_author'      => $in_author,
                 'state_ids'      => $states,
             ]);

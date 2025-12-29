@@ -19,68 +19,72 @@ class SpeciesRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-   public function rules(): array
-{
-    return [
-        'family_id'        => 'required|exists:families,id,deleted_at,NULL',
-        'genus_id'         => 'required|exists:genera,id,deleted_at,NULL',
+    public function rules(): array
+    {
+        return [
+            'family_id'        => 'required|exists:families,id,deleted_at,NULL',
+            'genus_id'         => 'required|exists:genera,id,deleted_at,NULL',
 
-        'species'          => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
-        // 'description'      => 'required|string|max:5000',
+            'species'          => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
+            // 'description'      => 'required|string|max:5000',
 
-        'author'           => 'nullable|string|max:255|regex:/^[A-Za-z\s]+$/',
-        'publication'      => 'nullable|string|max:255|regex:/^[A-Za-z\s]+$/',
-
-        'year_described'   => 'nullable|digits:4|integer',
-
-        'volume'           => 'nullable|string|max:255|regex:/^[A-Za-z\s]+$/().',
-
-        'page'             => 'nullable|numeric',
-
-        // 'common_name'      => 'nullable|string|max:25|regex:/^[A-Za-z\s]+$/',
-
-        // 'synonyms'         => 'nullable|array',
-        // 'synonyms.*'       => 'nullable|string|max:255|regex:/^[A-Za-z\s]+$/',
-
-        'images'           => 'nullable|array',
-        'images.*'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-    ];
-}
+            // 'author'           => 'nullable|string|max:255|regex:/^[A-Za-z\s]+$/',
+            // 'publication'      => 'nullable|string|max:255|regex:/^[A-Za-z\s]+$/',
+            'author'      => 'nullable|string|max:255|regex:/^[A-Za-z.\s(),]+$/',
+            'publication' => 'nullable|string|max:255|regex:/^[A-Za-z.\s(),]+$/',
 
 
-   public function messages(): array
-{
-    return [
+            'year_described'   => 'nullable|digits:4|integer',
 
-        'family_id.required'   => 'Please select a family.',
-        'family_id.exists'     => 'Selected family is invalid or deleted.',
+            'volume' => 'nullable|string|max:255|regex:/^[A-Za-z0-9\s()]+$/',
 
-        'genus_id.required'    => 'Please select a genus.',
-        'genus_id.exists'      => 'Selected genus is invalid or deleted.',
 
-        'species.required'     => 'Species name is required.',
-        'species.regex'        => 'Species may only contain letters and spaces.',
+            'page'             => 'nullable|numeric',
 
-        // 'description.required' => 'Description is required.',
+            // 'common_name'      => 'nullable|string|max:25|regex:/^[A-Za-z\s]+$/',
 
-        'author.regex'         => 'Author name may only contain letters and spaces.',
-        'publication.regex'    => 'Publication name may only contain letters and spaces.',
+            // 'synonyms'         => 'nullable|array',
+            // 'synonyms.*'       => 'nullable|string|max:255|regex:/^[A-Za-z\s]+$/',
 
-        'year_described.digits'  => 'Year must be a 4-digit number (e.g., 2024).',
-        'year_described.integer' => 'Year must be numeric.',
+            'images'           => 'nullable|array',
+            'images.*'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ];
+    }
 
-        'page.numeric'        => 'Page must be a numeric value.',
 
-        // 'common_name.regex'   => 'Common name may only contain letters and spaces.',
+    public function messages(): array
+    {
+        return [
 
-        // 'synonyms.array'      => 'Synonyms must be a list.',
-        // 'synonyms.*.string'   => 'Each synonym must be a valid string.',
+            'family_id.required'   => 'Please select a family.',
+            'family_id.exists'     => 'Selected family is invalid or deleted.',
 
-        'images.array'        => 'Images must be an array.',
-        'images.*.image'      => 'Each file must be an image.',
-        'images.*.mimes'      => 'Images must be JPG, JPEG, PNG, or WEBP format.',
-        'images.*.max'        => 'Each image must not exceed 2MB.',
-    ];
-}
+            'genus_id.required'    => 'Please select a genus.',
+            'genus_id.exists'      => 'Selected genus is invalid or deleted.',
 
+            'species.required'     => 'Species name is required.',
+            'species.regex'        => 'Species may only contain letters and spaces.',
+            'volume.regex'         => 'Volume may only contain letters, numbers, spaces, and parentheses.',
+
+            // 'description.required' => 'Description is required.',
+
+            'author.regex'         => 'Author name may only contain letters and spaces.',
+            'publication.regex'    => 'Publication name may only contain letters and spaces.',
+
+            'year_described.digits'  => 'Year must be a 4-digit number (e.g., 2024).',
+            'year_described.integer' => 'Year must be numeric.',
+
+            'page.numeric'        => 'Page must be a numeric value.',
+
+            // 'common_name.regex'   => 'Common name may only contain letters and spaces.',
+
+            // 'synonyms.array'      => 'Synonyms must be a list.',
+            // 'synonyms.*.string'   => 'Each synonym must be a valid string.',
+
+            'images.array'        => 'Images must be an array.',
+            'images.*.image'      => 'Each file must be an image.',
+            'images.*.mimes'      => 'Images must be JPG, JPEG, PNG, or WEBP format.',
+            'images.*.max'        => 'Each image must not exceed 2MB.',
+        ];
+    }
 }
