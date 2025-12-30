@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Species;
 use App\Models\SpeciesImage;
+use App\Models\SpeciesSynonym;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Repositories\Contracts\SpeciesRepositoryInterface;
@@ -126,6 +127,45 @@ class SpeciesRepository implements SpeciesRepositoryInterface
             }
 
             return $species;
+        });
+    }
+
+
+
+    public function addSynonyms($request)
+    {
+        return DB::transaction(function () use ($request) {
+
+            Species::findOrFail($request->species_id);
+
+            $speciesId = $request->species_id;
+            $createdSynonyms = [];
+
+            foreach ($request->authors as $author) {
+
+                $createdSynonyms[] = SpeciesSynonym::create([
+                    'species_id'     => $speciesId,
+                    'species'        => $author['species'] ?? null,
+                    'genus'          => $author['genus'] ?? null,
+                    'author'         => $author['name'] ?? null,
+                    'publication'    => $author['publication'] ?? null,
+                    'volume'         => $author['volume'] ?? null,
+                    'page'           => $author['page'] ?? null,
+                    'year_described' => $author['year'] ?? null,
+
+                    'is_infra'       => !empty($author['rank']),
+                    'infra_values'   => !empty($author['rank'])
+                        ? [
+                            'rank'       => $author['rank'],
+                            'taxon_name' => $author['taxon_name'] ?? null,
+                        ]
+                        : null,
+
+                    'in_author'      => $author['in_author_1'] ?? null,
+                ]);
+            }
+
+            return collect($createdSynonyms);
         });
     }
 }

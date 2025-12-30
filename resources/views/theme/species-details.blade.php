@@ -78,7 +78,7 @@
 
                             // Genus (uppercase)
                             if ($species->genus) {
-                                $parts[] = '<strong>' . strtoupper($species->genus->name) . '</strong>';
+                                $parts[] = '<strong>' . $species->genus->name . '</strong>';
                             }
 
                             // Species name
@@ -140,49 +140,27 @@
                         @php
                             $synonymLines = [];
 
-                            // Eager loading is assumed: Species::with('genus','synonyms')->find($id)
-
                             foreach ($species->synonyms()->get() as $synonym) {
-                                // dd($synonym);
                                 $line = [];
 
                                 // Genus (constant for all synonyms)
                                 // $line[] = '<strong>' . strtoupper($species->genus->name) . '</strong>';
-                                $line[] = ucfirst($synonym->genus);
+                                $line[] = '<i>' . $synonym->genus . '</i>';
 
                                 // Species epithet
                                 if ($synonym->spcies) {
                                     // $line[] = e($synonym->spcies);
-                                    $line[] = ucfirst($synonym->spcies);
+                                    $line[] = '<i>' . $synonym->spcies . '</i>';
                                 }
 
-                                // Author
-                                // if ($synonym->author) {
-                                //     $line[] = e($synonym->author) . ',';
-                                // }
-
-                                // if ($synonym->author) {
-                                //     if ($synonym->in_author !=null) {
-                                //         // NO comma after author
-                                //         $parts[] = $synonym->author;
-                                //         $parts[] = 'in ' . $synonym->in_author . ',';
-                                //     } else {
-                                //         // Normal author with comma
-                                //         $parts[] = $synonym->author . ',';
-                                //     }
-                                // }
+                                //   dd($synonym->author);
                                 // AUTHOR
-                                $author = is_array($synonym->author)
-                                    ? $synonym->author['name'] ?? null
-                                    : $synonym->author;
+                                $author = $synonym->author;
 
-                                $inAuthor = is_array($synonym->in_author)
-                                    ? $synonym->in_author['name'] ?? null
-                                    : $synonym->in_author;
+                                $inAuthor = $synonym->in_author;
 
                                 if (!empty($author)) {
                                     if (!empty($inAuthor)) {
-                                        // ✅ FIXED ORDER: Author in InAuthor,
                                         $line[] = e($author);
                                         $line[] = 'in ' . e($inAuthor) . ',';
                                     } else {
@@ -202,28 +180,32 @@
                                     $line[] = $species_name . ',';
                                 }
 
-                                if ($synonym->is_in === true) {
-                                    $infra_value = $synonym->in_author;
-
-                                    $infra = json_decode($infra_value, true);
-                                    // dd($infra);
-                                    $infra['in_author_1'];
-                                    $infra['in_author_2'];
-
-                                    $species_is_in =
-                                        $infra['in_author_1'] . ' ' . '<i>in</i>' . ' ' . $infra['in_author_2'];
-
-                                    $line[] = $species_is_in . ',';
-                                }
-
                                 // Publication
-                                if ($synonym->publication) {
-                                    $line[] = e($synonym->publication);
-                                }
+                                // if ($synonym->publication) {
+                                //     $line[] = e($synonym->publication);
+                                // }
 
-                                // Volume : Page
-                                if ($synonym->volume || $synonym->page) {
-                                    $line[] = trim(e($synonym->volume) . ': ' . e($synonym->page)) . '.';
+                                // // Volume : Page
+                                // if ($synonym->volume || $synonym->page) {
+                                //     $line[] = trim(e($synonym->volume) . ': ' . e($synonym->page)) . '.';
+                                // }
+                                if (!empty($synonym->publication)) {
+                                    if (!empty($synonym->volume)) {
+                                        // Publication Volume: Page.
+                                        $line[] = $synonym->publication;
+                                        if (!empty($synonym->page)) {
+                                            $line[] = $synonym->volume . ': ' . $synonym->page . '.';
+                                        } else {
+                                            $line[] = $synonym->volume . '.';
+                                        }
+                                    } else {
+                                        // Publication: Page.
+                                        if (!empty($synonym->page)) {
+                                            $line[] = $synonym->publication . ': ' . $synonym->page . '.';
+                                        } else {
+                                            $line[] = $synonym->publication . '.';
+                                        }
+                                    }
                                 }
 
                                 // Year
@@ -235,71 +217,7 @@
                             }
                         @endphp
 
-                        {{-- @php
-                            $synonymLines = [];
 
-                            // Assumed eager loading: Species::with('genus','synonyms')->find($id)
-
-                            foreach ($species->synonyms as $synonym) {
-                                $line = [];
-
-
-                                if (!empty($synonym->genus)) {
-                                    $line[] = '<strong>' . strtoupper(e($synonym->genus)) . '</strong>';
-                                }
-
-
-                                if (!empty($synonym->spcies)) {
-                                    $line[] = '<em>' . e($synonym->species) . '</em>';
-                                }
-
-
-                                if (!empty($synonym->author)) {
-                                    if (!empty($synonym->in_author)) {
-                                        // Author in InAuthor,
-                                        $line[] = e($synonym->author);
-                                        $line[] = '<i>in</i> ' . e($synonym->in_author) . ',';
-                                    } else {
-                                        // Normal author,
-                                        $line[] = e($synonym->author) . ',';
-                                    }
-                                }
-
-
-                                if ($synonym->is_infra === true && !empty($synonym->infra_values)) {
-                                    $infra = json_decode($synonym->infra_values, true);
-
-                                    if (!empty($infra['rank']) && !empty($infra['taxon_name'])) {
-                                        $line[] = e($infra['rank'] . ' ' . $infra['taxon_name']) . ',';
-                                    }
-                                }
-
-
-                                if (!empty($synonym->publication)) {
-                                    $line[] = e($synonym->publication);
-                                }
-
-
-                                if (!empty($synonym->volume)) {
-                                    if (!empty($synonym->page)) {
-                                        $line[] = e($synonym->volume) . ': ' . e($synonym->page) . '.';
-                                    }
-                                } elseif (!empty($synonym->page)) {
-                                    // No volume → Publication: Page.
-                                    $line[] = ': ' . e($synonym->page) . '.';
-                                }
-
-
-                                if (!empty($synonym->year_described)) {
-                                    $line[] = e($synonym->year_described) . '.';
-                                }
-
-                                $synonymLines[] = implode(' ', $line);
-                            }
-
-
-                            // dd($synonymLines[]);
-                        @endphp --}}
 
 
 

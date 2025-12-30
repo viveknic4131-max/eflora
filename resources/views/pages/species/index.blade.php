@@ -136,7 +136,7 @@
                                                         @method('DELETE')
 
                                                         <button type="submit" class="btn btn-danger btn-link"
-                                                            onclick="return confirm('Are you sure you want to delete this genus?')">
+                                                            onclick="return confirm('Are you sure you want to delete this species?')">
                                                             <i class="material-icons">close</i>
                                                         </button>
                                                     </form>

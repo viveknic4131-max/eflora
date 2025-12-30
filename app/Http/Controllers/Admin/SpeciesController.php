@@ -121,40 +121,20 @@ class SpeciesController extends Controller
 
         // dd($request->all());
 
-        $speciesId = $request->species_id;
+       try {
+            $synonyms = $this->speciesRepository->addSynonyms($request);
 
-        foreach ($request->authors as $author) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Synonyms added successfully.'
+            ]);
+        } catch (\Exception $e) {
 
-            SpeciesSynonym::create([
-                'species_id'     => $speciesId,
-                'spcies'         => $author['species'] ?? null,
-                'genus'          => $author['genus'] ?? null,
-                'author'         => $author['name'] ?? null,
-                'publication'    => $author['publication'] ?? null,
-                'volume'         => $author['volume'] ?? null,
-                'page'           => $author['page'] ?? null,
-                'year_described' => $author['year'] ?? null,
-
-
-                'is_infra'       => !empty($author['rank']),
-                'infra_values'   => !empty($author['rank'])
-                    ? json_encode([
-                        'rank' => $author['rank'],
-                        'taxon_name' => $author['taxon_name']
-                    ])
-                    : null,
-
-                // 'is_in' => !empty($author['in_author_1']) || !empty($author['in_author_2']),
-
-                'in_author' =>  $author['in_author_1'] ??
-                    null,
-
+            return response()->json([
+                'error' => true,
+                'message' => 'Something went wrong while adding synonyms.'
             ]);
         }
-
-        return redirect()
-            ->route('species.index')
-            ->with('success', 'Species created successfully.');
     }
 
 

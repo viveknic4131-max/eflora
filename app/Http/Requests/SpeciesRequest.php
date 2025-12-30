@@ -39,7 +39,7 @@ class SpeciesRequest extends FormRequest
             'volume' => 'nullable|string|max:255|regex:/^[A-Za-z0-9\s()]+$/',
 
 
-            'page'             => 'nullable|numeric',
+            'page'             => 'nullable|regex:/^[A-Za-z0-9\s(),]+$/',
 
             // 'common_name'      => 'nullable|string|max:25|regex:/^[A-Za-z\s]+$/',
 

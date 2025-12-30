@@ -10,6 +10,7 @@ interface SpeciesRepositoryInterface
     public function update($id, $data);
     public function delete($id);
     public function store($request);
+    public function addSynonyms($request);
 
     public function getAllSpecies(int $perPage);
 }

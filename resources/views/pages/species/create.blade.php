@@ -188,7 +188,7 @@
                                         <div class="col-md-3">
                                             <div class="input-group input-group-static">
                                                 <input type="text" name="taxon_name"
-                                                    class="form-control infraspecific-input" placeholder="Taxon Name">
+                                                    class="form-control infraspecific-input" placeholder="Taxon  Author Name">
                                             </div>
                                         </div>
 
@@ -207,7 +207,7 @@
                                         <div class="col-md-3">
                                             <div class="input-group input-group-static">
                                                 <input type="text" name="in_author_1"
-                                                    class="form-control in-input" placeholder="In Author 1">
+                                                    class="form-control in-input" placeholder="Author Name">
                                             </div>
                                         </div>
                                         {{-- <div class="col-md-3">
@@ -319,7 +319,7 @@
 
 </x-layout>
 
-<script>
+{{-- <script>
     $(document).ready(function() {
         // Family dropdown
         $('#family_id').select2({
@@ -410,25 +410,6 @@
     });
 
 
-    // $(document).ready(function() {
-    //     // Add new synonym
-    //     $('#add_synonym').click(function() {
-    //         $('#synonyms_wrapper').append(`
-    //     <div class="input-group mb-2 synonym-item">
-    //         <input type="text" name="synonyms[]" class="form-control" placeholder="Enter Synonym" required>
-    //         <button type="button" class="btn btn-danger remove-synonym">X</button>
-    //     </div>
-    // `);
-    //     });
-
-    //     // Remove synonym
-    //     $(document).on('click', '.remove-synonym', function() {
-    //         $(this).closest('.synonym-item').remove();
-    //     });
-
-
-    // });
-
 
 
     // Multiple Image Preview + Remove
@@ -502,12 +483,12 @@
             reader.readAsDataURL(file);
         });
     });
-</script>
+</script> --}}
 {{-- //  for authors --}}
 
 
 
-<script>
+{{-- <script>
     $(document).ready(function() {
 
         let index = 0;
@@ -666,8 +647,9 @@
             fields.find('.in-input').prop('required', this.checked);
         });
     });
-</script>
-<script>
+</script> --}}
+
+{{-- <script>
     document.addEventListener('DOMContentLoaded', function() {
         const infraCheck = document.querySelector('.species_infraspecific-check');
         const infraFields = document.querySelector('.infraspecific-fields');
@@ -708,8 +690,9 @@
             inInputs.forEach(input => input.disabled = true);
         }
     });
-</script>
+</script> --}}
 
+{{--
 <script>
     let SAVED_SPECIES_ID = null;
 
@@ -758,10 +741,10 @@
             }
         });
     });
-</script>
+</script> --}}
 
 
-<script>
+{{-- <script>
     $('#synonymsForm').on('submit', function(e) {
         e.preventDefault();
 
@@ -885,5 +868,327 @@
     function updateGenus(input, index) {
         authors[index].genus = input.value; // update your JS object
         updatePreview(); // optional
+    }
+</script> --}}
+
+
+
+<script>
+    /* =========================================================
+   GLOBAL STATE
+========================================================= */
+    let SAVED_SPECIES_ID = null;
+    let speciesSubmitting = false;
+    let synonymsSubmitting = false;
+    let authorIndex = 0; // for dynamic author items
+
+    /* =========================================================
+       SELECT2 INITIALIZATION
+    ========================================================= */
+    $(document).ready(function() {
+
+        // FAMILY
+        $('#family_id').select2({
+            placeholder: 'Search Family...',
+            ajax: {
+                url: '{{ route('ajax.families') }}',
+                dataType: 'json',
+                delay: 250,
+                data: params => ({
+                    q: params.term
+                }),
+                processResults: data => ({
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.name
+                    }))
+                })
+            },
+            minimumInputLength: 1
+        });
+
+        // GENUS
+        $('#genus_id').select2({
+            placeholder: 'Select Genus...',
+            allowClear: true
+        });
+
+        $('#family_id').on('change', function() {
+            let familyId = $(this).val();
+            $('#genus_id').prop('disabled', true).empty();
+
+            if (!familyId) return;
+
+            $.ajax({
+                url: '{{ route('ajax.genus.by.family') }}',
+                data: {
+                    family_id: familyId
+                },
+                success: function(data) {
+                    data.forEach(item => {
+                        $('#genus_id').append(new Option(item.name, item.id));
+                    });
+                    $('#genus_id').prop('disabled', false).trigger('change');
+                }
+            });
+        });
+
+        // STATES
+        $('#states').select2({
+            placeholder: 'Search and select States...',
+            multiple: true,
+            ajax: {
+                url: '{{ route('state.list') }}',
+                dataType: 'json',
+                delay: 250,
+                data: params => ({
+                    q: params.term
+                }),
+                processResults: data => ({
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.name
+                    }))
+                })
+            },
+            minimumInputLength: 1
+        });
+    });
+
+    /* =========================================================
+       IMAGE PREVIEW (LOCKED AFTER SAVE)
+    ========================================================= */
+    $('#images').on('change', function(e) {
+        $('#image_preview').empty();
+
+        Array.from(e.target.files).forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = ev => {
+                $('#image_preview').append(`
+                <div class="image-box position-relative" style="width:120px;height:120px">
+                    <img src="${ev.target.result}" style="width:100%;height:100%;object-fit:cover">
+                    <button type="button" class="btn btn-danger btn-sm remove-image"
+                        style="position:absolute;top:5px;right:5px" data-index="${index}">
+                        X
+                    </button>
+                </div>
+            `);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    $(document).on('click', '.remove-image', function() {
+        if (SAVED_SPECIES_ID) return; // lock after species save
+
+        const index = $(this).data('index');
+        const input = $('#images')[0];
+        const files = Array.from(input.files);
+
+        files.splice(index, 1);
+        const dt = new DataTransfer();
+        files.forEach(f => dt.items.add(f));
+        input.files = dt.files;
+        $('#images').trigger('change');
+    });
+
+    /* =========================================================
+       SPECIES IN / INFRASPECIFIC TOGGLE
+    ========================================================= */
+    document.addEventListener('DOMContentLoaded', function() {
+        function toggleFields(check, fields, inputs) {
+            fields.classList.toggle('d-none', !check.checked);
+            inputs.forEach(i => i.disabled = !check.checked);
+        }
+
+        const infraCheck = document.querySelector('.species_infraspecific-check');
+        const infraFields = document.querySelector('.infraspecific-fields');
+        const infraInputs = infraFields.querySelectorAll('input');
+
+        const inCheck = document.querySelector('.species_in-check');
+        const inFields = document.querySelector('.in-fields');
+        const inInputs = inFields.querySelectorAll('input');
+
+        infraCheck.addEventListener('change', () => toggleFields(infraCheck, infraFields, infraInputs));
+        inCheck.addEventListener('change', () => toggleFields(inCheck, inFields, inInputs));
+
+        toggleFields(infraCheck, infraFields, infraInputs);
+        toggleFields(inCheck, inFields, inInputs);
+    });
+
+    /* =========================================================
+       SPECIES SAVE (AJAX)
+    ========================================================= */
+    $('#speciesForm').on('submit', function(e) {
+        e.preventDefault();
+        if (speciesSubmitting) return;
+        speciesSubmitting = true;
+
+        const btn = $('#submitBtn').prop('disabled', true).text('Saving...');
+        let formData = new FormData(this);
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+
+            success: function(res) {
+                if (!res.success) throw res.message;
+
+                SAVED_SPECIES_ID = res.species_id;
+                $('#synonymsForm input[name="species_id"]').val(SAVED_SPECIES_ID);
+
+                // LOCK FORM & IMAGES
+                $('#speciesForm input, #speciesForm select, #speciesForm textarea')
+                    .prop('disabled', true);
+                $('#images').off('change').prop('disabled', true);
+                $('.remove-image').remove();
+
+                btn.text('Saved');
+                alert('Species saved successfully. Now add synonyms.');
+            },
+
+            error: function(xhr) {
+                speciesSubmitting = false;
+                btn.prop('disabled', false).text('Save Species');
+                handleAjaxError(xhr);
+            }
+        });
+    });
+
+    /* =========================================================
+       DYNAMIC AUTHORS (SYNONYMS)
+    ========================================================= */
+    $('#add_author').on('click', function() {
+        const genusData = $('#genus_id').select2('data');
+        if (!genusData.length) {
+            alert('Please select genus first');
+            return;
+        }
+        const genusName = genusData[0].text;
+
+        $('#authors_wrapper').append(`
+        <div class="author-item border rounded p-3 mb-3">
+
+            <div class="row g-2">
+                <div class="col-md-2"><input type="text" name="authors[${authorIndex}][genus]" class="form-control" placeholder="Genus Name *" required value="${genusName}" oninput="updateGenus(this, ${authorIndex})"></div>
+                <div class="col-md-2"><input type="text" name="authors[${authorIndex}][species]" class="form-control" placeholder="Species Name *" required></div>
+                <div class="col-md-2"><input type="text" name="authors[${authorIndex}][name]" class="form-control" placeholder="Author Name *" required></div>
+                <div class="col-md-2"><input type="text" name="authors[${authorIndex}][publication]" class="form-control" placeholder="Publication *" required></div>
+                <div class="col-md-2"><input type="text" name="authors[${authorIndex}][volume]" class="form-control" placeholder="Volume"></div>
+                <div class="col-md-1"><input type="number" name="authors[${authorIndex}][page]" class="form-control" placeholder="Page"></div>
+                <div class="col-md-1"><input type="number" name="authors[${authorIndex}][year]" class="form-control" placeholder="Year"></div>
+            </div>
+
+            <div class="row form-check mt-2">
+                <input type="checkbox" class="form-check-input infraspecific-check">Infraspecific
+            </div>
+            <div class="row mt-2 infraspecific-fields d-none">
+                <div class="col-md-3"><input type="text" name="authors[${authorIndex}][rank]" class="form-control infraspecific-input" placeholder="Rank"></div>
+                <div class="col-md-3"><input type="text" name="authors[${authorIndex}][taxon_name]" class="form-control infraspecific-input" placeholder="Taxon Author Name"></div>
+            </div>
+
+            <div class="row form-check mt-2">
+                <input type="checkbox" class="form-check-input in-check">In
+            </div>
+            <div class="row mt-2 in-fields d-none">
+                <div class="col-md-3"><input type="text" name="authors[${authorIndex}][in_author_1]" class="form-control in-input" placeholder="Author Name"></div>
+            </div>
+
+            <button type="button" class="btn btn-danger btn-sm mt-2 remove-author">Remove</button>
+        </div>
+    `);
+
+        authorIndex++;
+    });
+
+    // TOGGLE INFRASPECIFIC & IN CHECKS
+    $(document).on('change', '.infraspecific-check', function() {
+        const parent = $(this).closest('.author-item');
+        parent.find('.infraspecific-fields').toggleClass('d-none', !this.checked)
+            .find('.infraspecific-input').prop('required', this.checked);
+    });
+    $(document).on('change', '.in-check', function() {
+        const parent = $(this).closest('.author-item');
+        parent.find('.in-fields').toggleClass('d-none', !this.checked)
+            .find('.in-input').prop('required', this.checked);
+    });
+
+    // REMOVE AUTHOR
+    $(document).on('click', '.remove-author', function() {
+        $(this).closest('.author-item').remove();
+    });
+
+    /* =========================================================
+       SYNONYMS SAVE (AJAX)
+    ========================================================= */
+    $('#synonymsForm').on('submit', function(e) {
+        e.preventDefault();
+
+        if (!SAVED_SPECIES_ID) {
+            alert('Please save species first');
+            return;
+        }
+
+        if (synonymsSubmitting) return;
+        synonymsSubmitting = true;
+
+        const btn = $('#synonymsSubmitBtn').prop('disabled', true).text('Saving...');
+        const formData = new FormData(this);
+
+        $('#authors_wrapper .author-item').each(function() {
+            $(this).find('input').each(function() {
+                formData.append($(this).attr('name'), $(this).val());
+            });
+        });
+        formData.append('_token', '{{ csrf_token() }}');
+
+        $.ajax({
+            url: '{{ route('species.synonyms.store') }}',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(res) {
+                if (!res.success) throw res.message;
+
+                btn.text('Saved');
+                alert('Synonyms saved successfully');
+                $('#synonymsForm input, #synonymsForm select, #synonymsForm textarea').prop(
+                    'disabled', true);
+            },
+            error: function(xhr) {
+                synonymsSubmitting = false;
+                btn.prop('disabled', false).text('Save Synonyms');
+                handleAjaxError(xhr);
+            }
+        });
+    });
+
+    /* =========================================================
+       GLOBAL AJAX ERROR HANDLER
+    ========================================================= */
+    function handleAjaxError(xhr) {
+        if (xhr.status === 422 && xhr.responseJSON?.errors) {
+            const firstError = Object.values(xhr.responseJSON.errors)[0][0];
+            alert(firstError);
+            return;
+        }
+
+        if (xhr.responseJSON?.message) {
+            alert(xhr.responseJSON.message);
+            return;
+        }
+
+        alert('Unexpected error occurred. Please try again.');
+    }
+
+    /* =========================================================
+       GENUS UPDATE FOR AUTHOR INPUT
+    ========================================================= */
+    function updateGenus(input, index) {
+        // Optional: can be used to sync genus with author item if needed
     }
 </script>
