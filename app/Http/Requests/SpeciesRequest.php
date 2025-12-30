@@ -39,7 +39,7 @@ class SpeciesRequest extends FormRequest
             'volume' => 'nullable|string|max:255|regex:/^[A-Za-z0-9\s()]+$/',
 
 
-            'page'             => 'nullable|regex:/^[A-Za-z0-9\s(),]+$/',
+            // 'page'             => 'nullable|regex:/^[A-Za-z0-9\s(),]+$/',
 
             // 'common_name'      => 'nullable|string|max:25|regex:/^[A-Za-z\s]+$/',
 
@@ -74,7 +74,7 @@ class SpeciesRequest extends FormRequest
             'year_described.digits'  => 'Year must be a 4-digit number (e.g., 2024).',
             'year_described.integer' => 'Year must be numeric.',
 
-            'page.numeric'        => 'Page must be a numeric value.',
+            // 'page.numeric'        => 'Page must be a numeric value.',
 
             // 'common_name.regex'   => 'Common name may only contain letters and spaces.',
 
